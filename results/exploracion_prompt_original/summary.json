@@ -1,0 +1,6921 @@
+{
+  "k": 2,
+  "carpeta": "/content/drive/MyDrive/inventory_harness/results/exploracion",
+  "archivos": [
+    "rollouts_Qwen_Qwen3-1.7B+think.jsonl",
+    "rollouts_Qwen_Qwen3-1.7B.jsonl",
+    "rollouts_unsloth_Llama-3.2-1B-Instruct.jsonl"
+  ],
+  "problemas_de_carga": {
+    "linea_final_truncada": 0,
+    "lineas_corruptas": 0,
+    "filas_sin_campos_requeridos": 0,
+    "duplicados_descartados": 0
+  },
+  "manifest": {
+    "stage": "exploracion",
+    "dry_run": false,
+    "dataset": {
+      "split": "train",
+      "n_per_cell": 5,
+      "base_seed": 11,
+      "fingerprint": "7e5ff1cd409ec9122d83a1d3e0314bcec48bef37af785b812e65a4267af5ae91"
+    },
+    "n_samples": 2,
+    "limit": null,
+    "conditions": [
+      "tools",
+      "visible"
+    ],
+    "seeds": {
+      "dataset": 11,
+      "generation": 2026
+    },
+    "entorno": {
+      "python": "3.13.16",
+      "plataforma": "Linux-6.6.159+-x86_64-with-glibc2.39",
+      "torch": "2.11.0+cu130",
+      "transformers": "5.22.0",
+      "gpu": "Tesla T4"
+    },
+    "code_hash": "14201d674731578c",
+    "git_commit": null,
+    "created_at": "2026-11-04T15:00:10+00:00",
+    "gen_configs": {
+      "Qwen/Qwen3-1.7B": {
+        "model": "Qwen/Qwen3-1.7B",
+        "model_id": "Qwen/Qwen3-1.7B",
+        "enable_thinking": false,
+        "max_new_tokens": 512,
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.95,
+        "top_k": 50,
+        "repetition_penalty": 1.0,
+        "seed": 2026,
+        "batch_size": 16
+      },
+      "Qwen/Qwen3-1.7B+think": {
+        "model": "Qwen/Qwen3-1.7B+think",
+        "model_id": "Qwen/Qwen3-1.7B",
+        "enable_thinking": true,
+        "max_new_tokens": 1024,
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.95,
+        "top_k": 50,
+        "repetition_penalty": 1.0,
+        "seed": 2026,
+        "batch_size": 16
+      },
+      "unsloth/Llama-3.2-1B-Instruct": {
+        "model": "unsloth/Llama-3.2-1B-Instruct",
+        "model_id": "unsloth/Llama-3.2-1B-Instruct",
+        "enable_thinking": false,
+        "max_new_tokens": 512,
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.95,
+        "top_k": 50,
+        "repetition_penalty": 1.0,
+        "seed": 2026,
+        "batch_size": 16
+      }
+    },
+    "modelos": {
+      "Qwen/Qwen3-1.7B": {
+        "estado": "completo",
+        "error": null,
+        "esperados": 180,
+        "hechos": 180,
+        "segundos_por_rollout": 0.615,
+        "errores_internos": 0
+      },
+      "Qwen/Qwen3-1.7B+think": {
+        "estado": "completo",
+        "error": null,
+        "esperados": 180,
+        "hechos": 180,
+        "segundos_por_rollout": 6.941,
+        "errores_internos": 0
+      },
+      "unsloth/Llama-3.2-1B-Instruct": {
+        "estado": "completo",
+        "error": null,
+        "esperados": 180,
+        "hechos": 180,
+        "segundos_por_rollout": 2.884,
+        "errores_internos": 0
+      }
+    },
+    "notas": [
+      "unsloth/Llama-3.2-1B-Instruct: sin modo thinking, se corre solo con thinking off"
+    ],
+    "updated_at": "2026-11-04T15:32:05+00:00"
+  },
+  "aviso_baselines": null,
+  "grupos": [
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 4,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 6,
+        "invalid_value": 4
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 204.0,
+        "tokens_por_muestra": 20.4,
+        "segundos": 3.7518000000000002,
+        "segundos_por_muestra": 0.37518
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 6,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "invalid_value": 6,
+        "wrong_value": 4
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 235.0,
+        "tokens_por_muestra": 23.5,
+        "segundos": 3.7518000000000002,
+        "segundos_por_muestra": 0.37518
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 269.0,
+        "tokens_por_muestra": 26.9,
+        "segundos": 3.7981999999999996,
+        "segundos_por_muestra": 0.37981999999999994
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 2,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 2,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 8,
+        "missing_evidence": 2
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 266.0,
+        "tokens_por_muestra": 26.6,
+        "segundos": 3.7981999999999996,
+        "segundos_por_muestra": 0.37981999999999994
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 270.0,
+        "tokens_por_muestra": 27.0,
+        "segundos": 4.8118,
+        "segundos_por_muestra": 0.48118
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 271.0,
+        "tokens_por_muestra": 27.1,
+        "segundos": 8.650400000000001,
+        "segundos_por_muestra": 0.8650400000000001
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 562.0,
+        "tokens_por_muestra": 56.2,
+        "segundos": 6.3728,
+        "segundos_por_muestra": 0.63728
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 709.0,
+        "tokens_por_muestra": 70.9,
+        "segundos": 9.789200000000001,
+        "segundos_por_muestra": 0.9789200000000001
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 1065.0,
+        "tokens_por_muestra": 106.5,
+        "segundos": 9.789200000000001,
+        "segundos_por_muestra": 0.9789200000000001
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 2,
+        "n": 10,
+        "tasa": 0.2
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 1,
+        "n": 5,
+        "tasa": 0.2,
+        "ic95": [
+          0.03622410863243014,
+          0.6244653702374747
+        ]
+      },
+      "pass@2": {
+        "aciertos": 1,
+        "n": 5,
+        "tasa": 0.2,
+        "ic95": [
+          0.03622410863243014,
+          0.6244653702374747
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 2,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 8,
+        "ok": 2
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 196.0,
+        "tokens_por_muestra": 19.6,
+        "segundos": 4.3842,
+        "segundos_por_muestra": 0.43842
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 1,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 9,
+        "invalid_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 228.0,
+        "tokens_por_muestra": 22.8,
+        "segundos": 5.5398,
+        "segundos_por_muestra": 0.5539799999999999
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 2,
+        "n": 10,
+        "tasa": 0.2
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 1,
+        "n": 5,
+        "tasa": 0.2,
+        "ic95": [
+          0.03622410863243014,
+          0.6244653702374747
+        ]
+      },
+      "pass@2": {
+        "aciertos": 1,
+        "n": 5,
+        "tasa": 0.2,
+        "ic95": [
+          0.03622410863243014,
+          0.6244653702374747
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 2,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 2,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 6,
+        "invalid_value": 2,
+        "ok": 2
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 312.0,
+        "tokens_por_muestra": 31.2,
+        "segundos": 6.6774,
+        "segundos_por_muestra": 0.66774
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 268.0,
+        "tokens_por_muestra": 26.8,
+        "segundos": 4.3842,
+        "segundos_por_muestra": 0.43842
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 273.0,
+        "tokens_por_muestra": 27.3,
+        "segundos": 5.3145999999999995,
+        "segundos_por_muestra": 0.5314599999999999
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 273.0,
+        "tokens_por_muestra": 27.3,
+        "segundos": 8.6686,
+        "segundos_por_muestra": 0.86686
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 516.0,
+        "tokens_por_muestra": 51.6,
+        "segundos": 4.645,
+        "segundos_por_muestra": 0.46449999999999997
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 704.0,
+        "tokens_por_muestra": 70.4,
+        "segundos": 7.4822,
+        "segundos_por_muestra": 0.74822
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 1043.0,
+        "tokens_por_muestra": 104.3,
+        "segundos": 8.6686,
+        "segundos_por_muestra": 0.86686
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 3,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 3,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 7,
+        "missing_evidence": 3
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 4528.0,
+        "tokens_por_muestra": 452.8,
+        "segundos": 58.2166,
+        "segundos_por_muestra": 5.82166
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 4,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 2,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 2,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 4,
+        "no_answer_block": 3,
+        "missing_evidence": 2,
+        "invalid_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 4454.0,
+        "tokens_por_muestra": 445.4,
+        "segundos": 58.2166,
+        "segundos_por_muestra": 5.82166
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 4,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 1,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 1,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 5,
+        "no_answer_block": 3,
+        "invalid_value": 1,
+        "missing_evidence": 1
+      },
+      "tope_de_tokens": {
+        "si": 2,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 5642.0,
+        "tokens_por_muestra": 564.2,
+        "segundos": 67.9286,
+        "segundos_por_muestra": 6.79286
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 1,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 2,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 2,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 7,
+        "missing_evidence": 2,
+        "no_answer_block": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 5367.0,
+        "tokens_por_muestra": 536.7,
+        "segundos": 67.9286,
+        "segundos_por_muestra": 6.79286
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 8,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 8,
+        "wrong_value": 2
+      },
+      "tope_de_tokens": {
+        "si": 7,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 8929.0,
+        "tokens_por_muestra": 892.9,
+        "segundos": 69.2398,
+        "segundos_por_muestra": 6.92398
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 7,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 6,
+        "wrong_value": 3,
+        "ambiguous_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 6,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 8173.0,
+        "tokens_por_muestra": 817.3,
+        "segundos": 75.57560000000001,
+        "segundos_por_muestra": 7.5575600000000005
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 5,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 5,
+        "no_answer_block": 5
+      },
+      "tope_de_tokens": {
+        "si": 5,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 9123.0,
+        "tokens_por_muestra": 912.3,
+        "segundos": 71.298,
+        "segundos_por_muestra": 7.1298
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 9,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 8,
+        "multiple_answer_blocks": 1,
+        "wrong_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 9,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 9711.0,
+        "tokens_por_muestra": 971.1,
+        "segundos": 77.7144,
+        "segundos_por_muestra": 7.77144
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 10
+      },
+      "tope_de_tokens": {
+        "si": 10,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 10240.0,
+        "tokens_por_muestra": 1024.0,
+        "segundos": 77.7144,
+        "segundos_por_muestra": 7.77144
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 6,
+        "n": 10,
+        "tasa": 0.6
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 3,
+        "n": 5,
+        "tasa": 0.6,
+        "ic95": [
+          0.2307242812760128,
+          0.882379225767352
+        ]
+      },
+      "pass@2": {
+        "aciertos": 4,
+        "n": 5,
+        "tasa": 0.8,
+        "ic95": [
+          0.37553462976252533,
+          0.9637758913675698
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 3,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 6,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 6,
+        "invalid_value": 2,
+        "no_answer_block": 1,
+        "wrong_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 5191.0,
+        "tokens_por_muestra": 519.1,
+        "segundos": 64.9006,
+        "segundos_por_muestra": 6.49006
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 2,
+        "n": 10,
+        "tasa": 0.2
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 2,
+        "n": 5,
+        "tasa": 0.4,
+        "ic95": [
+          0.11762077423264783,
+          0.769275718723987
+        ]
+      },
+      "pass@2": {
+        "aciertos": 2,
+        "n": 5,
+        "tasa": 0.4,
+        "ic95": [
+          0.11762077423264783,
+          0.769275718723987
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 5,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 2,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "invalid_value": 4,
+        "wrong_value": 3,
+        "ok": 2,
+        "no_answer_block": 1
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 6263.0,
+        "tokens_por_muestra": 626.3,
+        "segundos": 67.0036,
+        "segundos_por_muestra": 6.700360000000001
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 2,
+        "n": 5,
+        "tasa": 0.4,
+        "ic95": [
+          0.11762077423264783,
+          0.769275718723987
+        ]
+      },
+      "pass@2": {
+        "aciertos": 2,
+        "n": 5,
+        "tasa": 0.4,
+        "ic95": [
+          0.11762077423264783,
+          0.769275718723987
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 5,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 3,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 5,
+        "ok": 3,
+        "wrong_value": 2
+      },
+      "tope_de_tokens": {
+        "si": 5,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 8484.0,
+        "tokens_por_muestra": 848.4,
+        "segundos": 69.7024,
+        "segundos_por_muestra": 6.9702399999999995
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 9,
+        "n": 10,
+        "tasa": 0.9
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 4,
+        "n": 5,
+        "tasa": 0.8,
+        "ic95": [
+          0.37553462976252533,
+          0.9637758913675698
+        ]
+      },
+      "pass@2": {
+        "aciertos": 5,
+        "n": 5,
+        "tasa": 1.0,
+        "ic95": [
+          0.5655175352168251,
+          1.0
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 9,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 9,
+        "wrong_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 4657.0,
+        "tokens_por_muestra": 465.7,
+        "segundos": 64.9006,
+        "segundos_por_muestra": 6.49006
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 8,
+        "n": 10,
+        "tasa": 0.8
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 4,
+        "n": 5,
+        "tasa": 0.8,
+        "ic95": [
+          0.37553462976252533,
+          0.9637758913675698
+        ]
+      },
+      "pass@2": {
+        "aciertos": 4,
+        "n": 5,
+        "tasa": 0.8,
+        "ic95": [
+          0.37553462976252533,
+          0.9637758913675698
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 2,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 8,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 8,
+        "no_answer_block": 2
+      },
+      "tope_de_tokens": {
+        "si": 2,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 8790.0,
+        "tokens_por_muestra": 879.0,
+        "segundos": 66.6674,
+        "segundos_por_muestra": 6.66674
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 10
+      },
+      "tope_de_tokens": {
+        "si": 10,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 10240.0,
+        "tokens_por_muestra": 1024.0,
+        "segundos": 76.48479999999999,
+        "segundos_por_muestra": 7.648479999999999
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 6,
+        "n": 10,
+        "tasa": 0.6
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 2,
+        "n": 5,
+        "tasa": 0.4,
+        "ic95": [
+          0.11762077423264783,
+          0.769275718723987
+        ]
+      },
+      "pass@2": {
+        "aciertos": 4,
+        "n": 5,
+        "tasa": 0.8,
+        "ic95": [
+          0.37553462976252533,
+          0.9637758913675698
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 2,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 6,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 6,
+        "wrong_value": 2,
+        "no_answer_block": 1,
+        "missing_field": 1
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 5980.0,
+        "tokens_por_muestra": 598.0,
+        "segundos": 66.9716,
+        "segundos_por_muestra": 6.697159999999999
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 10
+      },
+      "tope_de_tokens": {
+        "si": 10,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 10240.0,
+        "tokens_por_muestra": 1024.0,
+        "segundos": 71.7004,
+        "segundos_por_muestra": 7.17004
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 8,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 8,
+        "wrong_value": 2
+      },
+      "tope_de_tokens": {
+        "si": 8,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 9910.0,
+        "tokens_por_muestra": 991.0,
+        "segundos": 76.48479999999999,
+        "segundos_por_muestra": 7.648479999999999
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 5,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 9,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "tool_limit_exceeded": 5,
+        "multiple_answer_blocks": 3,
+        "wrong_value": 1,
+        "no_answer_block": 1
+      },
+      "tope_de_tokens": {
+        "si": 2,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 3162.0,
+        "tokens_por_muestra": 316.2,
+        "segundos": 55.7751,
+        "segundos_por_muestra": 5.57751
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 3,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 3,
+        "multiple_answer_blocks": 3,
+        "tool_limit_exceeded": 3,
+        "invalid_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 3188.0,
+        "tokens_por_muestra": 318.8,
+        "segundos": 49.5998,
+        "segundos_por_muestra": 4.95998
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 5,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "tool_limit_exceeded": 5,
+        "no_answer_block": 3,
+        "unknown_field": 1,
+        "missing_field": 1
+      },
+      "tope_de_tokens": {
+        "si": 3,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 5448.0,
+        "tokens_por_muestra": 544.8,
+        "segundos": 69.4076,
+        "segundos_por_muestra": 6.94076
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 3,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 7,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 1,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 1,
+        "n": 10
+      },
+      "error_types": {
+        "tool_limit_exceeded": 3,
+        "wrong_value": 2,
+        "no_answer_block": 2,
+        "unknown_field": 1,
+        "invalid_value": 1,
+        "missing_evidence": 1
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 1958.0,
+        "tokens_por_muestra": 195.8,
+        "segundos": 46.8378,
+        "segundos_por_muestra": 4.6837800000000005
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 2,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 7,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 4,
+        "wrong_value": 3,
+        "tool_limit_exceeded": 2,
+        "multiple_answer_blocks": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 1519.0,
+        "tokens_por_muestra": 151.9,
+        "segundos": 30.3822,
+        "segundos_por_muestra": 3.03822
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 3,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 6,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 4,
+        "tool_limit_exceeded": 3,
+        "invalid_value": 2,
+        "no_answer_block": 1
+      },
+      "tope_de_tokens": {
+        "si": 2,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 2409.0,
+        "tokens_por_muestra": 240.9,
+        "segundos": 53.5197,
+        "segundos_por_muestra": 5.35197
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 6,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 4,
+        "multiple_answer_blocks": 4,
+        "no_answer_block": 2
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 669.0,
+        "tokens_por_muestra": 66.9,
+        "segundos": 24.212600000000002,
+        "segundos_por_muestra": 2.42126
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 3,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 7,
+        "multiple_answer_blocks": 2,
+        "missing_field": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 706.0,
+        "tokens_por_muestra": 70.6,
+        "segundos": 22.0182,
+        "segundos_por_muestra": 2.20182
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 10
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 10
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 10
+      },
+      "tool_limit_exceeded": {
+        "si": 1,
+        "n": 10
+      },
+      "parser_error": {
+        "si": 9,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 5,
+        "multiple_answer_blocks": 3,
+        "tool_limit_exceeded": 1,
+        "wrong_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 6,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 4482.0,
+        "tokens_por_muestra": 448.2,
+        "segundos": 30.2291,
+        "segundos_por_muestra": 3.02291
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 10
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 656.0,
+        "tokens_por_muestra": 65.6,
+        "segundos": 13.017,
+        "segundos_por_muestra": 1.3016999999999999
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 8,
+        "multiple_answer_blocks": 1,
+        "invalid_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 406.0,
+        "tokens_por_muestra": 40.6,
+        "segundos": 13.5714,
+        "segundos_por_muestra": 1.35714
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "multiple_answer_blocks": 6,
+        "no_answer_block": 4
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 142.0,
+        "tokens_por_muestra": 14.2,
+        "segundos": 13.661999999999999,
+        "segundos_por_muestra": 1.3661999999999999
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 9,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 8,
+        "wrong_value": 1,
+        "multiple_answer_blocks": 1
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 1060.0,
+        "tokens_por_muestra": 106.0,
+        "segundos": 13.017,
+        "segundos_por_muestra": 1.3016999999999999
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 9,
+        "multiple_answer_blocks": 1
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 1005.0,
+        "tokens_por_muestra": 100.5,
+        "segundos": 13.661999999999999,
+        "segundos_por_muestra": 1.3661999999999999
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 9,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 8,
+        "multiple_answer_blocks": 1,
+        "wrong_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 2,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 2215.0,
+        "tokens_por_muestra": 221.5,
+        "segundos": 19.804,
+        "segundos_por_muestra": 1.9804
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 7,
+        "multiple_answer_blocks": 3
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 511.0,
+        "tokens_por_muestra": 51.1,
+        "segundos": 10.8082,
+        "segundos_por_muestra": 1.08082
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 8,
+        "multiple_answer_blocks": 2
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 688.0,
+        "tokens_por_muestra": 68.8,
+        "segundos": 19.000999999999998,
+        "segundos_por_muestra": 1.9000999999999997
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard",
+      "n_instancias": 5,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 5,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.43448246478317476
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "no_answer_block": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 972.0,
+        "tokens_por_muestra": 97.2,
+        "segundos": 19.804,
+        "segundos_por_muestra": 1.9804
+      }
+    }
+  ],
+  "por_modelo_condicion": [
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "n_instancias": 45,
+      "n_muestras": 90,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 90,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 45,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.07865159873288836
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 45,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.07865159873288836
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 90
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 90
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 90
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 90
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 90
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 90
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 90
+      },
+      "correct_final_answer": {
+        "si": 2,
+        "n": 90
+      },
+      "correcta_sin_recompensa": {
+        "si": 2,
+        "n": 90
+      },
+      "error_types": {
+        "wrong_value": 78,
+        "invalid_value": 10,
+        "missing_evidence": 2
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 90
+      },
+      "uso": {
+        "tokens_nuevos": 3851.0,
+        "tokens_por_muestra": 42.78888888888889,
+        "segundos": 54.513400000000004,
+        "segundos_por_muestra": 0.6057044444444445
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "n_instancias": 45,
+      "n_muestras": 90,
+      "tasa_media_muestra": {
+        "aciertos": 4,
+        "n": 90,
+        "tasa": 0.044444444444444446
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 2,
+        "n": 45,
+        "tasa": 0.044444444444444446,
+        "ic95": [
+          0.012274126706719846,
+          0.14827510769435623
+        ]
+      },
+      "pass@2": {
+        "aciertos": 2,
+        "n": 45,
+        "tasa": 0.044444444444444446,
+        "ic95": [
+          0.012274126706719846,
+          0.14827510769435623
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 3,
+        "n": 90
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 90
+      },
+      "correct_final_answer": {
+        "si": 4,
+        "n": 90
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 90
+      },
+      "error_types": {
+        "wrong_value": 83,
+        "ok": 4,
+        "invalid_value": 3
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 90
+      },
+      "uso": {
+        "tokens_nuevos": 3813.0,
+        "tokens_por_muestra": 42.36666666666667,
+        "segundos": 55.7646,
+        "segundos_por_muestra": 0.6196066666666666
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "n_instancias": 45,
+      "n_muestras": 90,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 90,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 45,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.07865159873288836
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 45,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.07865159873288836
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 90
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 90
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 90
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 90
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 90
+      },
+      "parser_error": {
+        "si": 48,
+        "n": 90
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 90
+      },
+      "correct_final_answer": {
+        "si": 8,
+        "n": 90
+      },
+      "correcta_sin_recompensa": {
+        "si": 8,
+        "n": 90
+      },
+      "error_types": {
+        "no_answer_block": 44,
+        "wrong_value": 34,
+        "missing_evidence": 8,
+        "invalid_value": 2,
+        "ambiguous_value": 1,
+        "multiple_answer_blocks": 1
+      },
+      "tope_de_tokens": {
+        "si": 40,
+        "n": 90
+      },
+      "uso": {
+        "tokens_nuevos": 66167.0,
+        "tokens_por_muestra": 735.1888888888889,
+        "segundos": 623.8326,
+        "segundos_por_muestra": 6.931473333333333
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "n_instancias": 45,
+      "n_muestras": 90,
+      "tasa_media_muestra": {
+        "aciertos": 34,
+        "n": 90,
+        "tasa": 0.37777777777777777
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 17,
+        "n": 45,
+        "tasa": 0.37777777777777777,
+        "ic95": [
+          0.25108084672137915,
+          0.5237006551911048
+        ]
+      },
+      "pass@2": {
+        "aciertos": 21,
+        "n": 45,
+        "tasa": 0.4666666666666667,
+        "ic95": [
+          0.32935132065011297,
+          0.6092254525987463
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 45,
+        "n": 90
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 90
+      },
+      "correct_final_answer": {
+        "si": 34,
+        "n": 90
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 90
+      },
+      "error_types": {
+        "no_answer_block": 38,
+        "ok": 34,
+        "wrong_value": 11,
+        "invalid_value": 6,
+        "missing_field": 1
+      },
+      "tope_de_tokens": {
+        "si": 38,
+        "n": 90
+      },
+      "uso": {
+        "tokens_nuevos": 69755.0,
+        "tokens_por_muestra": 775.0555555555555,
+        "segundos": 624.8162,
+        "segundos_por_muestra": 6.942402222222222
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "n_instancias": 45,
+      "n_muestras": 90,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 90,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 45,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.07865159873288836
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 45,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.07865159873288836
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 90
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 90
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 90
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 90
+      },
+      "tool_limit_exceeded": {
+        "si": 22,
+        "n": 90
+      },
+      "parser_error": {
+        "si": 67,
+        "n": 90
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 90
+      },
+      "correct_final_answer": {
+        "si": 1,
+        "n": 90
+      },
+      "correcta_sin_recompensa": {
+        "si": 1,
+        "n": 90
+      },
+      "error_types": {
+        "wrong_value": 22,
+        "tool_limit_exceeded": 22,
+        "no_answer_block": 21,
+        "multiple_answer_blocks": 16,
+        "invalid_value": 4,
+        "missing_field": 2,
+        "unknown_field": 2,
+        "missing_evidence": 1
+      },
+      "tope_de_tokens": {
+        "si": 15,
+        "n": 90
+      },
+      "uso": {
+        "tokens_nuevos": 23541.0,
+        "tokens_por_muestra": 261.56666666666666,
+        "segundos": 381.9821,
+        "segundos_por_muestra": 4.244245555555556
+      }
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "n_instancias": 45,
+      "n_muestras": 90,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 90,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=2": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 45,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.07865159873288836
+        ]
+      },
+      "pass@2": {
+        "aciertos": 0,
+        "n": 45,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.07865159873288836
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 88,
+        "n": 90
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 90
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 90
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 90
+      },
+      "error_types": {
+        "no_answer_block": 72,
+        "multiple_answer_blocks": 15,
+        "wrong_value": 2,
+        "invalid_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 5,
+        "n": 90
+      },
+      "uso": {
+        "tokens_nuevos": 7655.0,
+        "tokens_por_muestra": 85.05555555555556,
+        "segundos": 136.3466,
+        "segundos_por_muestra": 1.514962222222222
+      }
+    }
+  ],
+  "clasificacion": [
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5882412616050445,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5882412616050445,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "zona_aprendible",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.6516549444913391,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.6516549444913392,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.6516549444913392,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "zona_aprendible",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5882412616050445,
+      "motivo": null,
+      "frente_a_trivial": "supera",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5882412616050445,
+      "motivo": null,
+      "frente_a_trivial": "supera",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "zona_aprendible",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.6516549444913392,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.43448246478317476,
+      "motivo": null,
+      "frente_a_trivial": "no_distinguible",
+      "frente_a_informada": "no_distinguible"
+    }
+  ],
+  "clasificacion_entre_condiciones": [
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "sin_patron",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "sin_patron",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "sin_patron",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "sin_patron",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "problema_de_interfaz",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "problema_de_interfaz",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    }
+  ],
+  "baselines": [
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 5,
+      "n": 5,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 5,
+      "n": 5,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 5,
+      "n": 5,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 5,
+      "n": 5,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 5,
+      "n": 5,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 5,
+      "n": 5,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 5,
+      "n": 5,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 5,
+      "n": 5,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 5,
+      "n": 5,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 2,
+      "n": 5,
+      "tasa": 0.4
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 2,
+      "n": 5,
+      "tasa": 0.4
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 5,
+      "tasa": 0.4
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 1,
+      "n": 5,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 1,
+      "n": 5,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 1,
+      "n": 5,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "no_descontar_stock",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 1,
+      "n": 5,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "no_descontar_stock",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "no_descontar_stock",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "nunca_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "nunca_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "nunca_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "primera_sucursal",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 1,
+      "n": 5,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "primera_sucursal",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "primera_sucursal",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 1,
+      "n": 5,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "primera_sucursal_contada",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 2,
+      "n": 5,
+      "tasa": 0.4
+    },
+    {
+      "baseline": "primera_sucursal_contada",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 1,
+      "n": 5,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "primera_sucursal_contada",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 5,
+      "tasa": 0.4
+    },
+    {
+      "baseline": "siempre_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 2,
+      "n": 5,
+      "tasa": 0.4
+    },
+    {
+      "baseline": "siempre_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 2,
+      "n": 5,
+      "tasa": 0.4
+    },
+    {
+      "baseline": "siempre_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 5,
+      "tasa": 0.4
+    },
+    {
+      "baseline": "sucursal_azar",
+      "clase": "azar",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "sucursal_azar",
+      "clase": "azar",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "sucursal_azar",
+      "clase": "azar",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 1,
+      "n": 5,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "sucursal_azar_contada",
+      "clase": "azar",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 1,
+      "n": 5,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "sucursal_azar_contada",
+      "clase": "azar",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 1,
+      "n": 5,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "sucursal_azar_contada",
+      "clase": "azar",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 5,
+      "tasa": 0.4
+    },
+    {
+      "baseline": "todo_atendido",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 1,
+      "n": 5,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "todo_atendido",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "todo_atendido",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 5,
+      "tasa": 0.0
+    }
+  ],
+  "umbrales": {
+    "cerca_de_100": 0.9,
+    "cerca_de_0": 0.1,
+    "ganancia_apreciable": 0.15,
+    "visible_bueno": 0.7,
+    "brecha_condiciones": 0.3,
+    "mal_en_ambas": 0.3,
+    "ic_muy_ancho": 0.3
+  },
+  "n_rollouts": 540,
+  "n_muestra_errores": 272
+}
