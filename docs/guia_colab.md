@@ -27,7 +27,7 @@ Ejecuta *Entorno de ejecución > Ejecutar todo*. Colab pedirá permiso para usar
 
 El cuaderno comprueba la GPU, instala dependencias, corre las pruebas del núcleo, hace una prueba de humo y luego la exploración. La sección 5 imprime un rollout completo por modelo. Revísalos: el modelo debería llamar a `get_inventory` y terminar con un bloque `<answer>`.
 
-Mantén la pestaña abierta. La exploración completa de 3 variantes tomó cerca de una hora en una T4. Las líneas `TOTAL ...` muestran el tiempo real restante.
+Mantén la pestaña abierta. La exploración corre Qwen3-1.7B y Qwen3-8B con thinking, y guarda en `results/exploracion_parser_nuevo`. Qwen3-8B no cabe en 16 bits en una T4, así que ahí se carga en 8 bits. La exploración anterior de 3 variantes tomó cerca de una hora en una T4; Qwen3-8B será más lento. Las líneas `TOTAL ...` muestran el tiempo real restante.
 
 El piloto no corre con *Ejecutar todo*: está protegido por `EJECUTAR_PILOTO = False`.
 

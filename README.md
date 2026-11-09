@@ -10,18 +10,16 @@ El modelo recibe una solicitud en español, consulta la herramienta `get_invento
 
 | Entregable | Estado |
 |---|---|
-| Harness y verificador | Listos, con un problema conocido (ver abajo) |
+| Harness y verificador | Listos |
 | Generador de tareas | Listo |
 | Exploración de línea base | Terminada |
 | Piloto de línea base (más instancias y pass@5) | Pendiente |
 | Trazas SFT y pares DPO | Pendientes |
 | Informe final | Pendiente |
 
-### Problema conocido: llamadas sin etiqueta
+### Llamadas sin etiqueta
 
-**El harness todavía no reconoce la mayoría de las llamadas que hace el modelo.** Qwen suele escribir el JSON correcto sin `<tool_call>`, y el harness lo trata como respuesta final. Por eso, los resultados con herramientas no miden aún la capacidad real del modelo.
-
-**Antes del piloto** hay que aceptar también JSON sin etiqueta, estilo Python (`get_inventory(...)`) y `tool_call={...}`, y repetir la exploración con herramientas. El cambio va en `parse_tool_calls`, en `src/inventory_harness/tools.py`.
+Qwen suele escribir el JSON correcto sin `<tool_call>`. `parse_tool_calls` ahora acepta también JSON sin etiqueta, estilo Python (`get_inventory(...)`) y `tool_call={...}`. **Los resultados con herramientas de abajo son anteriores a ese cambio** y no miden la capacidad real del modelo: hay que repetir la exploración con herramientas.
 
 ## Resultados de la exploración
 
@@ -43,7 +41,7 @@ Qwen con thinking, por dificultad:
 | Medium | 9/15 | 12/15 |
 | Hard | 3/15 | 5/15 |
 
-Con herramientas, todos los modelos quedaron cerca de 0 por el problema de arriba: Qwen acertó 1 de 90 rollouts con y sin thinking, y Llama 0 de 90.
+Con herramientas, todos los modelos quedaron cerca de 0 porque el harness aún no reconocía las llamadas sin etiqueta: Qwen acertó 1 de 90 rollouts con y sin thinking, y Llama 0 de 90.
 
 Conclusiones por ahora:
 
@@ -163,9 +161,8 @@ docs/propuesta/                enunciado del desafío y propuestas
 
 ## Próximos pasos
 
-1. Corregir el reconocimiento de llamadas.
-2. Ajustar el prompt para que el mensaje de llamadas no incluya cálculos ni supuestos, y sugerir omitir `location_id` al comparar sucursales.
-3. Repetir la exploración de Qwen con thinking y con herramientas.
-4. Correr un piloto reducido, con 20 instancias por celda y 5 muestras (unos 1.800 rollouts).
-5. Generar trazas SFT con un modelo abierto más grande, que el enunciado exige, y pares DPO.
-6. Escribir el informe final de línea base.
+1. Ajustar el prompt para que el mensaje de llamadas no incluya cálculos ni supuestos, y sugerir omitir `location_id` al comparar sucursales.
+2. Repetir la exploración de Qwen con thinking y con herramientas.
+3. Correr un piloto reducido, con 20 instancias por celda y 5 muestras (unos 1.800 rollouts).
+4. Generar trazas SFT con un modelo abierto más grande, que el enunciado exige, y pares DPO.
+5. Escribir el informe final de línea base.

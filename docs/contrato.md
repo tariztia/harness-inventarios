@@ -121,6 +121,7 @@ Observaciones: un solo mensaje `user` por ronda, con un bloque por línea y en e
 - Máximo **2 rondas de herramientas**, seguidas de la respuesta final.
 - Un mensaje con `<tool_call>` es de herramientas, y cualquier `<answer>` en él se ignora.
 - Si falta `</tool_call>`, la llamada vale cuando tras la apertura hay un objeto JSON completo. Un JSON cortado es una llamada mal formada.
+- Si el mensaje no tiene ninguna llamada con etiqueta y tampoco `<answer>`, valen las llamadas sin etiqueta: el objeto JSON `{"name": "get_inventory", "arguments": {...}}` en cualquier parte del texto (también en un bloque de código o tras `tool_call=`) y la forma Python con valores literales, `get_inventory("P01", location_id="S1")`. Un mensaje con `<answer>` es respuesta final, aunque nombre la herramienta. Lo demás que el modelo escriba en ese mensaje, como resultados inventados, no se usa: los datos solo salen del harness.
 - Si el modelo pide una tercera ronda, no se ejecuta: `tool_limit_exceeded=True` y recompensa 0.
 - En condición `visible` no hay herramientas; el prompt incluye la tabla de inventario y una llamada no se ejecuta.
 

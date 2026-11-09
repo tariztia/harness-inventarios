@@ -13,7 +13,7 @@ from typing import Any
 
 from .numbers_es import normalize_text
 from .schema import Instance
-from .verifier import _strip_think
+from .verifier import _ANSWER_TAG_RE, _strip_think
 
 MAX_TOOL_ROUNDS = 2
 TOOL_NAME = "get_inventory"
@@ -28,6 +28,12 @@ ERROR_UNKNOWN_LOCATION = "location_id inexistente en el catalogo"
 
 _CALL_TAG_RE = re.compile(r"<\s{0,8}(/?)\s{0,8}tool_call\s{0,8}>", re.IGNORECASE)
 _RESULT_TAG_RE = re.compile(r"<\s{0,8}/?\s{0,8}tool_result\b", re.IGNORECASE)
+_UNTAGGED_START_RE = re.compile(rf'\{{\s{{0,8}}"|\b{TOOL_NAME}\s{{0,8}}\(', re.IGNORECASE)
+_PYTHON_CALL_RE = re.compile(rf"{TOOL_NAME}\s{{0,8}}\(([^()\n]{{0,200}})\)", re.IGNORECASE)
+_PYTHON_ARGUMENT_RE = re.compile(
+    r"""\s*(?:(product_id|location_id)\s*=\s*)?(?:"([^"]*)"|'([^']*)'|([A-Za-z]\d+)|(None|null))\s*"""
+)
+_PYTHON_POSITIONS = ("product_id", "location_id")
 
 
 def get_inventory(
@@ -88,7 +94,8 @@ def parse_tool_calls(text: str) -> list[Any]:
     Lo que esta dentro de <think> no cuenta, igual que en el verificador. Sin etiqueta de
     cierre, la llamada vale si tras la apertura hay un objeto JSON completo: Llama omite el
     cierre siempre. Si el JSON quedo cortado (sin tokens) es una llamada mal formada: el
-    harness responde con un error y la ronda se cuenta.
+    harness responde con un error y la ronda se cuenta. Si no hay ninguna etiqueta valida,
+    se buscan llamadas sin etiqueta (`_untagged_calls`).
     """
     clean = _clean(text)
     tags = list(_CALL_TAG_RE.finditer(clean))
@@ -107,7 +114,61 @@ def parse_tool_calls(text: str) -> list[Any]:
             continue
         calls.append(_load_call(clean[tag.end() : following.start()]))
         index += 2
+    return calls or _untagged_calls(clean)
+
+
+def _untagged_calls(clean: str) -> list[Any]:
+    """Llamadas sin <tool_call>: JSON suelto (en bloque de codigo o tras `tool_call=`) o
+    forma Python, `get_inventory("P01", location_id="S1")`.
+
+    Qwen casi nunca escribe la etiqueta aunque la llamada sea correcta. Aceptarlas no regala
+    recompensa: los datos siguen saliendo del harness, y lo que no sea una llamada completa
+    no cuenta. Un mensaje con <answer> es respuesta final, aunque nombre la herramienta.
+    """
+    if _ANSWER_TAG_RE.search(clean):
+        return []
+    calls: list[Any] = []
+    position = 0
+    while (start := _UNTAGGED_START_RE.search(clean, position)) is not None:
+        reader = _json_call_at if clean[start.start()] == "{" else _python_call_at
+        call, end = reader(clean, start.start())
+        if call is None:
+            position = start.end()
+        else:
+            calls.append(call)
+            position = end
     return calls
+
+
+def _json_call_at(text: str, start: int) -> tuple[Any, int]:
+    """Solo cuenta un objeto que nombre la herramienta: el resto es prosa o datos inventados."""
+    try:
+        value, end = json.JSONDecoder().raw_decode(text, start)
+    except (ValueError, RecursionError):
+        return None, start
+    if isinstance(value, dict) and value.get("name") == TOOL_NAME and "arguments" in value:
+        return value, end
+    return None, start
+
+
+def _python_call_at(text: str, start: int) -> tuple[Any, int]:
+    """Exige valores literales: asi `def get_inventory(product_id, ...)` no es una llamada."""
+    match = _PYTHON_CALL_RE.match(text, start)
+    if match is None:
+        return None, start
+    arguments: dict[str, Any] = {}
+    for position, piece in enumerate(match.group(1).split(",")):
+        argument = _PYTHON_ARGUMENT_RE.fullmatch(piece)
+        if argument is None or position >= len(_PYTHON_POSITIONS):
+            return None, start
+        key = argument.group(1) or _PYTHON_POSITIONS[position]
+        if key in arguments:
+            return None, start
+        literal = next((group for group in argument.groups()[1:4] if group is not None), None)
+        arguments[key] = literal
+    if arguments.get("product_id") is None:
+        return None, start
+    return {"name": TOOL_NAME, "arguments": arguments}, match.end()
 
 
 def _clean(text: str) -> str:

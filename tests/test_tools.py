@@ -153,3 +153,107 @@ def test_llamada_sin_cierre_con_json_completo_o_cortado():
     assert parse_tool_calls(f"<tool_call>{call}<br>\n<tool_call>{call}") == [json.loads(call)] * 2
     assert parse_tool_calls('<tool_call>{"name": "get_inv') == [None]
     assert parse_tool_calls("<tool_call>[1, 2]") == [None]
+
+
+P01_S2 = call(product_id="P01", location_id="S2")
+P02_S2 = call(product_id="P02", location_id="S2")
+P01_JSON = json.dumps(P01_S2)
+P02_JSON = json.dumps(P02_S2)
+
+
+# Formas copiadas de results/exploracion_prompt_corregido.
+@pytest.mark.parametrize(
+    "text",
+    [
+        P01_JSON,
+        f"```json\n{json.dumps(P01_S2, indent=2)}\n```",
+        f"1. Llamada para P01 en S2:\n`{P01_JSON}`",
+        f".tool_call={P01_JSON}",
+        f"tool_call = {P01_JSON}",
+        f"tool_call {P01_JSON}",
+        f"<think>razono</think>\n\n{P01_JSON}",
+        'get_inventory(product_id="P01", location_id="S2")',
+        "`get_inventory(product_id='P01', location_id='S2')`",
+        'GET_INVENTORY(product_id="P01", location_id="S2")',
+        'get_inventory("P01", "S2")',
+        "get_inventory(P01, S2)",
+        'get_inventory(location_id="S2", product_id="P01")',
+        f"{P01_JSON}</tool_call>",
+    ],
+)
+def test_llamada_sin_etiqueta_se_reconoce(text):
+    assert parse_tool_calls(text) == [P01_S2]
+
+
+def test_varias_llamadas_sin_etiqueta_en_orden():
+    text = f'{P01_JSON}\nget_inventory(product_id="P02", location_id="S2")'
+    assert parse_tool_calls(text) == [P01_S2, P02_S2]
+
+
+def test_forma_python_sin_sucursal_o_con_none():
+    assert parse_tool_calls('get_inventory("P01")') == [call(product_id="P01")]
+    assert parse_tool_calls('get_inventory("P01", location_id=None)') == [
+        call(product_id="P01", location_id=None)
+    ]
+
+
+def test_llamada_envuelta_en_otro_objeto():
+    assert parse_tool_calls(json.dumps({"tool_call": P01_S2})) == [P01_S2]
+
+
+def test_resultados_inventados_no_son_llamadas_pero_no_las_borran():
+    text = f'{P01_JSON}\nResultado: {{"physical_stock": 50, "reserved_stock": 0}}'
+    assert parse_tool_calls(text) == [P01_S2]
+
+
+def test_etiqueta_valida_tiene_prioridad_sobre_lo_demas():
+    tagged = f"<tool_call>{P01_JSON}</tool_call>"
+    assert parse_tool_calls(f'get_inventory("P02", "S2")\n{tagged}') == [P01_S2]
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "get_inventory",
+        "uso get_inventory para consultar",
+        "get_inventory()",
+        "get_inventory(product_id, location_id)",
+        "def get_inventory(product_id, location_id=None):",
+        'get_inventory(location_id="S2")',
+        'get_inventory("P01", "S2", "S3")',
+        'get_inventory("P01", product_id="P02")',
+        'get_inventory(sku="P01")',
+        'get_inventory("P01"',
+        'borrar_todo("P01")',
+        'mi_get_inventory("P01")',
+        '{"name": "get_inv',
+        '{"name": "get_inventory"}',
+        '{"name": "borrar", "arguments": {"product_id": "P01"}}',
+        '{"name": "Pedido O1", "products": [{"product_id": "P01"}]}',
+        '{"physical_stock": 50, "reserved_stock": 0}',
+        f"<think>{P01_JSON}</think>nada",
+        f"<think>{P01_JSON}",
+    ],
+)
+def test_lo_que_no_es_llamada_completa_no_cuenta(text):
+    assert parse_tool_calls(text) == []
+
+
+@pytest.mark.parametrize("call_text", [P01_JSON, 'get_inventory("P01", "S2")', "tool_call=" + P01_JSON])
+def test_mensaje_con_answer_es_respuesta_final(call_text):
+    assert parse_tool_calls(f"{call_text}\n<answer>\nfaltan: 3\n</answer>") == []
+
+
+def test_argumentos_con_id_inexistente_se_ejecutan_y_dan_error():
+    calls = parse_tool_calls('get_inventory("P99", "S9")')
+    assert validate_call(calls[0]) is None
+    assert set(execute_tool_call(INSTANCE, calls[0])) == {"error"}
+
+
+def test_json_sin_etiqueta_con_argumentos_invalidos_es_llamada_invalida():
+    calls = parse_tool_calls('{"name": "get_inventory", "arguments": {"sku": 1}}')
+    assert len(calls) == 1 and validate_call(calls[0]) is not None
+
+
+def test_cadena_muy_anidada_no_lanza():
+    assert parse_tool_calls('{"a":' * 50000) == []

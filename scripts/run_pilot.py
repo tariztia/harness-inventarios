@@ -37,8 +37,12 @@ TARGET_MODEL = "Qwen/Qwen3-1.7B"
 # Copia sin aprobacion manual de meta-llama/Llama-3.2-1B-Instruct (1,24B de parametros).
 LLAMA_MODEL = "unsloth/Llama-3.2-1B-Instruct"
 GATED_MODELS = ("google/gemma-3-1b-it",)
-# El piloto se limita a modelos de maximo 2B.
+# Modelo mas grande: linea base y fuente de las trazas SFT. No es objetivo de entrenamiento.
+LARGE_MODEL = "Qwen/Qwen3-8B"
+# Por omision, solo modelos de maximo 2B.
 DEFAULT_MODELS = (TARGET_MODEL, LLAMA_MODEL)
+# Qwen3-8B pesa 16,4 GB en float16 y la T4 tiene 15 GB: bajo este limite se carga en 8 bits.
+QUANTIZE_BELOW_GIB = {LARGE_MODEL: 20}
 # Gemma 3 puede dar NaN en float16 segun la documentacion de su comunidad; pesa 2 GiB en 16 bits.
 FLOAT32_MODEL_PREFIXES = ("google/gemma-3",)
 # Qwen3 es el unico de estos modelos con modo thinking en su plantilla de chat.
@@ -49,7 +53,7 @@ STAGES: dict[str, dict[str, Any]] = {
     "exploracion": {"base_seed": 11, "split": "train", "n_per_cell": 5, "n_samples": 2},
     "piloto": {"base_seed": 2026, "split": "eval", "n_per_cell": 40, "n_samples": 5},
 }
-DEFAULT_BATCH_SIZE = {TARGET_MODEL: 16, LLAMA_MODEL: 16}
+DEFAULT_BATCH_SIZE = {TARGET_MODEL: 16, LLAMA_MODEL: 16, LARGE_MODEL: 8}
 FALLBACK_BATCH_SIZE = 16
 MAX_NEW_TOKENS_OFF = 768
 MAX_NEW_TOKENS_THINKING = 2048
@@ -284,12 +288,31 @@ def choose_dtype(model: str) -> Any:
     return "auto" if native else torch.float16
 
 
+def quantization_kwargs(model: str) -> dict[str, Any]:
+    """Carga en 8 bits los modelos que no caben en la GPU disponible."""
+    import torch
+
+    limit = QUANTIZE_BELOW_GIB.get(model)
+    if limit is None or not torch.cuda.is_available():
+        return {}
+    if torch.cuda.get_device_properties(0).total_memory >= limit * 1024**3:
+        return {}
+    from transformers import BitsAndBytesConfig
+
+    return {"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
+
+
 def make_backend(variant: dict[str, Any], dry_run: bool, instances: list[Instance]) -> Any:
     from inventory_harness.backends import HFBackend, ScriptedBackend
 
     if dry_run:
         return ScriptedBackend(scripted_policy(instances), name=variant["label"])
-    return HFBackend(variant["model"], name=variant["label"], torch_dtype=choose_dtype(variant["model"]))
+    return HFBackend(
+        variant["model"],
+        name=variant["label"],
+        torch_dtype=choose_dtype(variant["model"]),
+        model_kwargs=quantization_kwargs(variant["model"]),
+    )
 
 
 def free_memory() -> None:
