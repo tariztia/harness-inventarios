@@ -35,16 +35,15 @@ from inventory_harness.schema import CONDITIONS, DIFFICULTIES, FAMILIES  # noqa:
 NEAR_ONE = 0.90
 NEAR_ZERO = 0.10
 APPRECIABLE_GAIN = 0.15
-GAIN_FLOOR = 0.05  # Limite inferior del IC de la ganancia para llamarla firme.
 VISIBLE_GOOD = 0.70
 CONDITION_GAP = 0.30
 BOTH_BAD = 0.30
-BOTH_BAD_CEILING = 0.40
 WIDE_INTERVAL = 0.30
 
 CATEGORY_TEXT = {
     "cerca_de_100": ("Éxito cercano a 100 %", "Poco margen: aumentar composición o variedad"),
     "cerca_de_0": ("Éxito cercano a 0 % incluso con k intentos", "Señal escasa: simplificar, SFT o reconsiderar"),
+    "casi_0_con_senal": ("pass@1 cercano a 0 %, pero pass@k mayor", "Señal escasa pero presente: candidata a SFT antes de RL"),
     "zona_aprendible": ("Acierto intermedio y pass@k mayor que pass@1", "Posible zona aprendible: profundizar"),
     "intermedio_sin_ganancia": ("Acierto intermedio sin ganancia apreciable", "Fuera de la tabla de §6: revisar a mano"),
     "sin_datos": ("Sin datos", "No clasificar"),
@@ -91,38 +90,49 @@ def gain_interval(p1: dict[str, Any], pk: dict[str, Any]) -> tuple[float | None,
 def classify_condition(p1: dict[str, Any], pk: dict[str, Any], k: int) -> dict[str, Any]:
     """Fila de §6 para una celda en una condicion, con cuanto la respaldan los datos.
 
-    `firme` exige que el IC completo caiga en la categoria. Si el IC es mas ancho que
-    WIDE_INTERVAL, la categoria solo se muestra como lectura provisional.
+    `firme` exige que el IC completo caiga en la categoria y, si la categoria depende de
+    la ganancia pass@k - pass@1, tambien el IC de la ganancia. pass@k solo se usa si tiene
+    el mismo denominador que pass@1. Si el IC es mas ancho que WIDE_INTERVAL, la categoria
+    solo se muestra como lectura provisional.
     """
     if not p1["n"]:
         return {"categoria": "sin_datos", "certeza": "sin_datos", "motivo": "pass@1 sin denominador"}
     low, high = p1["ic95"]
     rate = p1["tasa"]
-    has_k = k > 1 and pk["n"] > 0
+    has_k = k > 1 and pk["n"] > 0 and pk["n"] == p1["n"]
+    if has_k:
+        motive = None
+    elif k > 1 and pk["n"] > 0:
+        motive = (
+            f"pass@1 y pass@{k} tienen denominadores distintos (instancias incompletas): "
+            "se clasifica solo con pass@1"
+        )
+    else:
+        motive = f"sin pass@{k} utilizable: se clasifica solo con pass@1"
     pk_rate = pk["tasa"] if has_k else rate
     pk_high = pk["ic95"][1] if has_k else high
+    gain_low, gain_high = gain_interval(p1, pk) if has_k else (None, None)
     if rate >= NEAR_ONE:
         category, firm = "cerca_de_100", low >= NEAR_ONE
+    elif has_k and pk_rate - rate >= APPRECIABLE_GAIN:
+        gain_firm = gain_low >= APPRECIABLE_GAIN
+        if rate <= NEAR_ZERO:
+            category, firm = "casi_0_con_senal", gain_firm and high <= NEAR_ZERO
+        else:
+            category = "zona_aprendible"
+            firm = gain_firm and low > NEAR_ZERO and high < NEAR_ONE
     elif pk_rate <= NEAR_ZERO:
         category, firm = "cerca_de_0", pk_high <= NEAR_ZERO
-    elif has_k and pk_rate - rate >= APPRECIABLE_GAIN:
-        gain_low, _ = gain_interval(p1, pk)
-        firm = gain_low is not None and gain_low >= GAIN_FLOOR and low > NEAR_ZERO and high < NEAR_ONE
-        category = "zona_aprendible"
     else:
-        category, firm = "intermedio_sin_ganancia", low > NEAR_ZERO and high < NEAR_ONE
+        category = "intermedio_sin_ganancia"
+        firm = low > NEAR_ZERO and high < NEAR_ONE and (not has_k or gain_high < APPRECIABLE_GAIN)
     widths = [w for w in (width(p1), width(pk) if has_k else None) if w is not None]
     widest = max(widths)
     if widest > WIDE_INTERVAL:
         certainty = "ic_muy_ancho"
     else:
         certainty = "firme" if firm else "tentativa"
-    return {
-        "categoria": category,
-        "certeza": certainty,
-        "ancho_ic_max": widest,
-        "motivo": None if has_k else f"sin pass@{k} utilizable: se clasifica solo con pass@1",
-    }
+    return {"categoria": category, "certeza": certainty, "ancho_ic_max": widest, "motivo": motive}
 
 
 def classify_pair(
@@ -135,9 +145,10 @@ def classify_pair(
     v_low, v_high = visible["ic95"]
     wide = max(width(tools), width(visible)) > WIDE_INTERVAL
     if v_rate >= VISIBLE_GOOD and v_rate - t_rate >= CONDITION_GAP:
-        category, firm = "problema_de_interfaz", v_low > t_high
+        category = "problema_de_interfaz"
+        firm = v_low >= VISIBLE_GOOD and v_low - t_high >= CONDITION_GAP
     elif v_rate <= BOTH_BAD and t_rate <= BOTH_BAD:
-        category, firm = "mal_en_ambas", max(v_high, t_high) <= BOTH_BAD_CEILING
+        category, firm = "mal_en_ambas", max(v_high, t_high) <= BOTH_BAD
     else:
         category, firm = "sin_patron", False
     if wide:
@@ -243,6 +254,33 @@ def sample_failures(
 # --- Analisis e informe ---------------------------------------------------
 
 
+def group_baselines(
+    rows: list[dict[str, Any]], instances: list[Any]
+) -> dict[tuple[str, str], tuple[dict[Any, Any], dict[Any, Any]]]:
+    """Mejores reglas (trivial, informada) por (modelo, condicion), sobre sus instancias.
+
+    Usa las instancias con muestra 0, que son el denominador de pass@1. Asi un modelo
+    parcial se compara con la tasa de la regla en sus propias instancias.
+    """
+    by_id = {instance.id: instance for instance in instances}
+    ids: dict[tuple[str, str], set[str]] = defaultdict(set)
+    for row in rows:
+        if row["sample"] == 0:
+            ids[(str(row["model"]), str(row["condition"]))].add(str(row["instance_id"]))
+    cache: dict[frozenset[str], tuple[dict[Any, Any], dict[Any, Any]]] = {}
+    result = {}
+    for key, members in ids.items():
+        known = frozenset(members & by_id.keys())
+        if known not in cache:
+            evaluated = evaluate_baselines([by_id[i] for i in sorted(known)]) if known else []
+            cache[known] = (
+                best_by_cell(evaluated),
+                best_by_cell(evaluated, include_reasonable_errors=True),
+            )
+        result[key] = cache[known]
+    return result
+
+
 def analyze(folder: Path, per_stratum: int = 3, seed: int = 2026) -> dict[str, Any]:
     paths = sorted(folder.glob("rollouts_*.jsonl"))
     loaded = load_rollouts(paths)
@@ -258,20 +296,23 @@ def analyze(folder: Path, per_stratum: int = 3, seed: int = 2026) -> dict[str, A
     instances, warning = regenerate_instances(manifest)
     used = {str(row["instance_id"]) for row in rows}
     instances = [i for i in instances if i.id in used]
+    # La tabla descriptiva de reglas usa la union; la comparacion, las instancias de cada grupo.
     baseline_rows = evaluate_baselines(instances) if instances else []
-    trivial = best_by_cell(baseline_rows)
-    informed = best_by_cell(baseline_rows, include_reasonable_errors=True)
+    rules_by_group = group_baselines(rows, instances)
 
     pk_name = f"pass@{k}"
     cells = []
     for group in groups:
         p1, pk = group["pass@1"], group.get(pk_name, group["pass@1"])
         cell = (group["family"], group["difficulty"])
+        trivial, informed = rules_by_group.get((group["model"], group["condition"]), ({}, {}))
         cells.append(
             {
                 **{name: group[name] for name in ("model", "condition", "family", "difficulty")},
                 **classify_condition(p1, pk, k),
+                "regla_trivial": trivial.get(cell),
                 "frente_a_trivial": compare_with_baseline(p1, trivial.get(cell)),
+                "regla_informada": informed.get(cell),
                 "frente_a_informada": compare_with_baseline(p1, informed.get(cell)),
             }
         )
@@ -314,8 +355,6 @@ def analyze(folder: Path, per_stratum: int = 3, seed: int = 2026) -> dict[str, A
             "ic_muy_ancho": WIDE_INTERVAL,
         },
         "_rows": rows,
-        "_trivial": trivial,
-        "_informed": informed,
         "_per_stratum": per_stratum,
         "_seed": seed,
     }
@@ -520,8 +559,7 @@ def render_baselines(result: dict[str, Any]) -> list[str]:
 
     rows = []
     for cell in result["clasificacion"]:
-        key = (cell["family"], cell["difficulty"])
-        trivial, informed = result["_trivial"].get(key), result["_informed"].get(key)
+        trivial, informed = cell["regla_trivial"], cell["regla_informada"]
         rows.append(
             [
                 f"`{cell['model']}`",
@@ -535,8 +573,10 @@ def render_baselines(result: dict[str, Any]) -> list[str]:
             ]
         )
     lines += [
-        "`supera` significa que el límite inferior del IC de pass@1 queda sobre la tasa de la "
-        "regla; `no_distinguible`, que la regla cae dentro del IC.",
+        "Cada fila se compara con la tasa de la regla sobre las mismas instancias de ese modelo "
+        "y condición. `supera` significa que el límite inferior del IC de pass@1 queda sobre la "
+        "tasa de la regla; `no_distinguible`, que la regla cae dentro del IC. Son muchas "
+        "comparaciones con IC95 sin corrección por multiplicidad: algún `supera` puede ser casual.",
         "",
     ]
     lines += table(
@@ -607,9 +647,12 @@ def render_classification(result: dict[str, Any]) -> list[str]:
         "",
         "**Es una lectura orientativa, no una decisión ni un umbral del curso.** La propuesta "
         "define las categorías; los números son nuestros y están en `summary.json`. La "
-        f"certeza es `firme` solo si el IC completo cae en la categoría. Con un IC más ancho "
-        f"que {100 * WIDE_INTERVAL:.0f} puntos se marca `IC muy ancho`: esa categoría es una "
-        "lectura provisional y no debe usarse para decidir.",
+        "certeza es `firme` solo si el IC completo cae en la categoría (y, si la categoría "
+        "depende de la ganancia de pass@k sobre pass@1, también el IC de esa ganancia). Con un "
+        f"IC más ancho que {100 * WIDE_INTERVAL:.0f} puntos se marca `IC muy ancho`: esa "
+        "categoría es una lectura provisional y no debe usarse para decidir. `(solo pass@1)` "
+        "indica que no hubo pass@k utilizable (sin muestras o con denominador distinto por "
+        "instancias incompletas); el motivo está en `summary.json`.",
         "",
     ]
     rows = []
@@ -617,6 +660,10 @@ def render_classification(result: dict[str, Any]) -> list[str]:
     for cell in result["clasificacion"]:
         wide += cell["certeza"] == "ic_muy_ancho"
         label, action = CATEGORY_TEXT[cell["categoria"]]
+        if cell.get("motivo") and cell["categoria"] != "sin_datos":
+            if cell["categoria"] == "cerca_de_0":
+                label = "Éxito cercano a 0 %"
+            label += " (solo pass@1)"
         rows.append(
             [
                 f"`{cell['model']}`",

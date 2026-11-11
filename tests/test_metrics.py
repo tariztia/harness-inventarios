@@ -462,8 +462,18 @@ def test_analyze_empty_folder(tmp_path):
         ((5, 5), (5, 5), "cerca_de_100", "ic_muy_ancho"),
         ((0, 40), (0, 40), "cerca_de_0", "firme"),
         ((0, 5), (0, 5), "cerca_de_0", "ic_muy_ancho"),
+        # Ganancia 14/40: IC de la ganancia [0.22, 0.50], entero sobre 0.15.
         ((16, 40), (30, 40), "zona_aprendible", "firme"),
-        ((20, 40), (22, 40), "intermedio_sin_ganancia", "firme"),
+        # Ganancia 10/40: IC [0.14, 0.40]; el limite inferior no llega a 0.15.
+        ((16, 40), (26, 40), "zona_aprendible", "tentativa"),
+        # Ganancia 2/40: IC [0.01, 0.17]; no descarta una ganancia apreciable.
+        ((20, 40), (22, 40), "intermedio_sin_ganancia", "tentativa"),
+        # Sin ganancia: IC [0, 0.09], entero bajo 0.15.
+        ((20, 40), (20, 40), "intermedio_sin_ganancia", "firme"),
+        # pass@1 casi 0 con ganancia 8/40: no es zona aprendible. IC de la ganancia [0.11, 0.35].
+        ((0, 40), (8, 40), "casi_0_con_senal", "tentativa"),
+        # pass@1 IC [0, 0.04] y ganancia IC [0.22, 0.40]: ambos dentro de la categoria.
+        ((0, 100), (30, 100), "casi_0_con_senal", "firme"),
     ],
 )
 def test_classification_respects_the_interval(p1, pk, category, certainty):
@@ -471,6 +481,37 @@ def test_classification_respects_the_interval(p1, pk, category, certainty):
 
     result = analyze_results.classify_condition(proportion(*p1), proportion(*pk), 5)
     assert (result["categoria"], result["certeza"]) == (category, certainty)
+    assert result["motivo"] is None
+
+
+def test_classification_ignores_pass_at_k_with_another_denominator():
+    import analyze_results
+
+    # Con el mismo denominador seria casi_0_con_senal; aqui faltan 2 instancias en pass@5.
+    result = analyze_results.classify_condition(proportion(0, 40), proportion(8, 38), 5)
+    assert (result["categoria"], result["certeza"]) == ("cerca_de_0", "firme")
+    assert "denominadores distintos" in result["motivo"]
+    assert result["ancho_ic_max"] == pytest.approx(analyze_results.width(proportion(0, 40)))
+
+
+def test_classification_label_shows_when_only_pass_at_1_was_used():
+    import analyze_results
+
+    base = {"model": "m", "condition": "tools", "family": "availability", "difficulty": "easy",
+            "frente_a_trivial": "n/d"}
+    cells = [
+        {**base, **analyze_results.classify_condition(proportion(0, 40), proportion(8, 38), 5)},
+        {**base, "difficulty": "medium",
+         **analyze_results.classify_condition(proportion(0, 40), proportion(0, 40), 5)},
+    ]
+    lines = analyze_results.render_classification(
+        {"clasificacion": cells, "clasificacion_entre_condiciones": []}
+    )
+    easy = next(line for line in lines if "| easy |" in line)
+    medium = next(line for line in lines if "| medium |" in line)
+    assert "Éxito cercano a 0 % (solo pass@1)" in easy
+    assert "incluso con k intentos" not in easy
+    assert "Éxito cercano a 0 % incluso con k intentos |" in medium
 
 
 def test_interface_problem_and_bad_in_both():
@@ -478,9 +519,45 @@ def test_interface_problem_and_bad_in_both():
 
     pair = analyze_results.classify_pair(proportion(8, 40), proportion(36, 40))
     assert (pair["categoria"], pair["certeza"]) == ("problema_de_interfaz", "firme")
+    # Visible 28/40 tiene IC [0.55, 0.82]: el limite inferior queda bajo 0.70.
+    pair = analyze_results.classify_pair(proportion(8, 40), proportion(28, 40))
+    assert (pair["categoria"], pair["certeza"]) == ("problema_de_interfaz", "tentativa")
     pair = analyze_results.classify_pair(proportion(2, 40), proportion(3, 40))
     assert (pair["categoria"], pair["certeza"]) == ("mal_en_ambas", "firme")
+    # 9/40 tiene IC [0.12, 0.38]: el limite superior pasa de 0.30.
+    pair = analyze_results.classify_pair(proportion(5, 40), proportion(9, 40))
+    assert (pair["categoria"], pair["certeza"]) == ("mal_en_ambas", "tentativa")
     assert analyze_results.classify_pair(None, proportion(1, 2))["categoria"] == "falta_condicion"
+
+
+def test_baseline_comparison_uses_each_model_instances(tmp_path):
+    import analyze_results
+    import run_pilot
+
+    from inventory_harness.baselines import best_by_cell, evaluate_baselines
+
+    assert dry_run(tmp_path, "--limit", "18", "--models", "m/uno", "m/dos") == 0
+    partial = tmp_path / "rollouts_m_dos.jsonl"
+    rows = [json.loads(line) for line in partial.read_text(encoding="utf-8").splitlines()]
+    first = {}
+    for r in rows:
+        first.setdefault((r["family"], r["difficulty"]), r["instance_id"])
+    kept = [r for r in rows if r["instance_id"] in set(first.values())]
+    partial.write_text("".join(json.dumps(r) + "\n" for r in kept), encoding="utf-8")
+
+    result = analyze_results.analyze(tmp_path)
+    instances = run_pilot.build_dataset("train", 5, 11)[:18]
+    own = [i for i in instances if i.id in set(first.values())]
+    expected = {
+        "m/uno": best_by_cell(evaluate_baselines(instances)),
+        "m/dos": best_by_cell(evaluate_baselines(own)),
+    }
+    assert expected["m/uno"] != expected["m/dos"]
+    for cell in result["clasificacion"]:
+        key = (cell["family"], cell["difficulty"])
+        assert cell["regla_trivial"] == expected[cell["model"]].get(key)
+        if cell["model"] == "m/dos" and cell["regla_trivial"]:
+            assert cell["regla_trivial"]["n"] <= 1
 
 
 def test_availability_chance_level_does_not_beat_trivial_rule():
