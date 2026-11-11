@@ -140,6 +140,31 @@ def test_script_de_punta_a_punta_con_dry_run(tmp_path):
         assert reward(item["prompt"], json.dumps(item["rejected"])) == 0.0
     manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["profesor"] == "m/grande" and manifest["sft"] == len(sft)
+    assert manifest["avisos"] == []
+
+
+def test_script_avisa_si_la_corrida_uso_otro_codigo(tmp_path, capsys):
+    import build_training_data
+    import run_pilot
+
+    runs = tmp_path / "trazas"
+    assert run_pilot.main([
+        "--stage", "trazas", "--dry-run", "--limit", "9", "--n-samples", "1",
+        "--models", "m/chico", "--out", str(runs),
+    ]) == 0
+    path = runs / "manifest.json"
+    run_manifest = json.loads(path.read_text(encoding="utf-8"))
+    run_manifest.update(code_hash="otro", hashes_anteriores=["viejo"])
+    path.write_text(json.dumps(run_manifest), encoding="utf-8")
+    capsys.readouterr()
+
+    out = tmp_path / "datos"
+    assert build_training_data.main([str(runs), "--out", str(out)]) == 0
+    printed = capsys.readouterr().out
+    assert "AVISO: trazas: la corrida uso el codigo otro" in printed
+    assert "mezcla versiones" in printed
+    manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
+    assert len(manifest["avisos"]) == 2
 
 
 def test_script_rechaza_corridas_que_no_son_de_train(tmp_path):
