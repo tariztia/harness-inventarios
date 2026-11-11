@@ -20,6 +20,10 @@ INCLUDE_DIRS = ("src", "scripts", "tests", "docs")
 INCLUDE_FILES = ("pyproject.toml",)
 EXCLUDED_PARTS = {"__pycache__", ".pytest_cache"}
 EXCLUDED_SUFFIXES = {".pyc", ".pyo"}
+# Salidas de corridas: un `--out tests/salida` o un sft.jsonl en docs/ no deben viajar en el
+# zip. Los datos se regeneran desde semillas y los resultados viven en Drive.
+DATA_SUFFIXES = {".jsonl", ".tmp"}
+DATA_NAMES = {"manifest.json", "summary.json", "stats.json"}
 # Sin dependencias externas: comprueba que el zip trae todo el nucleo y las etapas.
 SELF_CHECK = (
     "import sys; sys.path.insert(0, 'src');"
@@ -38,8 +42,25 @@ def files_to_package() -> list[Path]:
                 continue
             if EXCLUDED_PARTS & set(path.relative_to(ROOT).parts):
                 continue
+            if path.suffix in DATA_SUFFIXES or path.name in DATA_NAMES:
+                continue
             paths.append(path)
     return paths
+
+
+def untracked(names: list[str]) -> list[str]:
+    """Archivos del zip que git no sigue. Vacio si no hay git: es solo un aviso."""
+    try:
+        done = subprocess.run(
+            ["git", "ls-files", "--others", "--exclude-standard", *INCLUDE_DIRS],
+            cwd=ROOT, capture_output=True, text=True, timeout=10,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return []
+    if done.returncode != 0:
+        return []
+    others = set(done.stdout.split())
+    return [name for name in names if name in others]
 
 
 def build(out: Path) -> list[str]:
@@ -88,6 +109,9 @@ def main() -> None:
     forbidden = [n for n in names if n.startswith(("data/", "results/")) or "__pycache__" in n]
     if forbidden:
         raise SystemExit(f"archivos que no deben ir en el zip: {forbidden[:5]}")
+    extra = untracked(names)
+    if extra:
+        print(f"AVISO: {len(extra)} archivos sin seguimiento de git van en el zip: {extra[:5]}")
     if not args.skip_check:
         check_in_empty_folder(args.out)
     digest = hashlib.sha256(args.out.read_bytes()).hexdigest()[:12]
