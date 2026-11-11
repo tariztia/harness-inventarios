@@ -131,6 +131,7 @@ Observaciones: un solo mensaje `user` por ronda, con un bloque por línea y en e
 
 - Normaliza cada respuesta: las llamadas pasan a `<tool_call>{json}</tool_call>` y se descarta el texto que las acompaña; el razonamiento de `<think>` se conserva. Si la normalización cambia la recompensa, la respuesta se descarta.
 - `sft.jsonl`: `{"id", "instance_id", "family", "difficulty", "condition", "source_model", "sample", "messages"}`. `messages` empieza con el prompt como mensaje `user`. Solo respuestas con recompensa 1 y llamadas válidas, priorizando al profesor (`--teacher`, por omisión `Qwen/Qwen3-8B+think`).
+- El razonamiento de rondas anteriores no llega al modelo: la plantilla de chat de Qwen3 borra el `<think>` de todo mensaje `assistant` previo al último mensaje `user`, y en este harness las observaciones son mensajes `user`. En la ronda 2 el modelo ve sus llamadas, pero no lo que pensó antes de hacerlas. Las trazas sí guardan ese `<think>`: al entrenar con la misma plantilla se borra igual, pero un entrenador que arme el texto por su cuenta le enseñaría al modelo un contexto que nunca ve al generar.
 - `dpo.jsonl`: `{"id", ..., "prompt", "chosen", "rejected", "chosen_model", "rejected_model", "rejected_error_type"}`. `chosen` y `rejected` son los mensajes posteriores al prompt, así que `reward(prompt, json.dumps(chosen))` da 1.0 y con `rejected` da 0.0. La rechazada prioriza modelos distintos del profesor y errores de valor; nunca es una respuesta cortada por el tope de tokens.
 
 ## Interfaz del curso
