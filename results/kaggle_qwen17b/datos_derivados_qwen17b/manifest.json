@@ -1,0 +1,179 @@
+{
+  "created_at": "2026-11-11T20:31:30+00:00",
+  "code_hash": "0790fe94aa2873b8",
+  "corridas": [
+    {
+      "carpeta": "trazas_qwen17b",
+      "stage": "trazas",
+      "dry_run": false,
+      "dataset": {
+        "split": "train",
+        "n_per_cell": 10,
+        "base_seed": 2026,
+        "fingerprint": "80651860efcd8e0fc14fb25c68da0e9ef3d28838eed3f4443cb7c219feefc89f"
+      },
+      "gen_configs": {
+        "Qwen/Qwen3-1.7B+think": {
+          "model": "Qwen/Qwen3-1.7B+think",
+          "model_id": "Qwen/Qwen3-1.7B",
+          "enable_thinking": true,
+          "max_new_tokens": 4096,
+          "do_sample": true,
+          "temperature": 0.7,
+          "top_p": 0.95,
+          "top_k": 50,
+          "repetition_penalty": 1.0,
+          "seed": 2026,
+          "batch_size": 8
+        }
+      }
+    }
+  ],
+  "profesor": null,
+  "max_sft_por_prompt": 1,
+  "procedimiento": [
+    "Cada modelo resuelve instancias de train con run_pilot (etapa trazas).",
+    "Cada rollout se normaliza: las llamadas pasan a <tool_call>{json}</tool_call> y se descarta el texto que las acompana; el razonamiento <think> se conserva.",
+    "El verificador vuelve a evaluar cada rollout normalizado contra la instancia protegida.",
+    "SFT: rollouts con recompensa 1 y llamadas validas, priorizando al profesor.",
+    "DPO: por prompt, una respuesta correcta (priorizando al profesor) y una incorrecta (priorizando otros modelos y errores de valor). Se excluyen las respuestas cortadas por el tope de tokens."
+  ],
+  "rollouts_leidos": 360,
+  "descartados": {},
+  "prompts": 180,
+  "sft": 109,
+  "dpo": 57,
+  "sft_por_modelo": {
+    "Qwen/Qwen3-1.7B+think": 109
+  },
+  "dpo_rechazada_por_error": {
+    "missing_field": 10,
+    "ambiguous_value": 2,
+    "wrong_value": 28,
+    "no_answer_block": 4,
+    "tool_limit_exceeded": 2,
+    "unknown_field": 11
+  },
+  "por_celda": {
+    "availability|easy|tools": {
+      "prompts": 10,
+      "con_correcta": 7,
+      "con_incorrecta": 10,
+      "sft": 7,
+      "dpo": 7
+    },
+    "availability|easy|visible": {
+      "prompts": 10,
+      "con_correcta": 9,
+      "con_incorrecta": 3,
+      "sft": 9,
+      "dpo": 2
+    },
+    "availability|hard|tools": {
+      "prompts": 10,
+      "con_correcta": 9,
+      "con_incorrecta": 9,
+      "sft": 9,
+      "dpo": 8
+    },
+    "availability|hard|visible": {
+      "prompts": 10,
+      "con_correcta": 8,
+      "con_incorrecta": 5,
+      "sft": 8,
+      "dpo": 3
+    },
+    "availability|medium|tools": {
+      "prompts": 10,
+      "con_correcta": 6,
+      "con_incorrecta": 9,
+      "sft": 6,
+      "dpo": 5
+    },
+    "availability|medium|visible": {
+      "prompts": 10,
+      "con_correcta": 8,
+      "con_incorrecta": 6,
+      "sft": 8,
+      "dpo": 4
+    },
+    "composition|easy|tools": {
+      "prompts": 10,
+      "con_correcta": 0,
+      "con_incorrecta": 10
+    },
+    "composition|easy|visible": {
+      "prompts": 10,
+      "con_correcta": 8,
+      "con_incorrecta": 5,
+      "sft": 8,
+      "dpo": 3
+    },
+    "composition|hard|tools": {
+      "prompts": 10,
+      "con_correcta": 0,
+      "con_incorrecta": 9
+    },
+    "composition|hard|visible": {
+      "prompts": 10,
+      "con_correcta": 0,
+      "con_incorrecta": 10
+    },
+    "composition|medium|tools": {
+      "prompts": 10,
+      "con_correcta": 1,
+      "con_incorrecta": 10,
+      "sft": 1,
+      "dpo": 1
+    },
+    "composition|medium|visible": {
+      "prompts": 10,
+      "con_correcta": 3,
+      "con_incorrecta": 9,
+      "sft": 3,
+      "dpo": 2
+    },
+    "selection|easy|tools": {
+      "prompts": 10,
+      "con_correcta": 9,
+      "con_incorrecta": 7,
+      "sft": 9,
+      "dpo": 6
+    },
+    "selection|easy|visible": {
+      "prompts": 10,
+      "con_correcta": 9,
+      "con_incorrecta": 2,
+      "sft": 9,
+      "dpo": 1
+    },
+    "selection|hard|tools": {
+      "prompts": 10,
+      "con_correcta": 5,
+      "con_incorrecta": 10,
+      "sft": 5,
+      "dpo": 5
+    },
+    "selection|hard|visible": {
+      "prompts": 10,
+      "con_correcta": 8,
+      "con_incorrecta": 4,
+      "sft": 8,
+      "dpo": 2
+    },
+    "selection|medium|tools": {
+      "prompts": 10,
+      "con_correcta": 9,
+      "con_incorrecta": 8,
+      "sft": 9,
+      "dpo": 7
+    },
+    "selection|medium|visible": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 1,
+      "sft": 10,
+      "dpo": 1
+    }
+  }
+}
