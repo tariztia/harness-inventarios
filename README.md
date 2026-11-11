@@ -14,7 +14,7 @@ El modelo recibe una solicitud en español, consulta la herramienta `get_invento
 | Generador de tareas | Listo |
 | Exploración de línea base | Terminada |
 | Piloto de línea base (más instancias y pass@5) | Pendiente |
-| Trazas SFT y pares DPO | Pendientes |
+| Trazas SFT y pares DPO | Script listo; faltan las corridas |
 | Informe final | Pendiente |
 
 ### Llamadas sin etiqueta
@@ -94,6 +94,18 @@ print(reward(prompt, "<answer>\nalcanza: sí\nfaltan: 999\n</answer>"))  # 0.0
 Para un dataset guardado, usa `InstanceStore.from_jsonl("data/eval.jsonl")`.
 
 En la condición con herramientas, `completion` es la trayectoria completa serializada como JSON. El harness repite cada llamada contra el estado protegido, así que una observación inventada o una respuesta adivinada recibe 0. El detalle está en [docs/contrato.md](docs/contrato.md).
+
+### Línea base y datos del modelo objetivo
+
+`notebooks/qwen_objetivo_colab.ipynb` corre Qwen3-1.7B con thinking en Colab: mide su línea base sobre `eval` (pass@1 y pass@5) y guarda sus respuestas sobre `train`. No entrena el modelo.
+
+Las respuestas sobre `train` se convierten en datos de entrenamiento con:
+
+```bash
+uv run python scripts/build_training_data.py results/trazas --out results/datos_derivados
+```
+
+El script vuelve a verificar cada respuesta y escribe `sft.jsonl` (trazas correctas), `dpo.jsonl` (una correcta y una incorrecta por prompt) y `manifest.json` (procedimiento y conteos). Acepta varias carpetas: con las de Qwen3-8B, sus respuestas tienen prioridad como correctas. Rechaza cualquier corrida que no sea de `train`.
 
 ### Correr modelos en Colab
 

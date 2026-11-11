@@ -18,7 +18,7 @@ En [Google Drive](https://drive.google.com), crea la carpeta `inventory_harness`
 
 ## 3. Abrir el cuaderno y activar la GPU
 
-1. En [Colab](https://colab.research.google.com), usa *Archivo > Subir cuaderno* y elige `notebooks/piloto_colab.ipynb`.
+1. En [Colab](https://colab.research.google.com), usa *Archivo > Subir cuaderno* y elige `notebooks/piloto_colab.ipynb`. Para la línea base y las respuestas del modelo objetivo, elige en cambio `notebooks/qwen_objetivo_colab.ipynb`, que se ejecuta completo con *Ejecutar todo*.
 2. Usa *Entorno de ejecución > Cambiar tipo de entorno de ejecución > GPU T4 > Guardar*.
 
 ## 4. Ejecutar la exploración

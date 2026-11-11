@@ -371,7 +371,7 @@ def test_thinking_variants_get_separate_files_and_keys(tmp_path):
     assert all(k.startswith("Qwen/Qwen3-1.7B+think|") for k in keys_in(think))
     config = json.loads(think.read_text(encoding="utf-8").splitlines()[0])["gen_config"]
     assert config["enable_thinking"] is True
-    assert config["max_new_tokens"] == 2048
+    assert config["max_new_tokens"] == 4096
 
 
 def test_thinking_skipped_for_models_without_it():
@@ -491,9 +491,20 @@ def test_availability_chance_level_does_not_beat_trivial_rule():
     assert analyze_results.compare_with_baseline(proportion(36, 40), baseline) == "supera"
 
 
+QWEN_NOTEBOOK = ROOT / "notebooks" / "qwen_objetivo_colab.ipynb"
+
+
 @pytest.mark.skipif(not NOTEBOOK.exists(), reason="el zip de Colab no trae el cuaderno")
-def test_notebook_is_valid_and_code_compiles():
-    notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
+@pytest.mark.parametrize(
+    "path, needed",
+    [
+        (NOTEBOOK, ("EJECUTAR_PILOTO = False", "userdata.get", "drive.mount", "resultados_inventory_harness.zip")),
+        (QWEN_NOTEBOOK, ("drive.mount", "--stage\", \"piloto", "--stage\", \"trazas", "build_training_data.py",
+                         "resultados_qwen17b.zip")),
+    ],
+)
+def test_notebook_is_valid_and_code_compiles(path, needed):
+    notebook = json.loads(path.read_text(encoding="utf-8"))
     assert notebook["nbformat"] == 4
     code_cells = [c for c in notebook["cells"] if c["cell_type"] == "code"]
     assert code_cells
@@ -505,8 +516,8 @@ def test_notebook_is_valid_and_code_compiles():
             for line in "".join(cell["source"]).splitlines()
         ]
         compile("\n".join(lines), "celda", "exec")
-    for needed in ("EJECUTAR_PILOTO = False", "userdata.get", "drive.mount", "resultados_inventory_harness.zip"):
-        assert needed in text
+    for piece in needed:
+        assert piece.replace("\\", "") in text
     assert "print(_token" not in text
 
 

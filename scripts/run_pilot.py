@@ -52,11 +52,15 @@ STAGES: dict[str, dict[str, Any]] = {
     # `train`, para que la calibracion no toque `eval`. `test` queda reservado.
     "exploracion": {"base_seed": 11, "split": "train", "n_per_cell": 5, "n_samples": 2},
     "piloto": {"base_seed": 2026, "split": "eval", "n_per_cell": 40, "n_samples": 5},
+    # Respuestas para SFT y DPO. Con la semilla del piloto, train sale de la misma
+    # generacion que eval y no repite ninguna de sus instancias.
+    "trazas": {"base_seed": 2026, "split": "train", "n_per_cell": 10, "n_samples": 2},
 }
 DEFAULT_BATCH_SIZE = {TARGET_MODEL: 16, LLAMA_MODEL: 16, LARGE_MODEL: 8}
 FALLBACK_BATCH_SIZE = 16
 MAX_NEW_TOKENS_OFF = 768
-MAX_NEW_TOKENS_THINKING = 2048
+# Con 2.048, la exploracion corto 37 de 180 rollouts con thinking, sobre todo en medium y hard.
+MAX_NEW_TOKENS_THINKING = 4096
 # Explicitos: de otro modo cada modelo hereda los de su generation_config.
 SAMPLING = {"do_sample": True, "temperature": 0.7, "top_p": 0.95, "top_k": 50, "repetition_penalty": 1.0}
 GENERATION_SEED = 2026
@@ -406,7 +410,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--n-per-cell", type=int, help="por omision, el valor de la etapa")
     parser.add_argument("--n-samples", type=int, help="por omision, el valor de la etapa")
     parser.add_argument("--out", type=Path, help="por omision, results/<etapa>")
-    parser.add_argument("--max-new-tokens", type=int, help="por omision, 768 sin thinking y 2048 con thinking")
+    parser.add_argument("--max-new-tokens", type=int, help="por omision, 768 sin thinking y 4096 con thinking")
     parser.add_argument("--batch-size", type=int, help="por omision, segun el modelo")
     parser.add_argument("--thinking", choices=("off", "on", "both"), default="off")
     parser.add_argument("--limit", type=int, help="humo: solo las primeras N instancias, intercaladas por celda")
