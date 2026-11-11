@@ -97,7 +97,7 @@ En la condición con herramientas, `completion` es la trayectoria completa seria
 
 ### Línea base y datos del modelo objetivo
 
-`notebooks/qwen_objetivo_colab.ipynb` corre Qwen3-1.7B con thinking en Colab: mide su línea base sobre `eval` (pass@1 y pass@5) y guarda sus respuestas sobre `train`. No entrena el modelo.
+`notebooks/qwen_objetivo_colab.ipynb` corre Qwen3-1.7B con thinking en Colab: mide su línea base sobre `eval` (pass@1 y pass@5) y guarda sus respuestas sobre `train`. No entrena el modelo. Si Colab se queda sin cuota de GPU, `notebooks/qwen_objetivo_kaggle.ipynb` hace lo mismo en Kaggle y continúa la corrida anterior (ver `docs/guia_kaggle.md`).
 
 Las respuestas sobre `train` se convierten en datos de entrenamiento con:
 
