@@ -143,6 +143,82 @@ def test_script_de_punta_a_punta_con_dry_run(tmp_path):
     assert manifest["avisos"] == []
 
 
+@pytest.mark.parametrize(
+    "text, thinking",
+    [
+        ('<think>a</think>\nget_inventory("P01") da 50\n<think>b</think>\nget_inventory("P02")',
+         "<think>a</think>\n<think>b</think>"),
+        ('<think>razono</THINK>\nget_inventory("P01") -> stock 50', "<think>razono</THINK>"),
+        ('<think>razono</ think>\nget_inventory("P01") -> stock 50', "<think>razono</ think>"),
+        ('razono</think>\nget_inventory("P01") -> stock 50', "razono</think>"),
+        ('get_inventory("P01") -> stock 50', ""),
+    ],
+)
+def test_normalizar_lee_el_think_como_el_verificador(text, thinking):
+    from inventory_harness.training_data import thinking_part
+
+    assert thinking_part(text) == thinking
+    out = normalize_tool_message(text)
+    assert "stock 50" not in out and "da 50" not in out
+    assert out.endswith("</tool_call>")
+
+
+def test_corridas_con_otra_semilla_no_mezclan_prompts(tmp_path):
+    """Los IDs se repiten entre semillas: cada par DPO debe salir de un solo prompt."""
+    import build_training_data
+    import run_pilot
+
+    explore, traces = tmp_path / "exploracion", tmp_path / "trazas"
+    for stage, folder, model in (("exploracion", explore, "m/chico"), ("trazas", traces, "m/grande")):
+        assert run_pilot.main([
+            "--stage", stage, "--dry-run", "--limit", "9", "--n-samples", "2",
+            "--models", model, "--out", str(folder),
+        ]) == 0
+    instances, rows = [], []
+    for folder in (explore, traces):
+        _, run_instances, run_rows = build_training_data.load_run(folder)
+        instances += run_instances
+        rows += run_rows
+    candidates = collect(rows, InstanceStore(instances), Counter())
+    sft, dpo, stats = build(candidates, teacher="m/grande")
+
+    assert stats["prompts"] == len({c.prompt for c in candidates})
+    by_prompt: dict[str, list] = {}
+    for c in candidates:
+        by_prompt.setdefault(c.prompt, []).append(c.messages)
+    for pair in dpo:
+        assert pair["chosen"] in by_prompt[pair["prompt"]]
+        assert pair["rejected"] in by_prompt[pair["prompt"]]
+    for item in sft:
+        prompt, *rest = item["messages"]
+        assert rest in by_prompt[prompt["content"]]
+    assert len({row["id"] for row in sft}) == len(sft)
+    assert len({row["id"] for row in dpo}) == len(dpo)
+
+
+def test_train_igual_a_eval_se_excluye(tmp_path):
+    """Con --n-per-cell 50, train_availability_easy_0038 repite una instancia del piloto."""
+    import build_training_data
+    import run_pilot
+
+    from inventory_harness.generator import fingerprint
+
+    runs = tmp_path / "trazas"
+    assert run_pilot.main([
+        "--stage", "trazas", "--dry-run", "--n-per-cell", "50", "--n-samples", "1",
+        "--models", "m/chico", "--conditions", "visible", "--out", str(runs),
+    ]) == 0
+    out = tmp_path / "datos"
+    assert build_training_data.main([str(runs), "--out", str(out)]) == 0
+    manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["descartados"].get("igual_a_eval_o_test", 0) >= 1
+
+    held_out = build_training_data.held_out_fingerprints([manifest["corridas"][0]["dataset"]])
+    train = {i.id: i for i in run_pilot.build_dataset("train", 50, 2026)}
+    for line in (out / "sft.jsonl").read_text(encoding="utf-8").splitlines():
+        assert fingerprint(train[json.loads(line)["instance_id"]]) not in held_out
+
+
 def test_script_avisa_si_la_corrida_uso_otro_codigo(tmp_path, capsys):
     import build_training_data
     import run_pilot
