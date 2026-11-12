@@ -299,7 +299,9 @@ def quantization_kwargs(model: str) -> dict[str, Any]:
     limit = QUANTIZE_BELOW_GIB.get(model)
     if limit is None or not torch.cuda.is_available():
         return {}
-    if torch.cuda.get_device_properties(0).total_memory >= limit * 1024**3:
+    # Con device_map="auto" el modelo se reparte entre todas las GPU visibles (Kaggle da dos T4).
+    total = sum(torch.cuda.get_device_properties(i).total_memory for i in range(torch.cuda.device_count()))
+    if total >= limit * 1024**3:
         return {}
     from transformers import BitsAndBytesConfig
 
@@ -348,19 +350,26 @@ def run_variant(
     backend: Any,
     state: dict[str, Any],
     save_state: Any,
+    allowed: dict[str, set[str]] | None = None,
 ) -> None:
     """Corre por tramos, alternando condicion, e informa una estimacion con tiempos reales.
 
     Cada tramo cierra el archivo, lo que ayuda a que Drive lo sincronice, y alternar deja
-    ambas condiciones parejas si la sesion se corta.
+    ambas condiciones parejas si la sesion se corta. Con `allowed`, solo corre esos pares
+    (instancia, condicion); las claves son las mismas, asi que se reanuda igual.
     """
     from inventory_harness.rollout import run_rollouts, sample_key
 
+    def included(instance: Instance, condition: str) -> bool:
+        return allowed is None or instance.id in allowed.get(condition, ())
+
+    instances = [i for i in instances if any(included(i, c) for c in conditions)]
     label = variant["label"]
     wanted = {
         sample_key(label, condition, instance.id, sample)
         for condition in conditions
         for instance in instances
+        if included(instance, condition)
         for sample in range(n_samples)
     }
     state["esperados"] = len(wanted)
@@ -370,10 +379,12 @@ def run_variant(
 
     def run(piece: list[Instance]) -> None:
         for condition in conditions:
-            run_rollouts(
-                piece, condition, backend, gen_config, n_samples, path,
-                run_label=label, base_seed=GENERATION_SEED,
-            )
+            subset = [instance for instance in piece if included(instance, condition)]
+            if subset:
+                run_rollouts(
+                    subset, condition, backend, gen_config, n_samples, path,
+                    run_label=label, base_seed=GENERATION_SEED,
+                )
 
     started = time.monotonic()
     done_at_start = done_count()
@@ -415,7 +426,22 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--thinking", choices=("off", "on", "both"), default="off")
     parser.add_argument("--limit", type=int, help="humo: solo las primeras N instancias, intercaladas por celda")
     parser.add_argument("--dry-run", action="store_true", help="usa ScriptedBackend, sin GPU")
+    parser.add_argument("--only", type=Path,
+                        help="JSON de scripts/pending_prompts.py: solo esos pares (instancia, condicion)")
     return parser.parse_args(argv)
+
+
+def load_only(path: Path, instances: list[Instance]) -> dict[str, set[str]]:
+    """Pares (instancia, condicion) permitidos, por condicion. Rechaza IDs fuera del dataset."""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    pairs = data["pending"] if isinstance(data, dict) else data
+    known = {instance.id for instance in instances}
+    allowed: dict[str, set[str]] = defaultdict(set)
+    for pair in pairs:
+        if pair["instance_id"] not in known or pair["condition"] not in CONDITIONS:
+            raise SystemExit(f"{path}: {pair['instance_id']}|{pair['condition']} no esta en el dataset")
+        allowed[pair["condition"]].add(pair["instance_id"])
+    return dict(allowed)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -434,6 +460,7 @@ def main(argv: list[str] | None = None) -> int:
         "fingerprint": dataset_fingerprint(instances),
     }
     selected = instances[: args.limit] if args.limit else instances
+    allowed = load_only(args.only, instances) if args.only else None
     variants, notes = expand_variants(list(args.models), args.thinking)
     for note in notes:
         print(note, flush=True)
@@ -445,6 +472,11 @@ def main(argv: list[str] | None = None) -> int:
         "n_samples": n_samples,
         "limit": args.limit,
         "conditions": list(args.conditions),
+        # Solo la ultima invocacion; las claves de cada rollout dicen que se corrio.
+        "only": None if allowed is None else {
+            "archivo": args.only.name,
+            "pares": sum(len(ids) for ids in allowed.values()),
+        },
         "seeds": {"dataset": stage["base_seed"], "generation": GENERATION_SEED},
         "entorno": environment(),
         "code_hash": code_hash(),
@@ -504,7 +536,7 @@ def main(argv: list[str] | None = None) -> int:
         try:
             run_variant(
                 variant, selected, list(args.conditions), n_samples, gen_config, path, backend,
-                state, lambda: write_manifest(out, manifest),
+                state, lambda: write_manifest(out, manifest), allowed,
             )
             state["estado"] = "completo" if state["hechos"] == state["esperados"] else "incompleto"
         except Exception as exc:

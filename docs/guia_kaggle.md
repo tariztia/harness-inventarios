@@ -28,3 +28,15 @@ Con dos GPU, la línea base y las respuestas de `train` corren al mismo tiempo, 
 En la página del cuaderno, abre la versión guardada (*Version history*) y su pestaña **Output**. Descarga `resultados_qwen17b.zip`, que trae las carpetas `linea_base_qwen17b`, `trazas_qwen17b` y `datos_derivados_qwen17b`.
 
 Si la corrida no alcanzó a terminar, crea un dataset nuevo con esas carpetas, que reemplace al anterior como entrada, y guarda otra versión: continúa donde quedó.
+
+## Profesor Qwen3-8B (`qwen_profesor_kaggle.ipynb`)
+
+Corre Qwen3-8B sobre las tareas de `train` para dar respuestas correctas donde Qwen3-1.7B no las tiene, y arma los datos SFT/DPO con ambos modelos. En float16 pesa 16 GB: se reparte entre las dos T4.
+
+1. **Dataset nuevo** (*Create > New Dataset*, privado), con dos archivos: el `inventory_harness_colab.zip` actualizado (trae `scripts/pending_prompts.py`) y `resultados_qwen17b.zip`, la salida de la corrida del 1.7B.
+2. **Cuaderno nuevo**: *File > Import Notebook* con `notebooks/qwen_profesor_kaggle.ipynb`. *Add Input* con ese dataset. *Settings*: **GPU T4 x2** e **Internet On**.
+3. **Paso 1, prueba** (`PASO = 1`, ya viene así): *Save Version > Save & Run All (Commit)*. Corre 9 prompts donde el 1.7B nunca acertó, con 2 muestras. La sección 6 del log dice cuántos resolvió el 8B y cuánto tardó por respuesta.
+4. **Paso 2, pendientes** (`PASO = 2`): los 71 prompts sin respuesta correcta. Agrega como entrada la salida de la versión anterior (*Add Input > Your Work*, el mismo cuaderno) para no repetir la prueba, y guarda otra versión.
+5. **Paso 3, todo** (`PASO = 3`, opcional): los 180 prompts, para que todas las trazas SFT vengan del 8B. Igual que el paso 2, con la salida anterior como entrada.
+
+Cada versión deja en *Output* `resultados_qwen8b.zip`, con `trazas_qwen8b`, `datos_derivados_qwen8b` y las listas de pendientes.
