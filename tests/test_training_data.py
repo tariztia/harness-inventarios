@@ -153,3 +153,52 @@ def test_script_rechaza_corridas_que_no_son_de_train(tmp_path):
     ]) == 0
     with pytest.raises(SystemExit):
         build_training_data.main([str(runs), "--out", str(tmp_path / "datos")])
+
+
+def test_pendientes_y_only_corren_solo_lo_que_falta(tmp_path):
+    import pending_prompts
+    import run_pilot
+
+    chico = tmp_path / "chico"
+    assert run_pilot.main([
+        "--stage", "trazas", "--dry-run", "--n-samples", "1", "--models", "m/chico", "--out", str(chico),
+    ]) == 0
+    lista = tmp_path / "pendientes.json"
+    assert pending_prompts.main([str(chico), "--out", str(lista)]) == 0
+    pending = json.loads(lista.read_text(encoding="utf-8"))["pending"]
+    assert pending
+
+    store = InstanceStore(run_pilot.build_dataset("train", 10, 2026))
+    rows = [json.loads(line) for f in chico.glob("rollouts_*.jsonl")
+            for line in f.read_text(encoding="utf-8").splitlines()]
+    solved = {(c.instance.id, c.condition) for c in collect(rows, store, Counter()) if c.correct}
+    assert {(p["instance_id"], p["condition"]) for p in pending}.isdisjoint(solved)
+    assert len(pending) + len(solved) == 90 * 2
+
+    prueba = tmp_path / "prueba.json"
+    assert pending_prompts.main([str(chico), "--out", str(prueba), "--limit", "3"]) == 0
+    first = json.loads(prueba.read_text(encoding="utf-8"))["pending"]
+    assert first == pending[:3]
+    assert len({(p["family"], p["difficulty"], p["condition"]) for p in first}) == 3
+
+    grande = tmp_path / "grande"
+    for archivo in (prueba, lista):
+        assert run_pilot.main([
+            "--stage", "trazas", "--dry-run", "--n-samples", "2", "--models", "m/grande",
+            "--out", str(grande), "--only", str(archivo),
+        ]) == 0
+    keys = [json.loads(line)["key"] for f in grande.glob("rollouts_*.jsonl")
+            for line in f.read_text(encoding="utf-8").splitlines()]
+    assert len(keys) == len(set(keys)) == 2 * len(pending)
+    expected = {(p["condition"], p["instance_id"]) for p in pending}
+    assert all(any(c in k and i in k for c, i in expected) for k in keys)
+
+
+def test_only_rechaza_ids_fuera_del_dataset(tmp_path):
+    import run_pilot
+
+    archivo = tmp_path / "malo.json"
+    archivo.write_text(json.dumps([{"instance_id": "train_x_9999", "condition": "tools"}]), encoding="utf-8")
+    with pytest.raises(SystemExit):
+        run_pilot.main(["--stage", "trazas", "--dry-run", "--models", "m/x", "--out", str(tmp_path / "o"),
+                        "--only", str(archivo)])
