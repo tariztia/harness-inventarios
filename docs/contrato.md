@@ -33,7 +33,7 @@ Las claves usan el formato canónico; `parse_answer` devuelve exactamente esta f
 
 ## Respuesta final del modelo
 
-Texto libre seguido de exactamente un bloque `<answer>`, con una línea `clave: valor`. Las claves son las mismas en todas las plantillas:
+Texto libre seguido de exactamente un bloque `<answer>`, con un par `clave: valor` por campo. Lo normal es un par por línea, pero también valen varios en la misma línea (`alcanza: no faltan: 3`, separados por espacio, coma, punto y coma o nada): se separan donde empieza una clave del contrato. Las claves son las mismas en todas las plantillas:
 
 ```text
 <answer>

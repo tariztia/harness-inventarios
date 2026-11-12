@@ -2,7 +2,7 @@
 
 Complementa [robustez_verificador.md](robustez_verificador.md): esos casos los escribió el equipo; aquí se revisan las respuestas que dieron los modelos en las dos exploraciones (`results/exploracion_prompt_original` y `results/exploracion_prompt_corregido`). Hecha el 11 de noviembre de 2026 con el verificador de `7ed8c83`, sin cambios en `verifier.py` ni `numbers_es.py` desde entonces. La condición `tools` de esas corridas tenía el parser de llamadas roto, así que casi todo el material es de `visible`.
 
-**Resultado:** 9 falsos rechazos entre 455 respuestas fallidas, por 2 causas (valores entre `< >` y varios pares en una línea), y 0 falsos positivos entre 119 aceptadas. Ninguna de las dos causas se cambió todavía: ver las recomendaciones de cada una.
+**Resultado:** 9 falsos rechazos entre 455 respuestas fallidas, por 2 causas (valores entre `< >` y varios pares en una línea), y 0 falsos positivos entre 119 aceptadas. **Actualización del 12 de noviembre:** la causa A2 (varios pares en una línea) ya se corrigió en el verificador. En la línea base de Qwen3-1.7B con herramientas resultó mucho más frecuente que aquí: 56 respuestas correctas rechazadas en 900 rollouts. La causa A1 sigue igual, porque el prompt vigente ya no la provoca. El resto del documento describe el verificador anterior al cambio.
 
 ## Alcance y método
 
