@@ -571,6 +571,7 @@ def test_availability_chance_level_does_not_beat_trivial_rule():
 QWEN_NOTEBOOK = ROOT / "notebooks" / "qwen_objetivo_colab.ipynb"
 KAGGLE_NOTEBOOK = ROOT / "notebooks" / "qwen_objetivo_kaggle.ipynb"
 TEACHER_NOTEBOOK = ROOT / "notebooks" / "qwen_profesor_kaggle.ipynb"
+OTHERS_NOTEBOOK = ROOT / "notebooks" / "linea_base_otros_kaggle.ipynb"
 
 
 @pytest.mark.skipif(not NOTEBOOK.exists(), reason="el zip de Colab no trae el cuaderno")
@@ -584,6 +585,8 @@ TEACHER_NOTEBOOK = ROOT / "notebooks" / "qwen_profesor_kaggle.ipynb"
                            "build_training_data.py", "resultados_qwen17b.zip")),
         (TEACHER_NOTEBOOK, ("PASO = 1", "pending_prompts.py", "\"--only\"", "Qwen/Qwen3-8B",
                             "build_training_data.py", "resultados_qwen8b.zip")),
+        (OTHERS_NOTEBOOK, ("/kaggle/input", "--stage\", \"piloto", "CUDA_VISIBLE_DEVICES", "Qwen/Qwen3-0.6B",
+                           "unsloth/Llama-3.2-1B-Instruct", "resultados_otros_modelos.zip")),
     ],
 )
 def test_notebook_is_valid_and_code_compiles(path, needed):

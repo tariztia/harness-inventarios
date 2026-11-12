@@ -40,3 +40,12 @@ Corre Qwen3-8B sobre las tareas de `train` para dar respuestas correctas donde Q
 5. **Paso 3, todo** (`PASO = 3`, opcional): los 180 prompts, para que todas las trazas SFT vengan del 8B. Igual que el paso 2, con la salida anterior como entrada.
 
 Cada versión deja en *Output* `resultados_qwen8b.zip`, con `trazas_qwen8b`, `datos_derivados_qwen8b` y las listas de pendientes.
+
+## Línea base de otros modelos (`linea_base_otros_kaggle.ipynb`)
+
+Mide pass@1 y pass@5 sobre `eval`, con las mismas instancias que la línea base de Qwen3-1.7B con thinking, para Llama-3.2-1B, Qwen3-1.7B y Qwen3-4B sin thinking (GPU 0) y Qwen3-0.6B con thinking (GPU 1). No usa `train`.
+
+1. **Dataset** (*Create > New Dataset*, privado) con `dist/inventory_harness_colab.zip`. Está en el repo; se regenera con `python scripts/package_for_colab.py` cuando cambia el código.
+2. **Cuaderno nuevo**: *File > Import Notebook* con `notebooks/linea_base_otros_kaggle.ipynb`. *Add Input* con ese dataset. *Settings*: **GPU T4 x2** e **Internet On**.
+3. *Save Version > Save & Run All (Commit)*.
+4. En *Output* queda `resultados_otros_modelos.zip`, con `linea_base_sin_think` y `linea_base_qwen06b`. Si la tanda con thinking no terminó, agrega esa salida como entrada (*Add Input > Your Work*) y guarda otra versión: continúa donde quedó.
