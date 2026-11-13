@@ -1,0 +1,218 @@
+{
+  "created_at": "2026-11-12T20:43:45+00:00",
+  "code_hash": "42f3ffba4c997fe9",
+  "avisos": [
+    "trazas_qwen17b: la corrida uso el codigo 0790fe94aa2873b8 y el actual es 42f3ffba4c997fe9. Si cambio el prompt, sus rollouts se descartan como prompt_desconocido.",
+    "trazas_qwen8b: la corrida uso el codigo d4ea15d25f41ff8f y el actual es 42f3ffba4c997fe9. Si cambio el prompt, sus rollouts se descartan como prompt_desconocido."
+  ],
+  "corridas": [
+    {
+      "carpeta": "trazas_qwen17b",
+      "stage": "trazas",
+      "dry_run": false,
+      "dataset": {
+        "split": "train",
+        "n_per_cell": 10,
+        "base_seed": 2026,
+        "fingerprint": "80651860efcd8e0fc14fb25c68da0e9ef3d28838eed3f4443cb7c219feefc89f"
+      },
+      "gen_configs": {
+        "Qwen/Qwen3-1.7B+think": {
+          "model": "Qwen/Qwen3-1.7B+think",
+          "model_id": "Qwen/Qwen3-1.7B",
+          "enable_thinking": true,
+          "max_new_tokens": 4096,
+          "do_sample": true,
+          "temperature": 0.7,
+          "top_p": 0.95,
+          "top_k": 50,
+          "repetition_penalty": 1.0,
+          "seed": 2026,
+          "batch_size": 8
+        }
+      }
+    },
+    {
+      "carpeta": "trazas_qwen8b",
+      "stage": "trazas",
+      "dry_run": false,
+      "dataset": {
+        "split": "train",
+        "n_per_cell": 10,
+        "base_seed": 2026,
+        "fingerprint": "80651860efcd8e0fc14fb25c68da0e9ef3d28838eed3f4443cb7c219feefc89f"
+      },
+      "gen_configs": {
+        "Qwen/Qwen3-8B+think": {
+          "model": "Qwen/Qwen3-8B+think",
+          "model_id": "Qwen/Qwen3-8B",
+          "enable_thinking": true,
+          "max_new_tokens": 4096,
+          "do_sample": true,
+          "temperature": 0.7,
+          "top_p": 0.95,
+          "top_k": 50,
+          "repetition_penalty": 1.0,
+          "seed": 2026,
+          "batch_size": 8
+        }
+      }
+    }
+  ],
+  "profesor": "Qwen/Qwen3-8B+think",
+  "max_sft_por_prompt": 1,
+  "procedimiento": [
+    "Cada modelo resuelve instancias de train con run_pilot (etapa trazas).",
+    "Cada rollout se normaliza: las llamadas pasan a <tool_call>{json}</tool_call> y se descarta el texto que las acompana; el razonamiento <think> se conserva.",
+    "El verificador vuelve a evaluar cada rollout normalizado contra la instancia protegida.",
+    "Se excluye toda instancia de train igual (misma huella) a una de eval o test.",
+    "Las respuestas se agrupan por prompt: corridas con otra semilla reutilizan los IDs.",
+    "SFT: rollouts con recompensa 1 y llamadas validas, priorizando al profesor.",
+    "DPO: por prompt, una respuesta correcta (priorizando al profesor) y una incorrecta (priorizando otros modelos y errores de valor). Se excluyen las respuestas cortadas por el tope de tokens."
+  ],
+  "rollouts_leidos": 502,
+  "descartados": {},
+  "prompts": 180,
+  "sft": 170,
+  "dpo": 105,
+  "sft_por_modelo": {
+    "Qwen/Qwen3-1.7B+think": 109,
+    "Qwen/Qwen3-8B+think": 61
+  },
+  "dpo_rechazada_por_error": {
+    "wrong_value": 82,
+    "ambiguous_value": 2,
+    "no_answer_block": 5,
+    "tool_limit_exceeded": 2,
+    "invalid_value": 2,
+    "unknown_field": 12
+  },
+  "por_celda": {
+    "availability|easy|tools": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 2,
+      "sft": 10,
+      "dpo": 2
+    },
+    "availability|easy|visible": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 2,
+      "sft": 10,
+      "dpo": 2
+    },
+    "availability|hard|tools": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 8,
+      "sft": 10,
+      "dpo": 8
+    },
+    "availability|hard|visible": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 5,
+      "sft": 10,
+      "dpo": 5
+    },
+    "availability|medium|tools": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 8,
+      "sft": 10,
+      "dpo": 8
+    },
+    "availability|medium|visible": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 6,
+      "sft": 10,
+      "dpo": 6
+    },
+    "composition|easy|tools": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 8,
+      "sft": 10,
+      "dpo": 8
+    },
+    "composition|easy|visible": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 5,
+      "sft": 10,
+      "dpo": 5
+    },
+    "composition|hard|tools": {
+      "prompts": 10,
+      "con_correcta": 4,
+      "con_incorrecta": 10,
+      "sft": 4,
+      "dpo": 4
+    },
+    "composition|hard|visible": {
+      "prompts": 10,
+      "con_correcta": 6,
+      "con_incorrecta": 10,
+      "sft": 6,
+      "dpo": 6
+    },
+    "composition|medium|tools": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 10,
+      "sft": 10,
+      "dpo": 10
+    },
+    "composition|medium|visible": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 9,
+      "sft": 10,
+      "dpo": 9
+    },
+    "selection|easy|tools": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 7,
+      "sft": 10,
+      "dpo": 7
+    },
+    "selection|easy|visible": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 2,
+      "sft": 10,
+      "dpo": 2
+    },
+    "selection|hard|tools": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 10,
+      "sft": 10,
+      "dpo": 10
+    },
+    "selection|hard|visible": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 4,
+      "sft": 10,
+      "dpo": 4
+    },
+    "selection|medium|tools": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 8,
+      "sft": 10,
+      "dpo": 8
+    },
+    "selection|medium|visible": {
+      "prompts": 10,
+      "con_correcta": 10,
+      "con_incorrecta": 1,
+      "sft": 10,
+      "dpo": 1
+    }
+  }
+}

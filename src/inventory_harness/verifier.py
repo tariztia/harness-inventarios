@@ -130,10 +130,38 @@ def _json_pairs(content: str) -> list[tuple[str, Any]]:
 _BULLET_RE = re.compile(r"^\s*(?:[-+•]|\*(?=\s))\s+")
 
 
+# Inicio de una clave del contrato seguida de dos puntos. No cuenta dentro de otra palabra:
+# `total_pendientes` no contiene la clave `pendientes`.
+_KEY_START_RE = re.compile(
+    r"(?<![A-Za-z_])(?:alcanza|faltan|sucursal|cubiertas|pendientes|total_pendientes|"
+    r"o[1-9]\d{0,3}_(?:atendidas|pendientes))\s{0,8}:",
+    re.IGNORECASE,
+)
+
+
+def _split_pairs(line: str) -> list[str]:
+    """Separa varios pares escritos en una linea: `alcanza: no faltan: 3`.
+
+    Los modelos pegan los pares, sobre todo tras recibir observaciones. Solo se parte donde
+    empieza una clave del contrato, y solo si la linea empieza con una: el resto del texto
+    sigue siendo valor. No abre trampas: una clave repetida es `duplicate_field` y una de
+    otra familia es `unknown_field`.
+    """
+    starts = [match.start() for match in _KEY_START_RE.finditer(line)]
+    if len(starts) < 2 or starts[0] != 0:
+        return [line]
+    pieces = [line[a:b] for a, b in zip(starts, starts[1:] + [len(line)])]
+    return [piece.strip().rstrip(",;|").rstrip() for piece in pieces]
+
+
 def _line_pairs(content: str) -> list[tuple[str, Any]]:
     pairs: list[tuple[str, Any]] = []
-    for raw_line in content.split("\n"):
-        line = _BULLET_RE.sub("", raw_line).strip()
+    lines = [
+        piece
+        for raw_line in content.split("\n")
+        for piece in _split_pairs(_BULLET_RE.sub("", raw_line).strip())
+    ]
+    for line in lines:
         if not line:
             continue
         if line.startswith("**") and line.endswith("**") and len(line) > 4:

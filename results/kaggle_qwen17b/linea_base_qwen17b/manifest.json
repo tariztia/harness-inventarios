@@ -53,5 +53,17 @@
     }
   },
   "notas": [],
-  "updated_at": "2026-11-11T20:31:21+00:00"
+  "updated_at": "2026-11-12T20:43:27+00:00",
+  "reevaluaciones": [
+    {
+      "fecha": "2026-11-12T20:43:27+00:00",
+      "code_hash": "42f3ffba4c997fe9",
+      "conteos": {
+        "evaluadas": 900,
+        "veredicto_distinto": 109,
+        "de_0_a_1": 56,
+        "missing_field -> ok": 56
+      }
+    }
+  ]
 }

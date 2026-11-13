@@ -22,6 +22,7 @@ sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import run_pilot  # noqa: E402
+from inventory_harness.generator import fingerprint  # noqa: E402
 from inventory_harness.reward import InstanceStore  # noqa: E402
 from inventory_harness.training_data import build, collect  # noqa: E402
 
@@ -30,6 +31,8 @@ PROCEDURE = [
     "Cada rollout se normaliza: las llamadas pasan a <tool_call>{json}</tool_call> y se "
     "descarta el texto que las acompana; el razonamiento <think> se conserva.",
     "El verificador vuelve a evaluar cada rollout normalizado contra la instancia protegida.",
+    "Se excluye toda instancia de train igual (misma huella) a una de eval o test.",
+    "Las respuestas se agrupan por prompt: corridas con otra semilla reutilizan los IDs.",
     "SFT: rollouts con recompensa 1 y llamadas validas, priorizando al profesor.",
     "DPO: por prompt, una respuesta correcta (priorizando al profesor) y una incorrecta "
     "(priorizando otros modelos y errores de valor). Se excluyen las respuestas cortadas "
@@ -58,6 +61,44 @@ def load_run(folder: Path) -> tuple[dict[str, Any], list, list[dict[str, Any]]]:
     return manifest, instances, rows
 
 
+def code_warnings(folder: Path, manifest: dict[str, Any], current: str) -> list[str]:
+    """Avisos si la corrida uso otro codigo. No detienen nada, pero explican descartes.
+
+    Los rollouts se ubican por el hash del prompt y las observaciones se vuelven a generar
+    con el codigo actual: si prompts.py cambio, se descartan como `prompt_desconocido` o
+    pierden la recompensa.
+    """
+    warnings = []
+    if manifest.get("code_hash") != current:
+        warnings.append(
+            f"{folder.name}: la corrida uso el codigo {manifest.get('code_hash')} y el actual es "
+            f"{current}. Si cambio el prompt, sus rollouts se descartan como prompt_desconocido."
+        )
+    if manifest.get("hashes_anteriores"):
+        warnings.append(
+            f"{folder.name}: la corrida se reanudo con codigo distinto "
+            f"({', '.join(map(str, manifest['hashes_anteriores']))}); mezcla versiones."
+        )
+    return warnings
+
+
+def held_out_fingerprints(datasets: list[dict[str, Any]]) -> set[str]:
+    """Huellas de eval y test que no pueden aparecer en los datos de entrenamiento.
+
+    `generate_dataset` quita duplicados entre splits solo dentro de una configuracion, y
+    eval cambia con `n_per_cell`: train con un n puede repetir una instancia de eval con
+    otro. Se cubren la configuracion de cada corrida y la del piloto, que mide la linea base.
+    """
+    piloto = run_pilot.STAGES["piloto"]
+    configs = {(piloto["n_per_cell"], piloto["base_seed"])}
+    configs |= {(d["n_per_cell"], d["base_seed"]) for d in datasets}
+    marks: set[str] = set()
+    for n_per_cell, base_seed in sorted(configs):
+        for split in ("eval", "test"):
+            marks |= {fingerprint(i) for i in run_pilot.build_dataset(split, n_per_cell, base_seed)}
+    return marks
+
+
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     with path.open("w", encoding="utf-8") as handle:
         for row in rows:
@@ -73,9 +114,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-sft-per-prompt", type=int, default=1)
     args = parser.parse_args(argv)
 
-    instances, rows, runs = [], [], []
+    instances, rows, runs, warnings = [], [], [], []
+    current_code = run_pilot.code_hash()
     for folder in args.runs:
         manifest, run_instances, run_rows = load_run(folder)
+        warnings += code_warnings(folder, manifest, current_code)
         instances += run_instances
         rows += run_rows
         runs.append({
@@ -88,6 +131,11 @@ def main(argv: list[str] | None = None) -> int:
 
     dropped: Counter = Counter()
     candidates = collect(rows, InstanceStore(instances), dropped)
+    held_out = held_out_fingerprints([run["dataset"] for run in runs])
+    kept = [c for c in candidates if fingerprint(c.instance) not in held_out]
+    if len(kept) != len(candidates):
+        dropped["igual_a_eval_o_test"] += len(candidates) - len(kept)
+    candidates = kept
     sft, dpo, stats = build(candidates, args.teacher, args.max_sft_per_prompt)
 
     args.out.mkdir(parents=True, exist_ok=True)
@@ -96,7 +144,8 @@ def main(argv: list[str] | None = None) -> int:
     teacher_present = any(c.model == args.teacher for c in candidates)
     summary = {
         "created_at": run_pilot.now(),
-        "code_hash": run_pilot.code_hash(),
+        "code_hash": current_code,
+        "avisos": warnings,
         "corridas": runs,
         "profesor": args.teacher if teacher_present else None,
         "max_sft_por_prompt": args.max_sft_per_prompt,
@@ -109,6 +158,8 @@ def main(argv: list[str] | None = None) -> int:
         json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8"
     )
 
+    for warning in warnings:
+        print(f"AVISO: {warning}")
     print(f"Rollouts leidos: {len(rows)}; descartados: {dict(dropped) or 0}")
     if not teacher_present:
         print(f"AVISO: no hay rollouts de {args.teacher}; las trazas SFT son de los otros modelos.")

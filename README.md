@@ -12,14 +12,45 @@ El modelo recibe una solicitud en español, consulta la herramienta `get_invento
 |---|---|
 | Harness y verificador | Listos |
 | Generador de tareas | Listo |
-| Exploración de línea base | Terminada |
-| Piloto de línea base (más instancias y pass@5) | Pendiente |
-| Trazas SFT y pares DPO | Script listo; faltan las corridas |
+| Línea base del modelo objetivo (pass@1 y pass@5) | Lista: 900 rollouts de Qwen3-1.7B sobre `eval` |
+| Línea base de otros modelos | Pendiente |
+| Trazas SFT y pares DPO | 170 trazas y 105 pares; falta correr Qwen3-8B en 109 prompts |
 | Informe final | Pendiente |
 
-### Llamadas sin etiqueta
+## Línea base de Qwen3-1.7B
 
-Qwen suele escribir el JSON correcto sin `<tool_call>`. `parse_tool_calls` ahora acepta también JSON sin etiqueta, estilo Python (`get_inventory(...)`) y `tool_call={...}`. **Los resultados con herramientas de abajo son anteriores a ese cambio** y no miden la capacidad real del modelo: hay que repetir la exploración con herramientas.
+Qwen3-1.7B con thinking sobre `eval`: 10 instancias por celda, 5 muestras, 90 instancias por condición (`results/kaggle_qwen17b/linea_base_qwen17b`). Con 10 instancias por celda, los intervalos por celda son anchos; el detalle está en su `report.md`.
+
+| Condición | pass@1 | pass@5 |
+|---|---|---|
+| Datos visibles | 58/90 (64 %) | 80/90 (89 %) |
+| Con herramientas | 37/90 (41 %) | 62/90 (69 %) |
+
+Por dificultad (pass@1 y pass@5, sobre 30 instancias):
+
+| Dificultad | Visible pass@1 | Visible pass@5 | Herramientas pass@1 | Herramientas pass@5 |
+|---|---|---|---|---|
+| Easy | 27 | 30 | 19 | 30 |
+| Medium | 18 | 28 | 13 | 22 |
+| Hard | 13 | 22 | 5 | 10 |
+
+Lectura:
+
+- Las tareas caen en la zona aprendible: el acierto baja con la dificultad y pass@5 supera con claridad a pass@1 en ambas condiciones.
+- Usar herramientas cuesta unos 23 puntos de pass@1 frente a tener los datos a la vista.
+- Composición hard con herramientas queda en 0/10 incluso con 5 intentos, y con datos visibles en 2/10: ahí casi no hay señal para RL.
+- En selección con herramientas, 43 de 150 respuestas vienen sin claves (`S2|29|0`) y se rechazan. Es un problema de formato tras recibir los resultados, no de razonamiento.
+
+Estos números se **reevaluaron** con `scripts/reevaluate.py` después de la corrida. El verificador rechazaba las respuestas con varios pares en una línea (`O1_atendidas: 33O1_pendientes: 6...`), y 56 de esas respuestas eran correctas. Ahora se aceptan (ver [docs/contrato.md](docs/contrato.md)). Antes del cambio, herramientas daba 27/90 en pass@1. Cada fila corregida conserva su veredicto original en `verdict_anterior`.
+
+## Datos derivados
+
+`results/kaggle_qwen8b/datos_derivados_qwen8b` tiene los datos de entrenamiento, armados con `scripts/build_training_data.py` sobre los 180 prompts de `train` (90 instancias por 2 condiciones):
+
+- `sft.jsonl`: 170 trazas correctas, 109 de Qwen3-1.7B y 61 de Qwen3-8B (el profesor).
+- `dpo.jsonl`: 105 pares (correcta, incorrecta). 82 de las incorrectas son errores de valor.
+
+Qwen3-8B corrió solo los 71 prompts en que el 1.7B no había acertado (`results/kaggle_qwen8b/pendientes.json`) y resolvió 61. Los 10 sin respuesta correcta son todos de composición hard.
 
 ## Resultados de la exploración
 
@@ -41,7 +72,7 @@ Qwen con thinking, por dificultad:
 | Medium | 9/15 | 12/15 |
 | Hard | 3/15 | 5/15 |
 
-Con herramientas, todos los modelos quedaron cerca de 0 porque el harness aún no reconocía las llamadas sin etiqueta: Qwen acertó 1 de 90 rollouts con y sin thinking, y Llama 0 de 90.
+Con herramientas, todos los modelos quedaron cerca de 0 porque el harness aún no reconocía las llamadas sin etiqueta (`<tool_call>`): Qwen acertó 1 de 90 rollouts con y sin thinking, y Llama 0 de 90. Eso se corrigió después; los resultados válidos con herramientas son los de la línea base de arriba.
 
 Conclusiones por ahora:
 
@@ -63,7 +94,7 @@ cd harness-inventarios
 uv run --group dev pytest -q
 ```
 
-Deberían pasar todos los tests, salvo 4 marcados como `xfail`, que son limitaciones conocidas del verificador. El núcleo solo usa la biblioteca estándar; `torch` y `transformers` hacen falta únicamente para correr modelos.
+Deberían pasar todos los tests, salvo 8 marcados como `xfail`, que son limitaciones conocidas del verificador. El núcleo solo usa la biblioteca estándar; `torch` y `transformers` hacen falta únicamente para correr modelos.
 
 ## Uso
 
@@ -150,7 +181,7 @@ faltan: 3
 </answer>
 ```
 
-El verificador acepta formas equivalentes como `3`, `tres`, `20-17` o `1 de P01 y 2 de P02`. Rechaza respuestas múltiples, ambiguas o contradictorias. La suite adversarial tiene 246 casos y pasa 242; los resultados y las 4 limitaciones están en [docs/robustez_verificador.md](docs/robustez_verificador.md). Esos casos los escribió el equipo, así que no reemplazan revisar respuestas reales.
+El verificador acepta formas equivalentes como `3`, `tres`, `20-17` o `1 de P01 y 2 de P02`. Rechaza respuestas múltiples, ambiguas o contradictorias. La suite adversarial tiene 334 casos y pasa 326; los resultados y las 8 limitaciones están en [docs/robustez_verificador.md](docs/robustez_verificador.md). Esos casos los escribió el equipo, así que no reemplazan revisar respuestas reales.
 
 ## Estructura
 
@@ -173,8 +204,8 @@ docs/propuesta/                enunciado del desafío y propuestas
 
 ## Próximos pasos
 
-1. Ajustar el prompt para que el mensaje de llamadas no incluya cálculos ni supuestos, y sugerir omitir `location_id` al comparar sucursales.
-2. Repetir la exploración de Qwen con thinking y con herramientas.
-3. Correr un piloto reducido, con 20 instancias por celda y 5 muestras (unos 1.800 rollouts).
-4. Generar trazas SFT con un modelo abierto más grande, que el enunciado exige, y pares DPO.
-5. Escribir el informe final de línea base.
+1. Correr Qwen3-8B en los 109 prompts de `train` que faltan (`PASO = 3` en `notebooks/qwen_profesor_kaggle.ipynb`). El enunciado pide trazas SFT de un modelo más grande, y hoy 109 de las 170 son del modelo objetivo.
+2. Medir la línea base de al menos un modelo más: el enunciado pide varios.
+3. Dejar claro el formato de respuesta en el mensaje que llega con los resultados de la herramienta, por las respuestas sin claves en selección.
+4. Decidir qué hacer con composición hard, que casi no da señal.
+5. Escribir el informe final de línea base. [docs/auditoria_verificador.md](docs/auditoria_verificador.md) y [docs/robustez_verificador.md](docs/robustez_verificador.md) cubren la parte de robustez.

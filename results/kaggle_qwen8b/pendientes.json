@@ -1,0 +1,440 @@
+{
+  "corridas": [
+    "trazas_qwen17b"
+  ],
+  "dataset": {
+    "split": "train",
+    "n_per_cell": 10,
+    "base_seed": 2026,
+    "fingerprint": "80651860efcd8e0fc14fb25c68da0e9ef3d28838eed3f4443cb7c219feefc89f"
+  },
+  "pendientes_totales": 71,
+  "pending": [
+    {
+      "instance_id": "train_composition_easy_0000",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_composition_hard_0000",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_hard_0000",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_medium_0000",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_medium_0000",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_selection_hard_0000",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_availability_medium_0002",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_availability_easy_0004",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_availability_hard_0003",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_availability_medium_0001",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_easy_0005",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_selection_hard_0001",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_availability_easy_0008",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_availability_hard_0001",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_selection_easy_0006",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_selection_easy_0005",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_selection_medium_0005",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_easy_0001",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_composition_hard_0001",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_hard_0001",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_medium_0001",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_medium_0001",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_selection_hard_0001",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_availability_medium_0004",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_availability_easy_0005",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_availability_hard_0008",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_availability_medium_0005",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_easy_0007",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_selection_hard_0008",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_easy_0002",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_composition_hard_0002",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_hard_0002",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_medium_0002",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_medium_0003",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_selection_hard_0002",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_availability_medium_0005",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_availability_easy_0008",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_composition_easy_0003",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_composition_hard_0003",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_hard_0003",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_medium_0003",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_medium_0004",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_selection_hard_0005",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_availability_medium_0006",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_easy_0004",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_composition_hard_0004",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_hard_0004",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_medium_0004",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_medium_0005",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_selection_hard_0006",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_easy_0005",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_composition_hard_0005",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_hard_0005",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_medium_0005",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_medium_0007",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_easy_0006",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_composition_hard_0006",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_hard_0006",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_medium_0006",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_medium_0008",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_easy_0007",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_composition_hard_0007",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_hard_0007",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_medium_0008",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_easy_0008",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_composition_hard_0008",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_hard_0008",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_medium_0009",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium"
+    },
+    {
+      "instance_id": "train_composition_easy_0009",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy"
+    },
+    {
+      "instance_id": "train_composition_hard_0009",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard"
+    },
+    {
+      "instance_id": "train_composition_hard_0009",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard"
+    }
+  ]
+}

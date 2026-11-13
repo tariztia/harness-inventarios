@@ -1,6 +1,6 @@
 {
   "k": 2,
-  "carpeta": "/kaggle/working/results/trazas_qwen17b",
+  "carpeta": "results\\kaggle_qwen17b\\trazas_qwen17b",
   "archivos": [
     "rollouts_Qwen_Qwen3-1.7B+think.jsonl"
   ],
@@ -65,7 +65,19 @@
       }
     },
     "notas": [],
-    "updated_at": "2026-11-11T17:54:04+00:00"
+    "updated_at": "2026-11-12T20:43:30+00:00",
+    "reevaluaciones": [
+      {
+        "fecha": "2026-11-12T20:43:30+00:00",
+        "code_hash": "42f3ffba4c997fe9",
+        "conteos": {
+          "evaluadas": 360,
+          "veredicto_distinto": 41,
+          "de_0_a_1": 22,
+          "missing_field -> ok": 22
+        }
+      }
+    ]
   },
   "aviso_baselines": null,
   "grupos": [
@@ -77,9 +89,9 @@
       "n_instancias": 10,
       "n_muestras": 20,
       "tasa_media_muestra": {
-        "aciertos": 7,
+        "aciertos": 18,
         "n": 20,
-        "tasa": 0.35
+        "tasa": 0.9
       },
       "incompletas": {
         "k=1": {
@@ -92,21 +104,21 @@
         }
       },
       "pass@1": {
-        "aciertos": 2,
+        "aciertos": 9,
         "n": 10,
-        "tasa": 0.2,
+        "tasa": 0.9,
         "ic95": [
-          0.05668215145437519,
-          0.5098375284633583
+          0.5958499732047615,
+          0.9821237869049271
         ]
       },
       "pass@2": {
-        "aciertos": 7,
+        "aciertos": 10,
         "n": 10,
-        "tasa": 0.7,
+        "tasa": 1.0,
         "ic95": [
-          0.39677814746114537,
-          0.8922087325936989
+          0.7224672001371107,
+          1.0
         ]
       },
       "valid_tool_call": {
@@ -130,7 +142,7 @@
         "n": 20
       },
       "parser_error": {
-        "si": 13,
+        "si": 0,
         "n": 20
       },
       "contradictory_answer": {
@@ -138,7 +150,7 @@
         "n": 20
       },
       "correct_final_answer": {
-        "si": 7,
+        "si": 18,
         "n": 20
       },
       "correcta_sin_recompensa": {
@@ -146,8 +158,8 @@
         "n": 20
       },
       "error_types": {
-        "missing_field": 13,
-        "ok": 7
+        "ok": 18,
+        "wrong_value": 2
       },
       "tope_de_tokens": {
         "si": 0,
@@ -168,9 +180,9 @@
       "n_instancias": 10,
       "n_muestras": 20,
       "tasa_media_muestra": {
-        "aciertos": 7,
+        "aciertos": 8,
         "n": 20,
-        "tasa": 0.35
+        "tasa": 0.4
       },
       "incompletas": {
         "k=1": {
@@ -183,12 +195,12 @@
         }
       },
       "pass@1": {
-        "aciertos": 3,
+        "aciertos": 4,
         "n": 10,
-        "tasa": 0.3,
+        "tasa": 0.4,
         "ic95": [
-          0.10779126740630099,
-          0.6032218525388546
+          0.16818032970623614,
+          0.6873262302663417
         ]
       },
       "pass@2": {
@@ -221,7 +233,7 @@
         "n": 20
       },
       "parser_error": {
-        "si": 3,
+        "si": 2,
         "n": 20
       },
       "contradictory_answer": {
@@ -229,7 +241,7 @@
         "n": 20
       },
       "correct_final_answer": {
-        "si": 7,
+        "si": 8,
         "n": 20
       },
       "correcta_sin_recompensa": {
@@ -238,9 +250,8 @@
       },
       "error_types": {
         "wrong_value": 10,
-        "ok": 7,
-        "no_answer_block": 2,
-        "missing_field": 1
+        "ok": 8,
+        "no_answer_block": 2
       },
       "tope_de_tokens": {
         "si": 0,
@@ -261,9 +272,9 @@
       "n_instancias": 10,
       "n_muestras": 20,
       "tasa_media_muestra": {
-        "aciertos": 10,
+        "aciertos": 11,
         "n": 20,
-        "tasa": 0.5
+        "tasa": 0.55
       },
       "incompletas": {
         "k=1": {
@@ -314,7 +325,7 @@
         "n": 20
       },
       "parser_error": {
-        "si": 4,
+        "si": 3,
         "n": 20
       },
       "contradictory_answer": {
@@ -322,7 +333,7 @@
         "n": 20
       },
       "correct_final_answer": {
-        "si": 10,
+        "si": 11,
         "n": 20
       },
       "correcta_sin_recompensa": {
@@ -330,11 +341,10 @@
         "n": 20
       },
       "error_types": {
-        "ok": 10,
+        "ok": 11,
         "wrong_value": 6,
         "tool_limit_exceeded": 2,
-        "no_answer_block": 1,
-        "missing_field": 1
+        "no_answer_block": 1
       },
       "tope_de_tokens": {
         "si": 0,
@@ -634,9 +644,9 @@
       "n_instancias": 10,
       "n_muestras": 20,
       "tasa_media_muestra": {
-        "aciertos": 0,
+        "aciertos": 8,
         "n": 20,
-        "tasa": 0.0
+        "tasa": 0.4
       },
       "incompletas": {
         "k=1": {
@@ -649,21 +659,21 @@
         }
       },
       "pass@1": {
-        "aciertos": 0,
+        "aciertos": 4,
         "n": 10,
-        "tasa": 0.0,
+        "tasa": 0.4,
         "ic95": [
-          0.0,
-          0.2775327998628892
+          0.16818032970623614,
+          0.6873262302663417
         ]
       },
       "pass@2": {
-        "aciertos": 0,
+        "aciertos": 6,
         "n": 10,
-        "tasa": 0.0,
+        "tasa": 0.6,
         "ic95": [
-          0.0,
-          0.2775327998628892
+          0.31267376973365824,
+          0.8318196702937638
         ]
       },
       "valid_tool_call": {
@@ -687,7 +697,7 @@
         "n": 20
       },
       "parser_error": {
-        "si": 20,
+        "si": 4,
         "n": 20
       },
       "contradictory_answer": {
@@ -695,7 +705,7 @@
         "n": 20
       },
       "correct_final_answer": {
-        "si": 0,
+        "si": 8,
         "n": 20
       },
       "correcta_sin_recompensa": {
@@ -703,7 +713,9 @@
         "n": 20
       },
       "error_types": {
-        "missing_field": 20
+        "ok": 8,
+        "wrong_value": 8,
+        "invalid_value": 4
       },
       "tope_de_tokens": {
         "si": 0,
@@ -777,7 +789,7 @@
         "n": 20
       },
       "parser_error": {
-        "si": 10,
+        "si": 5,
         "n": 20
       },
       "contradictory_answer": {
@@ -793,8 +805,7 @@
         "n": 20
       },
       "error_types": {
-        "wrong_value": 9,
-        "missing_field": 5,
+        "wrong_value": 14,
         "no_answer_block": 3,
         "tool_limit_exceeded": 1,
         "ok": 1,
@@ -910,9 +921,9 @@
       "n_instancias": 10,
       "n_muestras": 20,
       "tasa_media_muestra": {
-        "aciertos": 15,
+        "aciertos": 16,
         "n": 20,
-        "tasa": 0.75
+        "tasa": 0.8
       },
       "incompletas": {
         "k=1": {
@@ -925,12 +936,12 @@
         }
       },
       "pass@1": {
-        "aciertos": 7,
+        "aciertos": 8,
         "n": 10,
-        "tasa": 0.7,
+        "tasa": 0.8,
         "ic95": [
-          0.39677814746114537,
-          0.8922087325936989
+          0.49016247153664183,
+          0.9433178485456247
         ]
       },
       "pass@2": {
@@ -963,7 +974,7 @@
         "n": 0
       },
       "parser_error": {
-        "si": 3,
+        "si": 2,
         "n": 20
       },
       "contradictory_answer": {
@@ -971,7 +982,7 @@
         "n": 20
       },
       "correct_final_answer": {
-        "si": 15,
+        "si": 16,
         "n": 20
       },
       "correcta_sin_recompensa": {
@@ -979,9 +990,8 @@
         "n": 20
       },
       "error_types": {
-        "ok": 15,
+        "ok": 16,
         "wrong_value": 2,
-        "missing_field": 1,
         "ambiguous_value": 1,
         "no_answer_block": 1
       },
@@ -1737,9 +1747,9 @@
       "n_instancias": 90,
       "n_muestras": 180,
       "tasa_media_muestra": {
-        "aciertos": 53,
+        "aciertos": 74,
         "n": 180,
-        "tasa": 0.29444444444444445
+        "tasa": 0.4111111111111111
       },
       "incompletas": {
         "k=1": {
@@ -1752,21 +1762,21 @@
         }
       },
       "pass@1": {
-        "aciertos": 25,
+        "aciertos": 37,
         "n": 90,
-        "tasa": 0.2777777777777778,
+        "tasa": 0.4111111111111111,
         "ic95": [
-          0.19579689194686647,
-          0.3779522749706121
+          0.31513204023844693,
+          0.5143676265285444
         ]
       },
       "pass@2": {
-        "aciertos": 46,
+        "aciertos": 55,
         "n": 90,
-        "tasa": 0.5111111111111111,
+        "tasa": 0.6111111111111112,
         "ic95": [
-          0.409517457852855,
-          0.611795083801271
+          0.5078245886506263,
+          0.7053008278906345
         ]
       },
       "valid_tool_call": {
@@ -1790,7 +1800,7 @@
         "n": 180
       },
       "parser_error": {
-        "si": 76,
+        "si": 40,
         "n": 180
       },
       "contradictory_answer": {
@@ -1798,7 +1808,7 @@
         "n": 180
       },
       "correct_final_answer": {
-        "si": 53,
+        "si": 74,
         "n": 180
       },
       "correcta_sin_recompensa": {
@@ -1806,12 +1816,12 @@
         "n": 180
       },
       "error_types": {
-        "ok": 53,
-        "wrong_value": 51,
-        "missing_field": 40,
+        "ok": 74,
+        "wrong_value": 66,
         "no_answer_block": 17,
         "unknown_field": 11,
         "tool_limit_exceeded": 7,
+        "invalid_value": 4,
         "ambiguous_value": 1
       },
       "tope_de_tokens": {
@@ -1831,9 +1841,9 @@
       "n_instancias": 90,
       "n_muestras": 180,
       "tasa_media_muestra": {
-        "aciertos": 106,
+        "aciertos": 107,
         "n": 180,
-        "tasa": 0.5888888888888889
+        "tasa": 0.5944444444444444
       },
       "incompletas": {
         "k=1": {
@@ -1846,12 +1856,12 @@
         }
       },
       "pass@1": {
-        "aciertos": 54,
+        "aciertos": 55,
         "n": 90,
-        "tasa": 0.6,
+        "tasa": 0.6111111111111112,
         "ic95": [
-          0.4967030736405094,
-          0.6951098012466252
+          0.5078245886506263,
+          0.7053008278906345
         ]
       },
       "pass@2": {
@@ -1884,7 +1894,7 @@
         "n": 0
       },
       "parser_error": {
-        "si": 10,
+        "si": 9,
         "n": 180
       },
       "contradictory_answer": {
@@ -1892,7 +1902,7 @@
         "n": 180
       },
       "correct_final_answer": {
-        "si": 106,
+        "si": 107,
         "n": 180
       },
       "correcta_sin_recompensa": {
@@ -1900,11 +1910,10 @@
         "n": 180
       },
       "error_types": {
-        "ok": 106,
+        "ok": 107,
         "wrong_value": 64,
         "no_answer_block": 5,
         "ambiguous_value": 2,
-        "missing_field": 1,
         "unknown_field": 1,
         "multiple_answer_blocks": 1
       },
@@ -1926,12 +1935,34 @@
       "condition": "tools",
       "family": "availability",
       "difficulty": "easy",
-      "categoria": "zona_aprendible",
+      "categoria": "cerca_de_100",
       "certeza": "ic_muy_ancho",
-      "ancho_ic_max": 0.49543058513255356,
+      "ancho_ic_max": 0.38627381370016556,
       "motivo": null,
-      "frente_a_trivial": "no_distinguible",
-      "frente_a_informada": "no_distinguible"
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "easy",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "easy",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_informada": "supera"
     },
     {
       "model": "Qwen/Qwen3-1.7B+think",
@@ -1942,7 +1973,29 @@
       "certeza": "ic_muy_ancho",
       "ancho_ic_max": 0.5191459005601056,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "medium",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
       "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "medium",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
       "frente_a_informada": "no_distinguible"
     },
     {
@@ -1954,7 +2007,29 @@
       "certeza": "ic_muy_ancho",
       "ancho_ic_max": 0.5191459005601056,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "hard",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
       "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "hard",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
       "frente_a_informada": "no_distinguible"
     },
     {
@@ -1966,7 +2041,29 @@
       "certeza": "ic_muy_ancho",
       "ancho_ic_max": 0.49543058513255356,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "sucursal_azar",
+        "clase": "azar",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "easy",
+        "aciertos": 1,
+        "n": 10,
+        "tasa": 0.1
+      },
       "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "sucursal_azar_contada",
+        "clase": "azar",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "easy",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
       "frente_a_informada": "no_distinguible"
     },
     {
@@ -1978,7 +2075,29 @@
       "certeza": "ic_muy_ancho",
       "ancho_ic_max": 0.5191459005601056,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "sucursal_azar",
+        "clase": "azar",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "medium",
+        "aciertos": 2,
+        "n": 10,
+        "tasa": 0.2
+      },
       "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "sucursal_azar_contada",
+        "clase": "azar",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "medium",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
       "frente_a_informada": "no_distinguible"
     },
     {
@@ -1990,7 +2109,29 @@
       "certeza": "ic_muy_ancho",
       "ancho_ic_max": 0.5268138189748721,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "hard",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
       "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "primera_sucursal_contada",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "hard",
+        "aciertos": 1,
+        "n": 10,
+        "tasa": 0.1
+      },
       "frente_a_informada": "supera"
     },
     {
@@ -1998,12 +2139,34 @@
       "condition": "tools",
       "family": "composition",
       "difficulty": "easy",
-      "categoria": "cerca_de_0",
-      "certeza": "tentativa",
-      "ancho_ic_max": 0.2775327998628892,
+      "categoria": "zona_aprendible",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5191459005601056,
       "motivo": null,
-      "frente_a_trivial": "por_debajo",
-      "frente_a_informada": "por_debajo"
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_informada": "no_distinguible"
     },
     {
       "model": "Qwen/Qwen3-1.7B+think",
@@ -2014,7 +2177,29 @@
       "certeza": "ic_muy_ancho",
       "ancho_ic_max": 0.38627381370016556,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "medium",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
       "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "medium",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
       "frente_a_informada": "supera"
     },
     {
@@ -2026,7 +2211,29 @@
       "certeza": "tentativa",
       "ancho_ic_max": 0.2775327998628892,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "hard",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
       "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "hard",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
       "frente_a_informada": "no_distinguible"
     },
     {
@@ -2034,11 +2241,33 @@
       "condition": "visible",
       "family": "availability",
       "difficulty": "easy",
-      "categoria": "zona_aprendible",
+      "categoria": "intermedio_sin_ganancia",
       "certeza": "ic_muy_ancho",
-      "ancho_ic_max": 0.49543058513255356,
+      "ancho_ic_max": 0.4531553770089829,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "easy",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
       "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "easy",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
       "frente_a_informada": "no_distinguible"
     },
     {
@@ -2050,7 +2279,29 @@
       "certeza": "ic_muy_ancho",
       "ancho_ic_max": 0.49543058513255356,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "medium",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
       "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "medium",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
       "frente_a_informada": "no_distinguible"
     },
     {
@@ -2062,7 +2313,29 @@
       "certeza": "ic_muy_ancho",
       "ancho_ic_max": 0.4531553770089829,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "hard",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
       "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "hard",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
       "frente_a_informada": "no_distinguible"
     },
     {
@@ -2074,7 +2347,29 @@
       "certeza": "ic_muy_ancho",
       "ancho_ic_max": 0.38627381370016556,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "sucursal_azar",
+        "clase": "azar",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "easy",
+        "aciertos": 1,
+        "n": 10,
+        "tasa": 0.1
+      },
       "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "sucursal_azar_contada",
+        "clase": "azar",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "easy",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
       "frente_a_informada": "supera"
     },
     {
@@ -2086,7 +2381,29 @@
       "certeza": "tentativa",
       "ancho_ic_max": 0.27753279986288926,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "sucursal_azar",
+        "clase": "azar",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "medium",
+        "aciertos": 2,
+        "n": 10,
+        "tasa": 0.2
+      },
       "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "sucursal_azar_contada",
+        "clase": "azar",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "medium",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
       "frente_a_informada": "supera"
     },
     {
@@ -2098,7 +2415,29 @@
       "certeza": "ic_muy_ancho",
       "ancho_ic_max": 0.49543058513255356,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "hard",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
       "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "primera_sucursal_contada",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "hard",
+        "aciertos": 1,
+        "n": 10,
+        "tasa": 0.1
+      },
       "frente_a_informada": "supera"
     },
     {
@@ -2110,7 +2449,29 @@
       "certeza": "ic_muy_ancho",
       "ancho_ic_max": 0.5191459005601056,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
       "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
       "frente_a_informada": "supera"
     },
     {
@@ -2118,11 +2479,33 @@
       "condition": "visible",
       "family": "composition",
       "difficulty": "medium",
-      "categoria": "zona_aprendible",
+      "categoria": "casi_0_con_senal",
       "certeza": "ic_muy_ancho",
       "ancho_ic_max": 0.49543058513255367,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "medium",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
       "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "medium",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
       "frente_a_informada": "no_distinguible"
     },
     {
@@ -2134,7 +2517,29 @@
       "certeza": "tentativa",
       "ancho_ic_max": 0.2775327998628892,
       "motivo": null,
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "hard",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
       "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "hard",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
       "frente_a_informada": "no_distinguible"
     }
   ],
@@ -2143,7 +2548,7 @@
       "model": "Qwen/Qwen3-1.7B+think",
       "family": "availability",
       "difficulty": "easy",
-      "categoria": "problema_de_interfaz",
+      "categoria": "sin_patron",
       "certeza": "ic_muy_ancho"
     },
     {
@@ -2157,7 +2562,7 @@
       "model": "Qwen/Qwen3-1.7B+think",
       "family": "availability",
       "difficulty": "medium",
-      "categoria": "problema_de_interfaz",
+      "categoria": "sin_patron",
       "certeza": "ic_muy_ancho"
     },
     {
@@ -2677,5 +3082,5 @@
     "ic_muy_ancho": 0.3
   },
   "n_rollouts": 360,
-  "n_muestra_errores": 89
+  "n_muestra_errores": 85
 }

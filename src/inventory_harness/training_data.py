@@ -16,9 +16,10 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from typing import Any, Iterable
 
-from .reward import InstanceStore, evaluate_trajectory
+from .reward import InstanceStore, evaluate_trajectory, prompt_key
 from .schema import Instance, Verdict
-from .tools import parse_tool_calls, visible_start
+from .tools import parse_tool_calls
+from .verifier import _THINK_TAG_RE
 
 # Como respuesta rechazada sirven mas los errores de contenido que los de forma: el par
 # ensena a razonar, no solo a cerrar el bloque.
@@ -27,12 +28,41 @@ REJECTED_PRIORITY = {"wrong_value": 0, "contradiction": 1}
 UNUSABLE_REJECTED = {"internal_error", "forged_observation", "invalid_trajectory"}
 
 
+def thinking_part(text: str) -> str:
+    """El razonamiento del mensaje, tal como se escribio: lo que `_strip_think` descarta.
+
+    Usa la misma lectura de etiquetas que el verificador (mayusculas, espacios, varios
+    bloques, un cierre sin apertura), para que nada de lo visible se cuele como razonamiento.
+    """
+    spans: list[str] = []
+    depth = 0
+    start = 0
+    for match in _THINK_TAG_RE.finditer(text):
+        closing = bool(match.group(1))
+        if depth == 0:
+            if closing:
+                # Cierre sin apertura: la plantilla abrio el <think> antes de la completion.
+                spans = [text[: match.end()]]
+            else:
+                start = match.start()
+                depth = 1
+        elif closing:
+            depth -= 1
+            if depth == 0:
+                spans.append(text[start : match.end()])
+        else:
+            depth += 1
+    if depth:
+        spans.append(text[start:])
+    return "\n".join(span.strip() for span in spans if span.strip())
+
+
 def normalize_tool_message(text: str) -> str:
     """Mensaje de llamadas en forma canonica. Sin llamadas, o con una ilegible, queda igual."""
     calls = parse_tool_calls(text)
     if not calls or any(call is None for call in calls):
         return text
-    thinking = text[: visible_start(text)].rstrip()
+    thinking = thinking_part(text)
     body = "\n".join(
         f"<tool_call>{json.dumps(call, ensure_ascii=False)}</tool_call>" for call in calls
     )
@@ -137,25 +167,28 @@ def build(
     candidates: list[Candidate], teacher: str | None = None, max_sft_per_prompt: int = 1
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
     """Trazas SFT, pares DPO y conteos. El profesor tiene prioridad como respuesta elegida."""
-    groups: dict[tuple[str, str], list[Candidate]] = defaultdict(list)
+    # Por prompt, no por instance.id: corridas con otra semilla o con otro n_per_cell
+    # reutilizan los mismos IDs para instancias distintas.
+    groups: dict[str, list[Candidate]] = defaultdict(list)
     for candidate in candidates:
-        groups[(candidate.instance.id, candidate.condition)].append(candidate)
+        groups[prompt_key(candidate.prompt)].append(candidate)
 
     sft: list[dict[str, Any]] = []
     dpo: list[dict[str, Any]] = []
     cells: dict[str, Counter] = defaultdict(Counter)
-    for key in sorted(groups):
+    for key in sorted(groups, key=lambda k: (groups[k][0].instance.id, groups[k][0].condition, k)):
         group = groups[key]
+        first = group[0]
+        name = f"{first.instance.id}|{first.condition}|{key[:8]}"
         good = sorted((c for c in group if c.correct), key=lambda c: _chosen_key(c, teacher))
         bad = sorted((c for c in group if c.usable_rejected), key=lambda c: _rejected_key(c, teacher))
-        first = group[0]
         cell = cells[f"{first.instance.family}|{first.instance.difficulty}|{first.condition}"]
         cell["prompts"] += 1
         cell["con_correcta"] += bool(good)
         cell["con_incorrecta"] += bool(bad)
         for candidate in good[:max_sft_per_prompt]:
             sft.append({
-                "id": f"{key[0]}|{key[1]}|{candidate.model}|{candidate.sample}",
+                "id": f"{name}|{candidate.model}|{candidate.sample}",
                 **_meta(candidate),
                 "source_model": candidate.model,
                 "sample": candidate.sample,
@@ -165,7 +198,7 @@ def build(
         if good and bad and good[0].messages != bad[0].messages:
             chosen, rejected = good[0], bad[0]
             dpo.append({
-                "id": f"{key[0]}|{key[1]}",
+                "id": name,
                 **_meta(chosen),
                 "prompt": chosen.prompt,
                 "chosen": chosen.messages,

@@ -1,6 +1,9 @@
 {
-  "created_at": "2026-11-11T20:31:30+00:00",
-  "code_hash": "0790fe94aa2873b8",
+  "created_at": "2026-11-12T20:43:39+00:00",
+  "code_hash": "42f3ffba4c997fe9",
+  "avisos": [
+    "trazas_qwen17b: la corrida uso el codigo 0790fe94aa2873b8 y el actual es 42f3ffba4c997fe9. Si cambio el prompt, sus rollouts se descartan como prompt_desconocido."
+  ],
   "corridas": [
     {
       "carpeta": "trazas_qwen17b",
@@ -35,46 +38,48 @@
     "Cada modelo resuelve instancias de train con run_pilot (etapa trazas).",
     "Cada rollout se normaliza: las llamadas pasan a <tool_call>{json}</tool_call> y se descarta el texto que las acompana; el razonamiento <think> se conserva.",
     "El verificador vuelve a evaluar cada rollout normalizado contra la instancia protegida.",
+    "Se excluye toda instancia de train igual (misma huella) a una de eval o test.",
+    "Las respuestas se agrupan por prompt: corridas con otra semilla reutilizan los IDs.",
     "SFT: rollouts con recompensa 1 y llamadas validas, priorizando al profesor.",
     "DPO: por prompt, una respuesta correcta (priorizando al profesor) y una incorrecta (priorizando otros modelos y errores de valor). Se excluyen las respuestas cortadas por el tope de tokens."
   ],
   "rollouts_leidos": 360,
   "descartados": {},
   "prompts": 180,
-  "sft": 109,
-  "dpo": 57,
+  "sft": 118,
+  "dpo": 53,
   "sft_por_modelo": {
-    "Qwen/Qwen3-1.7B+think": 109
+    "Qwen/Qwen3-1.7B+think": 118
   },
   "dpo_rechazada_por_error": {
-    "missing_field": 10,
+    "wrong_value": 33,
     "ambiguous_value": 2,
-    "wrong_value": 28,
     "no_answer_block": 4,
     "tool_limit_exceeded": 2,
+    "invalid_value": 1,
     "unknown_field": 11
   },
   "por_celda": {
     "availability|easy|tools": {
       "prompts": 10,
-      "con_correcta": 7,
-      "con_incorrecta": 10,
-      "sft": 7,
-      "dpo": 7
+      "con_correcta": 10,
+      "con_incorrecta": 2,
+      "sft": 10,
+      "dpo": 2
     },
     "availability|easy|visible": {
       "prompts": 10,
       "con_correcta": 9,
-      "con_incorrecta": 3,
+      "con_incorrecta": 2,
       "sft": 9,
-      "dpo": 2
+      "dpo": 1
     },
     "availability|hard|tools": {
       "prompts": 10,
       "con_correcta": 9,
-      "con_incorrecta": 9,
+      "con_incorrecta": 8,
       "sft": 9,
-      "dpo": 8
+      "dpo": 7
     },
     "availability|hard|visible": {
       "prompts": 10,
@@ -86,9 +91,9 @@
     "availability|medium|tools": {
       "prompts": 10,
       "con_correcta": 6,
-      "con_incorrecta": 9,
+      "con_incorrecta": 8,
       "sft": 6,
-      "dpo": 5
+      "dpo": 4
     },
     "availability|medium|visible": {
       "prompts": 10,
@@ -99,8 +104,10 @@
     },
     "composition|easy|tools": {
       "prompts": 10,
-      "con_correcta": 0,
-      "con_incorrecta": 10
+      "con_correcta": 6,
+      "con_incorrecta": 8,
+      "sft": 6,
+      "dpo": 4
     },
     "composition|easy|visible": {
       "prompts": 10,
