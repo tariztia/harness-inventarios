@@ -582,7 +582,7 @@ TEACHER_NOTEBOOK = ROOT / "notebooks" / "qwen_profesor_kaggle.ipynb"
                          "resultados_qwen17b.zip")),
         (KAGGLE_NOTEBOOK, ("/kaggle/input", "--stage\", \"piloto", "--stage\", \"trazas", "CUDA_VISIBLE_DEVICES",
                            "build_training_data.py", "resultados_qwen17b.zip")),
-        (TEACHER_NOTEBOOK, ("PASO = 1", "pending_prompts.py", "\"--only\"", "Qwen/Qwen3-8B",
+        (TEACHER_NOTEBOOK, ("PASO = 3", "pending_prompts.py", "\"--only\"", "Qwen/Qwen3-8B",
                             "build_training_data.py", "resultados_qwen8b.zip")),
     ],
 )
