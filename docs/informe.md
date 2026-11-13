@@ -43,13 +43,22 @@ Cada instancia se evalúa en dos condiciones, para separar la dificultad de razo
 
 ### 2.3 Protocolo de interacción
 
-El prompt es un único mensaje de usuario, porque no todos los modelos tienen rol de sistema. En la condición `tools` la interacción tiene pocos turnos, como recomienda el enunciado:
+El prompt es un único mensaje de usuario, sin rol de sistema, y la herramienta se describe en ese mismo texto, con un ejemplo de llamada. Es una decisión de portabilidad: un mismo prompt en texto plano sirve a cualquier modelo, incluso a los que no admiten rol de sistema o no tienen un formato nativo de llamadas. Los modelos que usamos sí tienen ambas cosas. Las plantillas de chat de Qwen3 y de Llama 3.2 aceptan rol de sistema y una lista de herramientas (`tools=`), cada una con su propio formato: Llama 3.2, por ejemplo, admite una sola llamada por turno. No usar el mecanismo nativo tiene un costo, que discutimos en la sección 8; para el proyecto planeamos medirlo con los modelos que lo admiten.
+
+En la condición `tools` la interacción tiene pocos turnos, como recomienda el enunciado:
 
 1. El modelo emite una o más llamadas: `<tool_call>{"name": "get_inventory", "arguments": {"product_id": "P01"}}</tool_call>`.
-2. El harness las ejecuta y responde con un mensaje de usuario que trae los resultados (`<tool_result>...</tool_result>`) y el formato de la respuesta final.
+2. El harness las ejecuta y responde con un mensaje de usuario que trae los resultados (`<tool_result>...</tool_result>`) y el formato de la respuesta final. El formato llega recién en este mensaje: cuando iba en el prompt inicial, los modelos respondían sin llamar a la herramienta.
 3. El modelo responde, o pide una segunda ronda. Una tercera ronda no se ejecuta y vale 0.
 
-La respuesta final es texto libre seguido de exactamente un bloque `<answer>` con un par `clave: valor` por campo:
+**Qué cuenta como llamada.** Además de la forma con etiqueta, el harness acepta un objeto JSON suelto que nombre la herramienta (`{"name": "get_inventory", "arguments": {...}}`) y la forma de Python (`get_inventory("P01", location_id="S1")`). No cuenta un objeto que no nombre la herramienta, ni una llamada dentro de un mensaje que ya trae `<answer>`. Lo decidimos para que la línea base mida qué datos pide el modelo y qué hace con ellos, y no si recuerda una sintaxis: solo 41 de las 450 respuestas del objetivo con herramientas usan la etiqueta (sección 5.6).
+
+Aceptar más formas no regala recompensa, porque los datos siguen saliendo del harness y el modelo igual tiene que calcular. Pero tiene dos costos:
+
+- El harness interpreta intenciones: una mención en prosa, como «para esto llamaría get_inventory("P01")», se ejecuta como llamada y gasta una de las dos rondas.
+- Si la recompensa es la misma con o sin etiqueta, el aprendizaje por refuerzo no empuja al modelo hacia el formato estándar. Para entrenar, la recompensa debería exigir la etiqueta.
+
+**Respuesta final.** Es texto libre seguido de exactamente un bloque `<answer>`, que es obligatorio. Dentro del bloque se acepta un par `clave: valor` por campo o un objeto JSON plano:
 
 ```text
 <answer>
@@ -58,6 +67,12 @@ cubiertas: 7
 pendientes: 1
 </answer>
 ```
+
+Fuera del bloque no se busca la respuesta: un JSON o unos pares `clave: valor` sin las etiquetas valen 0. La razón es que el texto libre trae cálculos intermedios (por ejemplo, `faltan: 5` antes de corregirse a `faltan: 3`), y elegir uno de ellos como respuesta sería adivinar.
+
+Reasoning Gym también usa un bloque `<answer>` (Stojanovski et al., 2025), pero lo trata de otra forma. Toma el último bloque aunque haya varios, compara texto y puede dar crédito parcial. El nuestro exige exactamente un bloque, interpreta cada campo según su tipo (entero, sí/no, sucursal) y da 1 solo si todos coinciden con la respuesta calculada. La sección 4 lo explica en detalle.
+
+Exigir el bloque es la causa de rechazo más frecuente de Llama-3.2-1B: 699 de sus 900 respuestas no lo traen. Pero el formato no explica su resultado. Si se buscan las claves en cualquier parte del texto, sin exigir el bloque, solo 211 de los 1.460 valores que escribe son correctos (14 %), frente a 1.500 de 3.033 (49 %) de Qwen3-1.7B sin thinking. El problema principal de Llama es el cálculo (sección 5.7).
 
 ### 2.4 Interfaz del curso
 
