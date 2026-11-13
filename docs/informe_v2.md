@@ -12,10 +12,12 @@ El desafío pide construir un entorno de entrenamiento (harness) y su dataset pa
 
 Elegimos solicitudes sobre el inventario de una cadena de sucursales. El modelo recibe una solicitud en español, consulta el stock con una herramienta y entrega una respuesta que el verificador califica con 0 o 1. Las tareas exigen restar reservas, comparar sucursales y repartir stock entre pedidos que compiten. La herramienta entrega datos y nunca la respuesta, así que acertar exige razonar sobre lo que devuelve. El modelo objetivo es Qwen3-1.7B con thinking.
 
+Lo distintivo del entorno es que combina razonamiento aritmético de varios pasos con uso de una herramienta, y que cada instancia se evalúa en dos condiciones, con los datos a la vista o pidiéndolos a la herramienta, para separar ambas dificultades. Además, el verificador no confía en la trayectoria: vuelve a ejecutar las llamadas contra el estado protegido y exige que el modelo haya pedido los datos necesarios.
+
 Los resultados principales son:
 
-- **Las tareas caen en la zona aprendible del objetivo.** Usando herramientas acierta 41 % al primer intento y 69 % en alguno de 5 intentos. Con los datos a la vista, 64 % y 89 %.
-- **La dificultad está graduada y el entorno distingue capacidad.** Con herramientas, el pass@1 del objetivo baja de 63 % en easy a 43 % en medium y 17 % en hard. Sobre las mismas instancias, Llama-3.2-1B acierta 0 %, Qwen3-1.7B sin thinking 24 % y Qwen3-4B sin thinking 71 %.
+- **La evidencia apunta a que las tareas caen en la zona aprendible del objetivo**, aunque eso solo se confirmará al entrenar. Usando herramientas acierta 41 % al primer intento y 69 % en alguno de 5 intentos. Con los datos a la vista, 64 % y 89 %.
+- **La dificultad está graduada y el entorno separa a los modelos medidos.** Con herramientas, el pass@1 del objetivo baja de 63 % en easy a 43 % en medium y 17 % en hard. Sobre las mismas instancias, Llama-3.2-1B acierta 0 %, Qwen3-1.7B sin thinking 24 % y Qwen3-4B sin thinking 71 %.
 - **El verificador resiste las trampas que previmos y se corrigió con respuestas reales.** Pasa 326 de 334 casos adversariales escritos por el equipo, y ninguno de los 8 fallos premia un valor incorrecto. Una auditoría de respuestas reales encontró un falso rechazo frecuente, que se corrigió. Esto no garantiza robustez frente a un modelo optimizado con RL, que solo se podrá medir al entrenar.
 - **Los datos derivados están listos:** 170 trazas SFT de Qwen3-8B y 106 pares DPO sobre 180 prompts de entrenamiento.
 
@@ -43,7 +45,7 @@ Cada instancia se evalúa en dos condiciones, para separar la dificultad de razo
 
 El prompt es un único mensaje de usuario con las reglas, el catálogo y la solicitud (Anexo A). La herramienta se describe en ese mismo texto, con un ejemplo de llamada. Es una decisión de portabilidad: un prompt en texto plano sirve a cualquier modelo. Los modelos que usamos sí tienen un formato nativo de llamadas (las plantillas de Qwen3 y de Llama 3.2 aceptan una lista de herramientas), y no usarlo tiene un costo que discutimos en la sección 8.
 
-En `tools` la interacción tiene pocos turnos, como recomienda el enunciado. El modelo emite una o más llamadas `<tool_call>{json}</tool_call>`; el harness las ejecuta y responde con los resultados y recién ahí con el formato de respuesta (cuando el formato iba en el prompt inicial, los modelos respondían sin llamar). El modelo responde o pide una segunda ronda; una tercera no se ejecuta y vale 0. El harness también acepta llamadas sin la etiqueta, como un JSON suelto que nombre la herramienta, para que la línea base mida qué datos pide el modelo y no si recuerda una sintaxis. El Anexo A detalla qué cuenta como llamada y los riesgos de esa flexibilidad.
+En `tools` la interacción tiene pocos turnos, como recomienda el enunciado. El modelo emite una o más llamadas `<tool_call>{json}</tool_call>`; el harness las ejecuta y responde con los resultados y recién ahí con el formato de respuesta (en la exploración, cuando el formato iba en el prompt inicial, los modelos tendían a responder sin llamar). El modelo responde o pide una segunda ronda; una tercera no se ejecuta y vale 0. El harness también acepta llamadas sin la etiqueta, como un JSON suelto que nombre la herramienta, para que la línea base mida qué datos pide el modelo y no si recuerda una sintaxis. El Anexo A detalla qué cuenta como llamada y los riesgos de esa flexibilidad.
 
 La respuesta final es texto libre seguido de exactamente un bloque `<answer>`, que es obligatorio, con un par `clave: valor` por campo o un objeto JSON plano:
 
@@ -109,11 +111,11 @@ Hay tres particiones, `train`, `eval` y `test`, sin instancias duplicadas entre 
 | Selección | 1 línea, 2–3 sucursales | 2 líneas, 3 sucursales | 3–4 líneas, 4–5 sucursales |
 | Composición | 2 pedidos, 1 producto, 1 sucursal | 3 pedidos, 2 productos, 1–2 sucursales | 4–5 pedidos, 3 productos, 2–3 sucursales, con cascada |
 
-Los niveles se definieron antes de medir, a partir de la estructura de la tarea.
+Los niveles se definieron antes de medir, a partir de la estructura de la tarea. Son por familia: un nivel hard de disponibilidad no equivale en esfuerzo a uno de composición.
 
 ## 4. Verificador
 
-El verificador no juzga el razonamiento: **compara valores**. La respuesta esperada la calculó el solucionador al generar la instancia, y el verificador solo tiene que leer qué respondió el modelo y compararlo campo por campo. Por eso puede ser código determinista, sin un modelo de lenguaje como juez. Un juez sería más flexible con formas de respuesta imprevistas, pero agrega una pasada de modelo por cada rollout y se puede engañar: respuestas triviales logran tasas altas de falsos positivos en jueces grandes (Zhao et al., 2025). El costo de las reglas es el contrario, rechazar formas correctas que nadie previó (Huang et al., 2025). Lo aceptamos, y lo mitigamos con la auditoría de la sección 4.4.
+El verificador no juzga el razonamiento: **compara valores**. La respuesta esperada la calculó el solucionador al generar la instancia, y el verificador solo tiene que leer qué respondió el modelo y compararlo campo por campo. Por eso puede ser código determinista, sin un modelo de lenguaje como juez. Un juez sería más flexible con formas de respuesta imprevistas, pero agrega una pasada de modelo por cada rollout y se puede engañar: respuestas triviales logran tasas altas de falsos positivos en jueces grandes (Zhao et al., 2025). El costo de las reglas es el contrario, rechazar formas correctas que nadie previó (Huang et al., 2025). Lo aceptamos, y lo mitigamos en parte con la auditoría de la sección 4.4.
 
 ### 4.1 Cómo lee la respuesta
 
@@ -135,7 +137,7 @@ Escribimos 334 casos para engañar al verificador o comprobar que acepta equival
 
 ### 4.4 Auditoría y corrección
 
-Para ver respuestas que no escribimos nosotros, revisamos a mano las de dos corridas exploratorias, sobre 45 instancias de `train` (Anexo D). De 119 respuestas aceptadas, ninguna era incorrecta. De 455 rechazadas, 9 eran correctas pero se rechazaron por la forma: valores entre `< >` y varios pares en una misma línea.
+Para ver respuestas que no escribimos nosotros, revisamos a mano las de dos corridas exploratorias, sobre 45 instancias de `train` (Anexo D). En esa muestra, de 119 respuestas aceptadas ninguna era incorrecta. De 455 rechazadas, 9 eran correctas pero se rechazaron por la forma: valores entre `< >` y varios pares en una misma línea.
 
 La segunda causa resultó mucho más frecuente en la línea base con herramientas: el objetivo escribía `O1_atendidas: 33O1_pendientes: 6...`, y 56 de esas respuestas eran correctas. Corregimos el verificador para separar pares en una línea solo donde aparece una clave del contrato seguida de dos puntos, de modo que `33O1_pendientes:` no se puede leer como 3301 (Anexo B), y reevaluamos los rollouts guardados sin volver a correr el modelo. El pass@1 con herramientas del objetivo pasó de 27/90 a 37/90, y cada fila corregida conserva su veredicto original.
 
@@ -155,11 +157,11 @@ Es el ciclo que describe el enunciado: revisar trazas, corregir el verificador y
 
 Todas las corridas usan la partición `eval` con 10 instancias por celda y 5 muestras por instancia, con temperatura 0,7, `top_p` 0,95, `top_k` 50 y semilla fija, en GPU T4 de Kaggle. Un **rollout** es un intento completo calificado con 0 o 1; en total son 4.300.
 
-- **pass@1** usa la primera muestra de cada instancia, y **pass@5** cuenta las instancias con al menos un acierto entre sus 5 muestras (Chen et al., 2021).
+- **pass@1** es la fracción de instancias acertadas en la primera muestra, y **pass@5** cuenta las instancias con al menos un acierto entre sus 5 muestras (Chen et al., 2021). Usar solo la primera muestra para pass@1 descarta información: promediar las 5 daría una estimación con menos varianza (sección 8).
 - Para pass@1 reportamos intervalos de confianza de Wilson al 95 % (Wilson, 1927), sobre instancias.
 - El **tope de tokens** es el máximo de tokens generados por mensaje, razonamiento de `<think>` incluido. En `tools`, cada turno tiene su propio tope.
 
-Hay tres salvedades. La corrida de Qwen3-0.6B se cortó por el límite de tiempo de Kaggle con 70 de 90 instancias por condición, repartidas de forma pareja entre las celdas. Los modelos sin thinking tienen un tope menor, así que la comparación entre ambos grupos no es del todo pareja: afecta sobre todo a Qwen3-4B (sección 5.4). Y no medimos un modelo más grande con thinking sobre `eval`; el profesor Qwen3-8B corrió sobre `train` (sección 7).
+La corrida de Qwen3-0.6B se cortó por el límite de tiempo de Kaggle con 70 de 90 instancias por condición, repartidas de forma pareja entre las celdas. No medimos un modelo más grande con thinking sobre `eval`; el profesor Qwen3-8B corrió sobre `train` (sección 7).
 
 ### 5.2 Resultados
 
@@ -171,24 +173,24 @@ Hay tres salvedades. La corrida de Qwen3-0.6B se cortó por el límite de tiempo
 | **Qwen3-1.7B con thinking** | 58/90 (64 %; IC 54–74) | 80/90 (89 %) | 37/90 (41 %; IC 32–51) | 62/90 (69 %) |
 | Qwen3-4B sin thinking | 67/90 (74 %; IC 65–82) | 71/90 (79 %) | 64/90 (71 %; IC 61–79) | 73/90 (81 %) |
 
-El acierto sube con el tamaño del modelo en ambas condiciones. El thinking le da a Qwen3-1.7B unos 34 puntos de pass@1 con datos visibles y 17 con herramientas, y para el objetivo usar herramientas cuesta 23 puntos de pass@1 frente a tener los datos a la vista. Qwen3-4B sin thinking supera al objetivo en pass@1, pero gana poco con más intentos: tiende a acertar o fallar una instancia en todas sus muestras.
+Dentro de la familia Qwen3 y con el mismo modo, el pass@1 sube con el tamaño: de 0.6B a 1.7B con thinking, y de 1.7B a 4B sin thinking. No es una relación general: Llama-3.2-1B, más grande que Qwen3-0.6B, no acierta nada. Con el thinking, Qwen3-1.7B gana unos 34 puntos de pass@1 con datos visibles y 17 con herramientas, aunque esa diferencia incluye también su tope de tokens mayor. Para el objetivo, la condición `tools` cuesta 23 puntos de pass@1 frente a `visible`; esa brecha mezcla el uso de la herramienta con el formato de llamadas en texto y la interacción en varios turnos. Qwen3-4B sin thinking supera al objetivo en pass@1, pero su pass@5 apenas sube, lo que sugiere que tiende a acertar o fallar una instancia en todas sus muestras.
 
 ![Figura 2](figuras/figura2_pass_por_dificultad.png)
 
 **Figura 2.** pass@1 (punto relleno) y pass@5 (punto hueco) por nivel de dificultad, sobre 30 instancias por nivel (23 o 24 para Qwen3-0.6B). La línea entre ambos es lo que se gana con 5 intentos. Las cifras están en el Anexo E.
 
-En todos los modelos que aciertan algo, el acierto baja de easy a hard (Figura 2), lo que confirma el orden de los niveles definidos antes de medir. Composición es la familia más difícil, y composición hard casi no tiene aciertos en ningún modelo: Qwen3-4B logra 0/10 con datos visibles y 1/10 con herramientas. Con 10 instancias por celda, las cifras por familia orientan pero no permiten comparar celdas vecinas: 6/10 corresponde a un intervalo de 31–83 % (Anexo E).
+En todos los modelos que aciertan algo, el acierto nunca sube de easy a hard (Figura 2), lo que es consistente con el orden de los niveles definidos antes de medir; con 30 instancias por nivel, algunas diferencias entre niveles vecinos son chicas. Para el objetivo, composición es la familia más difícil, y composición hard casi no tiene aciertos en ningún modelo: Qwen3-4B logra 0/10 con datos visibles y 1/10 con herramientas. Con 10 instancias por celda, las cifras por familia orientan pero no permiten comparar celdas vecinas: 6/10 corresponde a un intervalo de 31–83 % (Anexo E).
 
 ### 5.3 Errores del objetivo con herramientas
 
-De las 450 respuestas de Qwen3-1.7B con thinking en `tools`, 168 son correctas (37 %) y 165 tienen un valor incorrecto (37 %); el resto son respuestas sin claves (47), sin bloque (36) y otros errores de formato o de protocolo (Anexo E). El modelo casi siempre sabe llamar: entre 84 % y 100 % de sus respuestas tienen llamadas válidas, según la celda, aunque solo 41 de las 450 usan la etiqueta `<tool_call>`. Lo que falla en las tareas difíciles es pedir todos los datos: en composición hard solo 34 % de las respuestas reunió los registros requeridos, frente a 94 % en composición easy. De los 282 fallos, 122 son errores de cálculo con llamadas válidas y todos los datos reunidos.
+De las 450 respuestas de Qwen3-1.7B con thinking en `tools`, 168 son correctas (37 %) y 165 tienen un valor incorrecto (37 %); el resto son respuestas sin claves (47), sin bloque (36) y otros errores de formato o de protocolo (Anexo E). El modelo casi siempre sabe llamar: entre 84 % y 100 % de sus respuestas tienen llamadas válidas, según la celda, aunque solo 41 de las 450 usan la etiqueta `<tool_call>`. En las tareas difíciles, una causa importante de fallo es no pedir todos los datos: en composición hard solo 34 % de las respuestas reunió los registros requeridos, frente a 94 % en composición easy. De los 282 fallos, 122 son errores de cálculo con llamadas válidas y todos los datos reunidos.
 
 Una parte de los fallos es de formato, no de razonamiento. En selección con herramientas, 47 de las 150 respuestas vienen sin claves (`<answer>S2|29|0</answer>`), y leídas por posición 32 tendrían los valores correctos. Ocurre solo en esa familia y condición. El costo medio del objetivo es de 2.086 tokens y 55 s por respuesta con herramientas, y menos del 4 % de sus respuestas llegó al tope de tokens.
 
 ### 5.4 Otros modelos
 
-- **Qwen3-4B sin thinking** se queda sin tokens en las tareas largas: 142 de sus 900 respuestas se cortan en el tope de 768 antes de emitir el bloque, todas en selección hard, composición hard y composición medium. Eso explica 142 de sus 269 fallos, así que sus cifras en hard subestiman lo que haría con más tokens.
-- **Llama-3.2-1B** no acierta ninguna de sus 900 respuestas, y 699 no traen bloque `<answer>`. Pero su problema principal es el cálculo: buscando las claves en cualquier parte del texto, solo 14 % de los valores que escribe son correctos, frente a 49 % de Qwen3-1.7B sin thinking; por ejemplo, suma las reservas en vez de restarlas. Sí llama bien a la herramienta: 364 de sus 450 respuestas en `tools` tienen llamadas válidas.
+- **Qwen3-4B sin thinking** se queda sin tokens en las tareas largas: 142 de sus 900 respuestas se cortan en el tope de 768 antes de emitir el bloque, todas en selección hard, composición hard y composición medium. Eso explica 142 de sus 269 fallos, así que sus cifras en hard probablemente subestiman lo que haría con más tokens.
+- **Llama-3.2-1B** no acierta ninguna de sus 900 respuestas, y 699 no traen bloque `<answer>`. Pero el formato no explica su resultado: buscando las claves en cualquier parte del texto, solo 14 % de los valores que escribe son correctos, frente a 49 % de Qwen3-1.7B sin thinking. Esa lectura es aproximada, pero indica que también falla en el cálculo; por ejemplo, suma las reservas en vez de restarlas. Sí llama bien a la herramienta: 364 de sus 450 respuestas en `tools` tienen llamadas válidas.
 
 El Anexo F tiene ejemplos reales de aciertos y errores de cada modelo.
 
@@ -197,20 +199,20 @@ El Anexo F tiene ejemplos reales de aciertos y errores de cada modelo.
 El enunciado pide que las tareas no sean imposibles ni triviales para el objetivo. La evidencia es:
 
 - **Acierto intermedio.** El pass@1 global es de 41 % con herramientas y 64 % con datos visibles.
-- **Señal para RL.** pass@5 supera a pass@1 por 28 puntos con herramientas y 25 con datos visibles: el modelo ya produce respuestas correctas con cierta frecuencia, que es lo que el aprendizaje por refuerzo puede reforzar.
+- **Señal para RL.** pass@5 supera a pass@1 por 28 puntos con herramientas y 25 con datos visibles: en muchas instancias el modelo produce la respuesta correcta en alguna muestra, que es lo que el aprendizaje por refuerzo puede reforzar.
 - **Gradiente de dificultad.** El acierto baja de easy a hard en ambas condiciones.
-- **Margen de mejora.** Qwen3-4B alcanza 71 % con herramientas sin thinking, y Qwen3-8B con thinking resuelve 170 de los 180 prompts de `train`.
-- **No basta un atajo.** El objetivo supera a reglas triviales («siempre alcanza», «la primera sucursal», «ignorar las reservas») en disponibilidad y selección easy y medium, aunque con 10 instancias por celda la diferencia no siempre es significativa. En composición medium y hard con herramientas queda por debajo de «todo se atiende», que acierta las instancias sin escasez (Anexo E).
+- **Las tareas son resolubles por modelos más grandes.** Qwen3-4B alcanza 71 % con herramientas sin thinking, y Qwen3-8B con thinking resuelve 170 de los 180 prompts de `train` en alguno de 2 intentos. Eso no prueba que el objetivo pueda llegar ahí, pero descarta que las tareas estén mal planteadas.
+- **No basta un atajo.** El objetivo supera a reglas triviales, como «siempre alcanza» o «ignorar las reservas», en disponibilidad y selección easy y medium, aunque no siempre con diferencia significativa. En composición medium y hard con herramientas queda por debajo de «todo se atiende» (Anexo E).
 
 Según pass@1 y pass@5, las 18 celdas del objetivo (familia × dificultad × condición) quedan así:
 
 | Zona | Celdas | Comentario |
 |---|---|---|
 | Casi resueltas (pass@1 ≥ 9/10) | Los tres easy con datos visibles; disponibilidad medium visible; disponibilidad easy con herramientas | Sirven como arranque del currículo |
-| Aprendibles | Las otras 11 celdas | pass@1 intermedio, o bajo con pass@5 claramente mayor |
+| Candidatas a la zona aprendible | Las otras 11 celdas | pass@1 intermedio, o bajo con pass@5 claramente mayor |
 | Sin señal | Composición hard, en ambas condiciones | 0/10 con herramientas y 2/10 con datos visibles, incluso con 5 intentos |
 
-Con 10 instancias por celda, los límites entre zonas son inciertos. Y una parte de los fallos con herramientas es de formato, como las respuestas sin claves de la sección 5.3.
+Con 10 instancias por celda, los límites entre zonas son inciertos. Una parte de los fallos con herramientas es de formato, como las respuestas sin claves de la sección 5.3. Y que haya señal no garantiza que el entrenamiento la aproveche: eso es lo que medirá el proyecto.
 
 ## 7. Datos derivados
 
@@ -233,14 +235,17 @@ De las rechazadas, 83 son errores de valor, 12 tienen campos desconocidos, 5 no 
 
 - **Composición hard no da señal** al objetivo, y tampoco la resuelven Qwen3-4B (1/10 con herramientas) ni, en parte, Qwen3-8B. Sirve como meta de largo plazo, no para iniciar RL. Una recompensa parcial por campo daría señal ahí, con el riesgo de premiar los campos fáciles.
 - **Pocas instancias por celda** en la línea base (10). Las cifras globales y por dificultad son más firmes que las de cada celda.
+- **pass@1 usa una sola muestra por instancia**, y hay una sola semilla de generación. Estimar pass@1 con el promedio de las 5 muestras y repetir con otras semillas daría intervalos más estrechos.
+- **Las comparaciones entre modelos tienen variables mezcladas:** el modo thinking va junto con un tope de tokens mayor, y la brecha entre `visible` y `tools` mezcla el uso de la herramienta con el formato del protocolo.
 - **La robustez medida es frente a trampas previstas.** Los casos adversariales los escribió el equipo, y la auditoría manual cubrió dos corridas exploratorias, no la línea base completa. El reward hacking aparece bajo presión de optimización, así que habrá que auditar trazas exitosas durante el entrenamiento.
 - **La herramienta no usa el mecanismo nativo de llamadas.** Se describe en texto en el prompt, aunque Qwen3 y Llama 3.2 tienen un formato nativo. Puede explicar por qué solo 41 de 450 respuestas del objetivo usan la etiqueta, y parte de la brecha entre las condiciones `visible` y `tools`. No lo verificamos; queda para el proyecto.
-- **La flexibilidad con las llamadas tiene costos.** Una mención en prosa de la herramienta se ejecuta como llamada, y si la recompensa es igual con o sin etiqueta, el aprendizaje por refuerzo no empuja al modelo hacia el formato estándar. Para entrenar, la recompensa debería exigir la etiqueta.
-- **Respuestas sin claves en selección con herramientas.** No relajamos el verificador para aceptarlas, porque su significado depende de la posición. Es un comportamiento que SFT debería corregir.
-- **Topes de tokens distintos** entre modelos con y sin thinking; parte de los fallos de los modelos sin thinking son respuestas cortadas.
-- **La revisión de contradicciones entre prosa y bloque es débil.** Solo entiende español, cubre disponibilidad y selección pero no composición, y no se activó en ninguna respuesta de las corridas exploratorias. No protege la recompensa de un valor incorrecto; eso lo hace la comparación.
-- **Las etiquetas de una suma no se validan** contra la instancia: `20 gatos y 20 perros` vale 40. No permite cubrir varias respuestas, porque la suma debe ser exacta.
+- **La flexibilidad con las llamadas tiene costos** (Anexo A): una mención en prosa se ejecuta como llamada, y si la recompensa no exige la etiqueta, el entrenamiento no empuja hacia el formato estándar.
+- **La revisión de contradicciones entre prosa y bloque es débil:** solo entiende español, no cubre composición y no se activó en ninguna respuesta de las corridas exploratorias. Tampoco se validan las etiquetas de una suma (`20 gatos y 20 perros` vale 40; Anexo B).
 - **Un solo dominio y una sola herramienta**, sin errores ni latencia, y redacciones de 5 plantillas por familia. No se mide si el modelo elige la herramienta correcta entre varias.
+
+## 9. Conclusiones
+
+Construimos un entorno de razonamiento con herramientas sobre inventarios, con tareas generadas por código, respuestas calculadas por un solucionador independiente y un verificador por reglas que sirve como recompensa. La línea base muestra que el modelo objetivo resuelve una parte intermedia de las tareas, que la dificultad está graduada y que pass@5 deja espacio para el aprendizaje por refuerzo, salvo en composición hard. El verificador resistió las trampas que previmos y se corrigió con evidencia de respuestas reales, pero su robustez frente a un modelo optimizado contra él está por medirse. El paso siguiente es el proyecto: entrenar con SFT, DPO y RL sobre este entorno, exigir la etiqueta de llamada en la recompensa, probar el formato nativo de herramientas y auditar las trazas exitosas.
 
 ## Referencias
 

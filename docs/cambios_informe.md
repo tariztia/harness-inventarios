@@ -51,3 +51,30 @@ Cuerpo de ~4.250 palabras (tablas incluidas) con 2 figuras, más anexos A–G. T
 | Figuras | `docs/figuras/`, generadas con `scripts/figuras_informe.py` | Reproducibles |
 
 Pendiente: integrantes y link al repo limpio (A1, A2), y exportar a PDF (A3).
+
+## Revisión final: afirmaciones demasiado fuertes
+
+| Antes | Después | Por qué |
+|---|---|---|
+| "Las tareas caen en la zona aprendible" | "La evidencia apunta a que…, aunque eso solo se confirmará al entrenar" | Sin entrenar no se puede afirmar que el modelo aprenda |
+| "El entorno distingue capacidad"; "el acierto sube con el tamaño" | "Separa a los modelos medidos"; sube dentro de Qwen3 con el mismo modo, no en general | Llama-3.2-1B es más grande que Qwen3-0.6B y acierta menos; el pass@5 de Qwen3-4B en visible es menor que el del objetivo |
+| "El thinking le da 34 puntos" | Incluye también su tope de tokens mayor | Variables mezcladas: thinking va con 4.096 tokens y sin thinking con 768 |
+| "Usar herramientas cuesta 23 puntos" | La condición `tools` cuesta 23 puntos, y la brecha mezcla herramienta, formato y turnos | No se aisló el efecto de la herramienta |
+| "El acierto baja de easy a hard… lo que confirma el orden" | "Nunca sube… es consistente con el orden" | Qwen3-0.6B empata entre niveles; n = 30 por nivel |
+| "Lo que falla en las tareas difíciles es pedir los datos" | "Una causa importante" | También hay 122 errores de cálculo con todos los datos |
+| "Su problema principal es el cálculo" (Llama) | La lectura indulgente es aproximada, pero indica que también falla en el cálculo | La lectura por claves puede capturar valores intermedios |
+| "Subestiman lo que haría con más tokens" (Qwen3-4B) | "Probablemente subestiman" | No se corrió con más tokens |
+| "Margen de mejora" con Qwen3-4B y Qwen3-8B | "Las tareas son resolubles por modelos más grandes"; no prueba que el objetivo llegue ahí. Se aclara que Qwen3-8B usa 2 intentos | Un modelo más grande no demuestra margen para el pequeño |
+| Celdas "Aprendibles" | "Candidatas a la zona aprendible" | Mismo motivo que la primera fila |
+| "Lo mitigamos con la auditoría"; "ninguna aceptada era incorrecta" | "En parte"; "en esa muestra" | Auditoría chica y exploratoria |
+| "Cuando el formato iba en el prompt, los modelos respondían sin llamar" | "En la exploración… tendían a" | Observación no cuantificada en el informe |
+
+También se agregó:
+
+- En §5.1 y §8, que pass@1 usa solo la primera de 5 muestras (confirmado en `metrics.py`) y hay una sola semilla.
+- En §8, las variables mezcladas en las comparaciones.
+- En §3.4, que los niveles son por familia.
+- En la introducción, qué tiene de distintivo el entorno, porque la originalidad es un criterio de la rúbrica.
+- Una sección 9 de conclusiones.
+
+Para compensar el largo, se quitaron de §8 dos puntos que ya estaban en otras secciones.
