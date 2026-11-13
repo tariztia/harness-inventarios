@@ -15,7 +15,7 @@ El modelo recibe una solicitud en español, consulta la herramienta `get_invento
 | Línea base del modelo objetivo (pass@1 y pass@5) | Lista: 900 rollouts de Qwen3-1.7B sobre `eval` |
 | Línea base de otros modelos | Lista para Llama-3.2-1B, Qwen3-1.7B sin thinking y Qwen3-4B; Qwen3-0.6B va en 70 de 90 instancias |
 | Trazas SFT y pares DPO | Listos: 170 trazas, todas de Qwen3-8B, y 106 pares |
-| Informe final | Pendiente |
+| Informe final | Borrador completo en [docs/informe.md](docs/informe.md) |
 
 ## Línea base de Qwen3-1.7B
 
@@ -39,7 +39,7 @@ Lectura:
 - Las tareas caen en la zona aprendible: el acierto baja con la dificultad y pass@5 supera con claridad a pass@1 en ambas condiciones.
 - Usar herramientas cuesta unos 23 puntos de pass@1 frente a tener los datos a la vista.
 - Composición hard con herramientas queda en 0/10 incluso con 5 intentos, y con datos visibles en 2/10: ahí casi no hay señal para RL.
-- En selección con herramientas, 43 de 150 respuestas vienen sin claves (`S2|29|0`) y se rechazan. Es un problema de formato tras recibir los resultados, no de razonamiento.
+- En selección con herramientas, 47 de 150 respuestas vienen sin claves (`S2|29|0`) y se rechazan; leídas por posición, 32 tendrían los valores correctos. Es un problema de formato tras recibir los resultados, no de razonamiento.
 
 Estos números se **reevaluaron** con `scripts/reevaluate.py` después de la corrida. El verificador rechazaba las respuestas con varios pares en una línea (`O1_atendidas: 33O1_pendientes: 6...`), y 56 de esas respuestas eran correctas. Ahora se aceptan (ver [docs/contrato.md](docs/contrato.md)). Antes del cambio, herramientas daba 27/90 en pass@1. Cada fila corregida conserva su veredicto original en `verdict_anterior`.
 
@@ -230,4 +230,4 @@ docs/propuesta/                enunciado del desafío y propuestas
 1. Terminar la línea base de Qwen3-0.6B: faltan 200 rollouts, unas 3 horas en Kaggle. Se continúa agregando la salida anterior como entrada del cuaderno.
 2. Dejar claro el formato de respuesta en el mensaje que llega con los resultados de la herramienta, por las respuestas sin claves en selección. Obliga a repetir las corridas.
 3. Decidir qué hacer con composición hard, que casi no da señal en ningún modelo.
-4. Escribir el informe final de línea base. [docs/auditoria_verificador.md](docs/auditoria_verificador.md) y [docs/robustez_verificador.md](docs/robustez_verificador.md) cubren la parte de robustez.
+4. Revisar [docs/informe.md](docs/informe.md), el informe final, y completar los integrantes.
