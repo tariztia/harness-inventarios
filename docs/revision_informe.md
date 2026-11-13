@@ -4,6 +4,28 @@ Notas para corregir `docs/informe.md` antes de entregarlo. No es parte de la ent
 
 Estados: **pendiente**, **por decidir** (falta una decisión del equipo), **listo**.
 
+## 0. Protocolo de la revisión (acordado el 13-11)
+
+1. **Largo: a lo más 7 páginas a doble columna**, como el paper del proyecto (unas 4.000 palabras de cuerpo con 2 figuras). El informe actual tiene 5.890 palabras (~15 páginas a una columna); §5 sola tiene 2.248.
+2. **Cada ítem tiene un destino:** cuerpo (qué se hizo, cómo, y qué muestra: una afirmación con su cifra), anexo (la evidencia: tablas por celda, ejemplos, casos) o repo (comandos y rutas).
+3. **Referencias mínimas, sin sección de trabajo relacionado.** Solo se cita donde la cita respalda una decisión cuestionable: por qué no un LLM juez (Huang et al., 2025; Zhao et al., 2025) y la definición de pass@k (Chen et al., 2021). Opcional: una oración en la introducción con Reasoning Gym o AgentGym. No se citan contrastes de detalle (por ejemplo, el manejo de `<answer>` en Reasoning Gym) ni conceptos vistos en clase (RLVR). Toda referencia de la lista debe estar citada en el cuerpo.
+4. **Orden de trabajo:** primero el esqueleto con la estructura y qué se mueve a dónde; después se reescribe sección por sección, mostrando cada una antes de seguir. La §2.3 ya reescrita se reduce a 3–4 oraciones y su detalle pasa al anexo.
+
+Estructura acordada:
+
+| Sección | Contenido | Palabras |
+|---|---|---|
+| 1. Introducción | Problema, aporte, 3–4 resultados principales | ~350 |
+| 2. Entorno | Tareas, dos condiciones, protocolo, interfaz `reward()`. Figura 1: flujo instancia → modelo → herramienta → verificador | ~600 |
+| 3. Dataset | Generación, controles contra atajos, particiones, dificultad | ~450 |
+| 4. Verificador | Principio de diseño, defensas de trayectoria, robustez resumida, auditoría como ciclo. Tono: robusto frente a lo previsto | ~600 |
+| 5. Línea base | Configuración y definiciones, tabla global, Figura 2 (pass@1/pass@5 por dificultad), errores, 1–2 ejemplos breves | ~900 |
+| 6. Calibración | Zona aprendible del objetivo | ~250 |
+| 7. Datos derivados | SFT y DPO: modelo, procedimiento, conteos | ~300 |
+| 8. Limitaciones y trabajo futuro | Debilidades (B13) y pendientes del proyecto | ~300 |
+| Referencias | Solo las citadas | — |
+| Anexos | A. Prompt completo y ejemplo · B. Interpretación de valores y caso `33O1` · C. Casos adversariales por categoría · D. Auditoría · E. Tablas por familia, reglas triviales y uso de herramientas · F. Ejemplos cualitativos · G. Reproducción | sin límite |
+
 ## A. Bloqueantes para entregar hoy (13 de noviembre, Canvas)
 
 | # | Qué | Estado |
@@ -12,7 +34,7 @@ Estados: **pendiente**, **por decidir** (falta una decisión del equipo), **list
 | A2 | El repo `tariztia/harness-inventarios` está **privado**. El enunciado dice que el entorno "será compartido con el resto del curso" (política de apertura) y el informe cita el repo como fuente. Hacerlo público, o al menos dar acceso al equipo docente | Decidido (E): se publica un repo limpio |
 | A3 | Formato para Canvas: el informe está en Markdown. Exportarlo a PDF y adjuntar el link al repo (y, si se quiere, `dist/inventory_harness_colab.zip`) | pendiente |
 | A4 | La carpeta vieja `results/kaggle_qwen17b/datos_derivados_qwen17b/` tiene otro `sft.jsonl` y otro `dpo.jsonl`. Los oficiales son los de `kaggle_qwen8b`. Borrarla o aclararla en el README | Decidido (E): queda fuera del repo limpio |
-| A5 | **El informe no cita ningún trabajo**, ni siquiera las cuatro referencias del enunciado. Agregar una sección corta de trabajo relacionado y referencias, citando cada paper donde justifica una decisión (lista en `analisis_verificador.md` §2 y §6) | pendiente |
+| A5 | **El informe no cita ningún trabajo.** Agregar referencias mínimas según el protocolo (punto 3), sin sección de trabajo relacionado | pendiente |
 
 ## B. Cambios al informe
 
