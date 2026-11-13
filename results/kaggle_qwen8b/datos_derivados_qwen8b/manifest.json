@@ -1,9 +1,9 @@
 {
-  "created_at": "2026-11-12T20:43:45+00:00",
-  "code_hash": "42f3ffba4c997fe9",
+  "created_at": "2026-11-13T11:58:05+00:00",
+  "code_hash": "27f29db9ca698f3e",
   "avisos": [
-    "trazas_qwen17b: la corrida uso el codigo 0790fe94aa2873b8 y el actual es 42f3ffba4c997fe9. Si cambio el prompt, sus rollouts se descartan como prompt_desconocido.",
-    "trazas_qwen8b: la corrida uso el codigo d4ea15d25f41ff8f y el actual es 42f3ffba4c997fe9. Si cambio el prompt, sus rollouts se descartan como prompt_desconocido."
+    "trazas_qwen17b: la corrida uso el codigo 0790fe94aa2873b8 y el actual es 27f29db9ca698f3e. Si cambio el prompt, sus rollouts se descartan como prompt_desconocido.",
+    "trazas_qwen8b: la corrida uso el codigo ddebcd4a24cfedcb y el actual es 27f29db9ca698f3e. Si cambio el prompt, sus rollouts se descartan como prompt_desconocido."
   ],
   "corridas": [
     {
@@ -70,17 +70,16 @@
     "SFT: rollouts con recompensa 1 y llamadas validas, priorizando al profesor.",
     "DPO: por prompt, una respuesta correcta (priorizando al profesor) y una incorrecta (priorizando otros modelos y errores de valor). Se excluyen las respuestas cortadas por el tope de tokens."
   ],
-  "rollouts_leidos": 502,
+  "rollouts_leidos": 720,
   "descartados": {},
   "prompts": 180,
   "sft": 170,
-  "dpo": 105,
+  "dpo": 106,
   "sft_por_modelo": {
-    "Qwen/Qwen3-1.7B+think": 109,
-    "Qwen/Qwen3-8B+think": 61
+    "Qwen/Qwen3-8B+think": 170
   },
   "dpo_rechazada_por_error": {
-    "wrong_value": 82,
+    "wrong_value": 83,
     "ambiguous_value": 2,
     "no_answer_block": 5,
     "tool_limit_exceeded": 2,
@@ -196,9 +195,9 @@
     "selection|hard|visible": {
       "prompts": 10,
       "con_correcta": 10,
-      "con_incorrecta": 4,
+      "con_incorrecta": 5,
       "sft": 10,
-      "dpo": 4
+      "dpo": 5
     },
     "selection|medium|tools": {
       "prompts": 10,

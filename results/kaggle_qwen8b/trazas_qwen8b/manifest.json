@@ -13,10 +13,7 @@
     "tools",
     "visible"
   ],
-  "only": {
-    "archivo": "pendientes.json",
-    "pares": 71
-  },
+  "only": null,
   "seeds": {
     "dataset": 2026,
     "generation": 2026
@@ -28,7 +25,7 @@
     "transformers": "5.20.2",
     "gpu": "Tesla T4"
   },
-  "code_hash": "d4ea15d25f41ff8f",
+  "code_hash": "ddebcd4a24cfedcb",
   "git_commit": null,
   "created_at": "2026-11-12T02:47:17+00:00",
   "gen_configs": {
@@ -50,21 +47,12 @@
     "Qwen/Qwen3-8B+think": {
       "estado": "completo",
       "error": null,
-      "esperados": 142,
-      "hechos": 142,
-      "segundos_por_rollout": 101.718,
+      "esperados": 360,
+      "hechos": 360,
+      "segundos_por_rollout": 42.168,
       "errores_internos": 0
     }
   },
   "notas": [],
-  "updated_at": "2026-11-12T20:43:33+00:00",
-  "reevaluaciones": [
-    {
-      "fecha": "2026-11-12T20:43:33+00:00",
-      "code_hash": "42f3ffba4c997fe9",
-      "conteos": {
-        "evaluadas": 142
-      }
-    }
-  ]
+  "updated_at": "2026-11-13T04:10:54+00:00"
 }

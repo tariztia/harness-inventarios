@@ -1,0 +1,3095 @@
+{
+  "k": 5,
+  "carpeta": "results\\kaggle_otros_modelos\\linea_base_qwen06b",
+  "archivos": [
+    "rollouts_Qwen_Qwen3-0.6B+think.jsonl"
+  ],
+  "problemas_de_carga": {
+    "linea_final_truncada": 0,
+    "lineas_corruptas": 0,
+    "filas_sin_campos_requeridos": 0,
+    "duplicados_descartados": 0
+  },
+  "manifest": {
+    "stage": "piloto",
+    "dry_run": false,
+    "dataset": {
+      "split": "eval",
+      "n_per_cell": 10,
+      "base_seed": 2026,
+      "fingerprint": "efb77852b9c86edc5c478be0de30fa11515d288e272a6cf09f624c3bd0453e5b"
+    },
+    "n_samples": 5,
+    "limit": null,
+    "conditions": [
+      "tools",
+      "visible"
+    ],
+    "only": null,
+    "seeds": {
+      "dataset": 2026,
+      "generation": 2026
+    },
+    "entorno": {
+      "python": "3.13.16",
+      "plataforma": "Linux-6.18.55+-x86_64-with-glibc2.39",
+      "torch": "2.11.0+cu130",
+      "transformers": "5.20.2",
+      "gpu": "Tesla T4"
+    },
+    "code_hash": "27f29db9ca698f3e",
+    "git_commit": null,
+    "created_at": "2026-11-12T22:59:05+00:00",
+    "gen_configs": {
+      "Qwen/Qwen3-0.6B+think": {
+        "model": "Qwen/Qwen3-0.6B+think",
+        "model_id": "Qwen/Qwen3-0.6B",
+        "enable_thinking": true,
+        "max_new_tokens": 4096,
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.95,
+        "top_k": 50,
+        "repetition_penalty": 1.0,
+        "seed": 2026,
+        "batch_size": 8
+      }
+    },
+    "modelos": {
+      "Qwen/Qwen3-0.6B+think": {
+        "estado": "corriendo",
+        "error": null,
+        "esperados": 900,
+        "hechos": 700,
+        "segundos_por_rollout": 55.912
+      }
+    },
+    "notas": [],
+    "updated_at": "2026-11-13T09:51:36+00:00"
+  },
+  "aviso_baselines": null,
+  "grupos": [
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "easy",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 4,
+        "n": 40,
+        "tasa": 0.1
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.32440756488388023
+        ]
+      },
+      "pass@5": {
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375,
+        "ic95": [
+          0.13684428582359742,
+          0.6942576053973727
+        ]
+      },
+      "valid_tool_call": {
+        "si": 34,
+        "n": 40
+      },
+      "correct_tool_arguments": {
+        "si": 34,
+        "n": 40
+      },
+      "retrieved_required_data": {
+        "si": 40,
+        "n": 40
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 40
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 40
+      },
+      "parser_error": {
+        "si": 30,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 2,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 4,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "no_answer_block": 14,
+        "invalid_value": 12,
+        "wrong_value": 4,
+        "ok": 4,
+        "unknown_field": 3,
+        "contradiction": 2,
+        "missing_field": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 51869.0,
+        "tokens_por_muestra": 1296.725,
+        "segundos": 1245.5946,
+        "segundos_por_muestra": 31.139864999999997
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "medium",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 4,
+        "n": 40,
+        "tasa": 0.1
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375,
+        "ic95": [
+          0.13684428582359742,
+          0.6942576053973727
+        ]
+      },
+      "pass@5": {
+        "aciertos": 4,
+        "n": 8,
+        "tasa": 0.5,
+        "ic95": [
+          0.21521606221387757,
+          0.7847839377861224
+        ]
+      },
+      "valid_tool_call": {
+        "si": 40,
+        "n": 40
+      },
+      "correct_tool_arguments": {
+        "si": 40,
+        "n": 40
+      },
+      "retrieved_required_data": {
+        "si": 40,
+        "n": 40
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 40
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 40
+      },
+      "parser_error": {
+        "si": 25,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 4,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "no_answer_block": 14,
+        "wrong_value": 11,
+        "ok": 4,
+        "unknown_field": 4,
+        "missing_field": 4,
+        "invalid_value": 3
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 54322.0,
+        "tokens_por_muestra": 1358.05,
+        "segundos": 1450.1586,
+        "segundos_por_muestra": 36.253965
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "hard",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 1,
+        "n": 40,
+        "tasa": 0.025
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 1,
+        "n": 8,
+        "tasa": 0.125,
+        "ic95": [
+          0.02241749145005667,
+          0.4708881822128535
+        ]
+      },
+      "pass@5": {
+        "aciertos": 1,
+        "n": 8,
+        "tasa": 0.125,
+        "ic95": [
+          0.02241749145005667,
+          0.4708881822128535
+        ]
+      },
+      "valid_tool_call": {
+        "si": 40,
+        "n": 40
+      },
+      "correct_tool_arguments": {
+        "si": 40,
+        "n": 40
+      },
+      "retrieved_required_data": {
+        "si": 34,
+        "n": 40
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 40
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 40
+      },
+      "parser_error": {
+        "si": 23,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 1,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "wrong_value": 16,
+        "no_answer_block": 10,
+        "invalid_value": 9,
+        "missing_field": 3,
+        "multiple_answer_blocks": 1,
+        "ok": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 79713.0,
+        "tokens_por_muestra": 1992.825,
+        "segundos": 2189.6376999999998,
+        "segundos_por_muestra": 54.740942499999996
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "easy",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 18,
+        "n": 40,
+        "tasa": 0.45
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 4,
+        "n": 8,
+        "tasa": 0.5,
+        "ic95": [
+          0.21521606221387757,
+          0.7847839377861224
+        ]
+      },
+      "pass@5": {
+        "aciertos": 8,
+        "n": 8,
+        "tasa": 1.0,
+        "ic95": [
+          0.6755924351161198,
+          1.0
+        ]
+      },
+      "valid_tool_call": {
+        "si": 38,
+        "n": 40
+      },
+      "correct_tool_arguments": {
+        "si": 37,
+        "n": 40
+      },
+      "retrieved_required_data": {
+        "si": 36,
+        "n": 40
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 40
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 40
+      },
+      "parser_error": {
+        "si": 4,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 18,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "ok": 18,
+        "wrong_value": 18,
+        "invalid_value": 2,
+        "no_answer_block": 2
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 93672.0,
+        "tokens_por_muestra": 2341.8,
+        "segundos": 2601.0318,
+        "segundos_por_muestra": 65.025795
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "medium",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 2,
+        "n": 40,
+        "tasa": 0.05
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 1,
+        "n": 8,
+        "tasa": 0.125,
+        "ic95": [
+          0.02241749145005667,
+          0.4708881822128535
+        ]
+      },
+      "pass@5": {
+        "aciertos": 1,
+        "n": 8,
+        "tasa": 0.125,
+        "ic95": [
+          0.02241749145005667,
+          0.4708881822128535
+        ]
+      },
+      "valid_tool_call": {
+        "si": 35,
+        "n": 40
+      },
+      "correct_tool_arguments": {
+        "si": 35,
+        "n": 40
+      },
+      "retrieved_required_data": {
+        "si": 14,
+        "n": 40
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 40
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 40
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 2,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "wrong_value": 28,
+        "no_answer_block": 10,
+        "ok": 2
+      },
+      "tope_de_tokens": {
+        "si": 7,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 145606.0,
+        "tokens_por_muestra": 3640.15,
+        "segundos": 3682.5042,
+        "segundos_por_muestra": 92.06260499999999
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 40,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.32440756488388023
+        ]
+      },
+      "pass@5": {
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.32440756488388023
+        ]
+      },
+      "valid_tool_call": {
+        "si": 38,
+        "n": 40
+      },
+      "correct_tool_arguments": {
+        "si": 38,
+        "n": 40
+      },
+      "retrieved_required_data": {
+        "si": 11,
+        "n": 40
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 40
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 40
+      },
+      "parser_error": {
+        "si": 10,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "wrong_value": 30,
+        "no_answer_block": 10
+      },
+      "tope_de_tokens": {
+        "si": 7,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 167461.0,
+        "tokens_por_muestra": 4186.525,
+        "segundos": 4380.0933,
+        "segundos_por_muestra": 109.50233250000001
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 1,
+        "n": 40,
+        "tasa": 0.025
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.32440756488388023
+        ]
+      },
+      "pass@5": {
+        "aciertos": 1,
+        "n": 8,
+        "tasa": 0.125,
+        "ic95": [
+          0.02241749145005667,
+          0.4708881822128535
+        ]
+      },
+      "valid_tool_call": {
+        "si": 35,
+        "n": 40
+      },
+      "correct_tool_arguments": {
+        "si": 35,
+        "n": 40
+      },
+      "retrieved_required_data": {
+        "si": 36,
+        "n": 40
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 40
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 40
+      },
+      "parser_error": {
+        "si": 26,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 1,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "invalid_value": 22,
+        "wrong_value": 13,
+        "no_answer_block": 4,
+        "ok": 1
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 104996.0,
+        "tokens_por_muestra": 2624.9,
+        "segundos": 2887.8148,
+        "segundos_por_muestra": 72.19537
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium",
+      "n_instancias": 7,
+      "n_muestras": 35,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 35,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 7,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.35433043506668743
+        ]
+      },
+      "pass@5": {
+        "aciertos": 0,
+        "n": 7,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.35433043506668743
+        ]
+      },
+      "valid_tool_call": {
+        "si": 19,
+        "n": 35
+      },
+      "correct_tool_arguments": {
+        "si": 19,
+        "n": 35
+      },
+      "retrieved_required_data": {
+        "si": 11,
+        "n": 35
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 35
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 35
+      },
+      "parser_error": {
+        "si": 20,
+        "n": 35
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 35
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 35
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 35
+      },
+      "error_types": {
+        "no_answer_block": 17,
+        "wrong_value": 15,
+        "invalid_value": 3
+      },
+      "tope_de_tokens": {
+        "si": 9,
+        "n": 35
+      },
+      "uso": {
+        "tokens_nuevos": 141514.0,
+        "tokens_por_muestra": 4043.2571428571428,
+        "segundos": 2989.1159,
+        "segundos_por_muestra": 85.40331142857143
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard",
+      "n_instancias": 7,
+      "n_muestras": 35,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 35,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 7,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.35433043506668743
+        ]
+      },
+      "pass@5": {
+        "aciertos": 0,
+        "n": 7,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.35433043506668743
+        ]
+      },
+      "valid_tool_call": {
+        "si": 22,
+        "n": 35
+      },
+      "correct_tool_arguments": {
+        "si": 22,
+        "n": 35
+      },
+      "retrieved_required_data": {
+        "si": 4,
+        "n": 35
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 35
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 35
+      },
+      "parser_error": {
+        "si": 26,
+        "n": 35
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 35
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 35
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 35
+      },
+      "error_types": {
+        "no_answer_block": 16,
+        "invalid_value": 10,
+        "wrong_value": 9
+      },
+      "tope_de_tokens": {
+        "si": 10,
+        "n": 35
+      },
+      "uso": {
+        "tokens_nuevos": 146725.0,
+        "tokens_por_muestra": 4192.142857142857,
+        "segundos": 3312.4633,
+        "segundos_por_muestra": 94.64180857142857
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 1,
+        "n": 40,
+        "tasa": 0.025
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.32440756488388023
+        ]
+      },
+      "pass@5": {
+        "aciertos": 1,
+        "n": 8,
+        "tasa": 0.125,
+        "ic95": [
+          0.02241749145005667,
+          0.4708881822128535
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 17,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 1,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "wrong_value": 22,
+        "invalid_value": 8,
+        "no_answer_block": 7,
+        "ambiguous_value": 2,
+        "ok": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 24096.0,
+        "tokens_por_muestra": 602.4,
+        "segundos": 908.5623,
+        "segundos_por_muestra": 22.714057500000003
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 40,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.32440756488388023
+        ]
+      },
+      "pass@5": {
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.32440756488388023
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 26,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "no_answer_block": 20,
+        "wrong_value": 14,
+        "invalid_value": 5,
+        "unknown_field": 1
+      },
+      "tope_de_tokens": {
+        "si": 2,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 40849.0,
+        "tokens_por_muestra": 1021.225,
+        "segundos": 1225.3622,
+        "segundos_por_muestra": 30.634055
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 1,
+        "n": 40,
+        "tasa": 0.025
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.32440756488388023
+        ]
+      },
+      "pass@5": {
+        "aciertos": 1,
+        "n": 8,
+        "tasa": 0.125,
+        "ic95": [
+          0.02241749145005667,
+          0.4708881822128535
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 22,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 1,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "wrong_value": 17,
+        "unknown_field": 10,
+        "no_answer_block": 7,
+        "invalid_value": 5,
+        "ok": 1
+      },
+      "tope_de_tokens": {
+        "si": 3,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 54555.0,
+        "tokens_por_muestra": 1363.875,
+        "segundos": 1655.7618,
+        "segundos_por_muestra": 41.394045
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 15,
+        "n": 40,
+        "tasa": 0.375
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375,
+        "ic95": [
+          0.13684428582359742,
+          0.6942576053973727
+        ]
+      },
+      "pass@5": {
+        "aciertos": 8,
+        "n": 8,
+        "tasa": 1.0,
+        "ic95": [
+          0.6755924351161198,
+          1.0
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 12,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 15,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "ok": 15,
+        "wrong_value": 13,
+        "invalid_value": 8,
+        "no_answer_block": 3,
+        "multiple_answer_blocks": 1
+      },
+      "tope_de_tokens": {
+        "si": 3,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 54172.0,
+        "tokens_por_muestra": 1354.3,
+        "segundos": 1482.5051,
+        "segundos_por_muestra": 37.062627500000005
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "medium",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 3,
+        "n": 40,
+        "tasa": 0.075
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 1,
+        "n": 8,
+        "tasa": 0.125,
+        "ic95": [
+          0.02241749145005667,
+          0.4708881822128535
+        ]
+      },
+      "pass@5": {
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375,
+        "ic95": [
+          0.13684428582359742,
+          0.6942576053973727
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 16,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 3,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "wrong_value": 21,
+        "no_answer_block": 9,
+        "invalid_value": 7,
+        "ok": 3
+      },
+      "tope_de_tokens": {
+        "si": 9,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 86419.0,
+        "tokens_por_muestra": 2160.475,
+        "segundos": 1988.8215,
+        "segundos_por_muestra": 49.7205375
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 1,
+        "n": 40,
+        "tasa": 0.025
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.32440756488388023
+        ]
+      },
+      "pass@5": {
+        "aciertos": 1,
+        "n": 8,
+        "tasa": 0.125,
+        "ic95": [
+          0.02241749145005667,
+          0.4708881822128535
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 14,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 1,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "wrong_value": 25,
+        "no_answer_block": 9,
+        "invalid_value": 3,
+        "multiple_answer_blocks": 2,
+        "ok": 1
+      },
+      "tope_de_tokens": {
+        "si": 8,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 101955.0,
+        "tokens_por_muestra": 2548.875,
+        "segundos": 2190.0808,
+        "segundos_por_muestra": 54.75202
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy",
+      "n_instancias": 8,
+      "n_muestras": 40,
+      "tasa_media_muestra": {
+        "aciertos": 2,
+        "n": 40,
+        "tasa": 0.05
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.32440756488388023
+        ]
+      },
+      "pass@5": {
+        "aciertos": 2,
+        "n": 8,
+        "tasa": 0.25,
+        "ic95": [
+          0.071479212752109,
+          0.5907245696898311
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 40
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 40
+      },
+      "correct_final_answer": {
+        "si": 2,
+        "n": 40
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 40
+      },
+      "error_types": {
+        "wrong_value": 38,
+        "ok": 2
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 40
+      },
+      "uso": {
+        "tokens_nuevos": 48518.0,
+        "tokens_por_muestra": 1212.95,
+        "segundos": 1175.4141,
+        "segundos_por_muestra": 29.3853525
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium",
+      "n_instancias": 7,
+      "n_muestras": 35,
+      "tasa_media_muestra": {
+        "aciertos": 1,
+        "n": 35,
+        "tasa": 0.02857142857142857
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 7,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.35433043506668743
+        ]
+      },
+      "pass@5": {
+        "aciertos": 1,
+        "n": 7,
+        "tasa": 0.14285714285714285,
+        "ic95": [
+          0.02567962434474355,
+          0.5131278292743189
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 6,
+        "n": 35
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 35
+      },
+      "correct_final_answer": {
+        "si": 1,
+        "n": 35
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 35
+      },
+      "error_types": {
+        "wrong_value": 28,
+        "no_answer_block": 5,
+        "ok": 1,
+        "multiple_answer_blocks": 1
+      },
+      "tope_de_tokens": {
+        "si": 6,
+        "n": 35
+      },
+      "uso": {
+        "tokens_nuevos": 70207.0,
+        "tokens_por_muestra": 2005.9142857142858,
+        "segundos": 1510.1998,
+        "segundos_por_muestra": 43.148565714285716
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard",
+      "n_instancias": 7,
+      "n_muestras": 35,
+      "tasa_media_muestra": {
+        "aciertos": 2,
+        "n": 35,
+        "tasa": 0.05714285714285714
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 1,
+        "n": 7,
+        "tasa": 0.14285714285714285,
+        "ic95": [
+          0.02567962434474355,
+          0.5131278292743189
+        ]
+      },
+      "pass@5": {
+        "aciertos": 1,
+        "n": 7,
+        "tasa": 0.14285714285714285,
+        "ic95": [
+          0.02567962434474355,
+          0.5131278292743189
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 7,
+        "n": 35
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 35
+      },
+      "correct_final_answer": {
+        "si": 2,
+        "n": 35
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 35
+      },
+      "error_types": {
+        "wrong_value": 26,
+        "no_answer_block": 7,
+        "ok": 2
+      },
+      "tope_de_tokens": {
+        "si": 7,
+        "n": 35
+      },
+      "uso": {
+        "tokens_nuevos": 85430.0,
+        "tokens_por_muestra": 2440.8571428571427,
+        "segundos": 2258.8831,
+        "segundos_por_muestra": 64.53951714285715
+      }
+    }
+  ],
+  "por_modelo_condicion": [
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "n_instancias": 70,
+      "n_muestras": 350,
+      "tasa_media_muestra": {
+        "aciertos": 30,
+        "n": 350,
+        "tasa": 0.08571428571428572
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 9,
+        "n": 70,
+        "tasa": 0.12857142857142856,
+        "ic95": [
+          0.06914100115337508,
+          0.22664755949425175
+        ]
+      },
+      "pass@5": {
+        "aciertos": 18,
+        "n": 70,
+        "tasa": 0.2571428571428571,
+        "ic95": [
+          0.16929275741343847,
+          0.3702613014715483
+        ]
+      },
+      "valid_tool_call": {
+        "si": 301,
+        "n": 350
+      },
+      "correct_tool_arguments": {
+        "si": 300,
+        "n": 350
+      },
+      "retrieved_required_data": {
+        "si": 226,
+        "n": 350
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 350
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 350
+      },
+      "parser_error": {
+        "si": 174,
+        "n": 350
+      },
+      "contradictory_answer": {
+        "si": 2,
+        "n": 350
+      },
+      "correct_final_answer": {
+        "si": 30,
+        "n": 350
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 350
+      },
+      "error_types": {
+        "wrong_value": 144,
+        "no_answer_block": 97,
+        "invalid_value": 61,
+        "ok": 30,
+        "missing_field": 8,
+        "unknown_field": 7,
+        "contradiction": 2,
+        "multiple_answer_blocks": 1
+      },
+      "tope_de_tokens": {
+        "si": 35,
+        "n": 350
+      },
+      "uso": {
+        "tokens_nuevos": 985878.0,
+        "tokens_por_muestra": 2816.7942857142857,
+        "segundos": 24738.4142,
+        "segundos_por_muestra": 70.68118342857143
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "n_instancias": 70,
+      "n_muestras": 350,
+      "tasa_media_muestra": {
+        "aciertos": 26,
+        "n": 350,
+        "tasa": 0.07428571428571429
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        },
+        "k=5": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 5,
+        "n": 70,
+        "tasa": 0.07142857142857142,
+        "ic95": [
+          0.03089421703784702,
+          0.1565541221709532
+        ]
+      },
+      "pass@5": {
+        "aciertos": 18,
+        "n": 70,
+        "tasa": 0.2571428571428571,
+        "ic95": [
+          0.16929275741343847,
+          0.3702613014715483
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 120,
+        "n": 350
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 350
+      },
+      "correct_final_answer": {
+        "si": 26,
+        "n": 350
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 350
+      },
+      "error_types": {
+        "wrong_value": 204,
+        "no_answer_block": 67,
+        "invalid_value": 36,
+        "ok": 26,
+        "unknown_field": 11,
+        "multiple_answer_blocks": 4,
+        "ambiguous_value": 2
+      },
+      "tope_de_tokens": {
+        "si": 38,
+        "n": 350
+      },
+      "uso": {
+        "tokens_nuevos": 566201.0,
+        "tokens_por_muestra": 1617.7171428571428,
+        "segundos": 14395.5907,
+        "segundos_por_muestra": 41.13025914285714
+      }
+    }
+  ],
+  "clasificacion": [
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "casi_0_con_senal",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5574133195737753,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_trivial": "por_debajo",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_informada": "por_debajo"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5695678755722449,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "medium",
+        "aciertos": 4,
+        "n": 8,
+        "tasa": 0.5
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "medium",
+        "aciertos": 4,
+        "n": 8,
+        "tasa": 0.5
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.44847069076279683,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "zona_aprendible",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5695678755722449,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "easy",
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "primera_sucursal_contada",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.44847069076279683,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "medium",
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "primera_sucursal_contada",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "medium",
+        "aciertos": 2,
+        "n": 8,
+        "tasa": 0.25
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.32440756488388023,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "hard",
+        "aciertos": 1,
+        "n": 8,
+        "tasa": 0.125
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "primera_sucursal_contada",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "hard",
+        "aciertos": 2,
+        "n": 8,
+        "tasa": 0.25
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.44847069076279683,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_trivial": "por_debajo",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_informada": "por_debajo"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.35433043506668743,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "medium",
+        "aciertos": 2,
+        "n": 7,
+        "tasa": 0.2857142857142857
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "medium",
+        "aciertos": 2,
+        "n": 7,
+        "tasa": 0.2857142857142857
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "tools",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.35433043506668743,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 7,
+        "tasa": 0.42857142857142855
+      },
+      "frente_a_trivial": "por_debajo",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 7,
+        "tasa": 0.42857142857142855
+      },
+      "frente_a_informada": "por_debajo"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.44847069076279683,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_trivial": "por_debajo",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_informada": "por_debajo"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.32440756488388023,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "medium",
+        "aciertos": 4,
+        "n": 8,
+        "tasa": 0.5
+      },
+      "frente_a_trivial": "por_debajo",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "medium",
+        "aciertos": 4,
+        "n": 8,
+        "tasa": 0.5
+      },
+      "frente_a_informada": "por_debajo"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.44847069076279683,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_trivial": "por_debajo",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_informada": "por_debajo"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "zona_aprendible",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5574133195737753,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "easy",
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "primera_sucursal_contada",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "zona_aprendible",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5574133195737753,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "medium",
+        "aciertos": 0,
+        "n": 8,
+        "tasa": 0.0
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "primera_sucursal_contada",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "medium",
+        "aciertos": 2,
+        "n": 8,
+        "tasa": 0.25
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.44847069076279683,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "hard",
+        "aciertos": 1,
+        "n": 8,
+        "tasa": 0.125
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "primera_sucursal_contada",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "hard",
+        "aciertos": 2,
+        "n": 8,
+        "tasa": 0.25
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "casi_0_con_senal",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5192453569377221,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_trivial": "por_debajo",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 8,
+        "tasa": 0.375
+      },
+      "frente_a_informada": "por_debajo"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.4874482049295753,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "medium",
+        "aciertos": 2,
+        "n": 7,
+        "tasa": 0.2857142857142857
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "medium",
+        "aciertos": 2,
+        "n": 7,
+        "tasa": 0.2857142857142857
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.4874482049295753,
+      "motivo": null,
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 7,
+        "tasa": 0.42857142857142855
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 7,
+        "tasa": 0.42857142857142855
+      },
+      "frente_a_informada": "no_distinguible"
+    }
+  ],
+  "clasificacion_entre_condiciones": [
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "sin_patron",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "sin_patron",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    },
+    {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "mal_en_ambas",
+      "certeza": "ic_muy_ancho"
+    }
+  ],
+  "baselines": [
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 8,
+      "n": 8,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 8,
+      "n": 8,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 8,
+      "n": 8,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 8,
+      "n": 8,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 7,
+      "n": 7,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 7,
+      "n": 7,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 8,
+      "n": 8,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 8,
+      "n": 8,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 8,
+      "n": 8,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 8,
+      "tasa": 0.375
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 8,
+      "tasa": 0.375
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 4,
+      "n": 8,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 8,
+      "tasa": 0.375
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 7,
+      "tasa": 0.42857142857142855
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 7,
+      "tasa": 0.2857142857142857
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 8,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 1,
+      "n": 8,
+      "tasa": 0.125
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 8,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "no_descontar_stock",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 8,
+      "tasa": 0.375
+    },
+    {
+      "baseline": "no_descontar_stock",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 7,
+      "tasa": 0.42857142857142855
+    },
+    {
+      "baseline": "no_descontar_stock",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 7,
+      "tasa": 0.2857142857142857
+    },
+    {
+      "baseline": "nunca_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 8,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "nunca_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 8,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "nunca_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 8,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "primera_sucursal",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 8,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "primera_sucursal",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 1,
+      "n": 8,
+      "tasa": 0.125
+    },
+    {
+      "baseline": "primera_sucursal",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 8,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "primera_sucursal_contada",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 8,
+      "tasa": 0.375
+    },
+    {
+      "baseline": "primera_sucursal_contada",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 2,
+      "n": 8,
+      "tasa": 0.25
+    },
+    {
+      "baseline": "primera_sucursal_contada",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 8,
+      "tasa": 0.25
+    },
+    {
+      "baseline": "siempre_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 8,
+      "tasa": 0.375
+    },
+    {
+      "baseline": "siempre_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 8,
+      "tasa": 0.375
+    },
+    {
+      "baseline": "siempre_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 4,
+      "n": 8,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "sucursal_azar",
+      "clase": "azar",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 8,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "sucursal_azar",
+      "clase": "azar",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 8,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "sucursal_azar",
+      "clase": "azar",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 8,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "sucursal_azar_contada",
+      "clase": "azar",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 1,
+      "n": 8,
+      "tasa": 0.125
+    },
+    {
+      "baseline": "sucursal_azar_contada",
+      "clase": "azar",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 2,
+      "n": 8,
+      "tasa": 0.25
+    },
+    {
+      "baseline": "sucursal_azar_contada",
+      "clase": "azar",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 8,
+      "tasa": 0.25
+    },
+    {
+      "baseline": "todo_atendido",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 8,
+      "tasa": 0.375
+    },
+    {
+      "baseline": "todo_atendido",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 7,
+      "tasa": 0.42857142857142855
+    },
+    {
+      "baseline": "todo_atendido",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 7,
+      "tasa": 0.2857142857142857
+    }
+  ],
+  "umbrales": {
+    "cerca_de_100": 0.9,
+    "cerca_de_0": 0.1,
+    "ganancia_apreciable": 0.15,
+    "visible_bueno": 0.7,
+    "brecha_condiciones": 0.3,
+    "mal_en_ambas": 0.3,
+    "ic_muy_ancho": 0.3
+  },
+  "n_rollouts": 700,
+  "n_muestra_errores": 168
+}

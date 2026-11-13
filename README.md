@@ -13,8 +13,8 @@ El modelo recibe una solicitud en español, consulta la herramienta `get_invento
 | Harness y verificador | Listos |
 | Generador de tareas | Listo |
 | Línea base del modelo objetivo (pass@1 y pass@5) | Lista: 900 rollouts de Qwen3-1.7B sobre `eval` |
-| Línea base de otros modelos | Pendiente |
-| Trazas SFT y pares DPO | 170 trazas y 105 pares; falta correr Qwen3-8B en 109 prompts |
+| Línea base de otros modelos | Lista para Llama-3.2-1B, Qwen3-1.7B sin thinking y Qwen3-4B; Qwen3-0.6B va en 70 de 90 instancias |
+| Trazas SFT y pares DPO | Listos: 170 trazas, todas de Qwen3-8B, y 106 pares |
 | Informe final | Pendiente |
 
 ## Línea base de Qwen3-1.7B
@@ -43,14 +43,37 @@ Lectura:
 
 Estos números se **reevaluaron** con `scripts/reevaluate.py` después de la corrida. El verificador rechazaba las respuestas con varios pares en una línea (`O1_atendidas: 33O1_pendientes: 6...`), y 56 de esas respuestas eran correctas. Ahora se aceptan (ver [docs/contrato.md](docs/contrato.md)). Antes del cambio, herramientas daba 27/90 en pass@1. Cada fila corregida conserva su veredicto original en `verdict_anterior`.
 
+## Línea base de otros modelos
+
+Mismas instancias de `eval` y 5 muestras (`results/kaggle_otros_modelos`, corrida con `notebooks/linea_base_otros_kaggle.ipynb`). Sin thinking el tope es de 768 tokens; con thinking, de 4096.
+
+| Modelo | Visible pass@1 | Visible pass@5 | Herramientas pass@1 | Herramientas pass@5 |
+|---|---|---|---|---|
+| Llama-3.2-1B | 0/90 | 0/90 | 0/90 | 0/90 |
+| Qwen3-0.6B con thinking (parcial) | 5/70 (7 %) | 18/70 (26 %) | 9/70 (13 %) | 18/70 (26 %) |
+| Qwen3-1.7B sin thinking | 27/90 (30 %) | 51/90 (57 %) | 22/90 (24 %) | 42/90 (47 %) |
+| **Qwen3-1.7B con thinking (objetivo)** | 58/90 (64 %) | 80/90 (89 %) | 37/90 (41 %) | 62/90 (69 %) |
+| Qwen3-4B sin thinking | 67/90 (74 %) | 71/90 (79 %) | 64/90 (71 %) | 73/90 (81 %) |
+
+Lectura:
+
+- El acierto sube con el tamaño del modelo en ambas condiciones, así que las tareas distinguen capacidad.
+- El thinking le da al 1.7B unos 34 puntos de pass@1 con datos visibles y 17 con herramientas.
+- Qwen3-4B sin thinking supera al objetivo en pass@1, pero no en pass@5 con datos visibles: gana poco con más intentos. 142 de sus generaciones se cortaron en el tope de 768 tokens.
+- Llama-3.2-1B no acierta ninguna de sus 900 respuestas: 699 no traen bloque `<answer>` y 430 generaciones llegan al tope de tokens.
+- Composición hard sigue casi en cero para todos: Qwen3-4B logra 0/10 con datos visibles y 1/10 con herramientas.
+- Qwen3-0.6B se cortó a las 11 horas con 70 de 90 instancias por condición, todas con sus 5 muestras. La corrida se puede continuar.
+
+Como referencia de un modelo más grande, Qwen3-8B con thinking acierta 81/90 en la primera muestra de cada condición, pero sobre `train` y con 2 muestras (`results/kaggle_qwen8b/trazas_qwen8b`), así que no es comparable punto a punto con esta tabla.
+
 ## Datos derivados
 
 `results/kaggle_qwen8b/datos_derivados_qwen8b` tiene los datos de entrenamiento, armados con `scripts/build_training_data.py` sobre los 180 prompts de `train` (90 instancias por 2 condiciones):
 
-- `sft.jsonl`: 170 trazas correctas, 109 de Qwen3-1.7B y 61 de Qwen3-8B (el profesor).
-- `dpo.jsonl`: 105 pares (correcta, incorrecta). 82 de las incorrectas son errores de valor.
+- `sft.jsonl`: 170 trazas correctas, todas de Qwen3-8B (el profesor).
+- `dpo.jsonl`: 106 pares (correcta, incorrecta). La correcta es siempre de Qwen3-8B; la incorrecta es de Qwen3-1.7B en 105 pares. 83 de las incorrectas son errores de valor.
 
-Qwen3-8B corrió solo los 71 prompts en que el 1.7B no había acertado (`results/kaggle_qwen8b/pendientes.json`) y resolvió 61. Los 10 sin respuesta correcta son todos de composición hard.
+Qwen3-8B corrió los 180 prompts con 2 muestras y acertó 329 de 360 respuestas. Los 10 prompts sin respuesta correcta son todos de composición hard (6 con herramientas y 4 con datos visibles). `results/kaggle_qwen8b/pendientes.json` es la lista de 71 prompts que se corrió primero, antes de extender la corrida a todos.
 
 ## Resultados de la exploración
 
@@ -204,8 +227,7 @@ docs/propuesta/                enunciado del desafío y propuestas
 
 ## Próximos pasos
 
-1. Correr Qwen3-8B en los 109 prompts de `train` que faltan (`PASO = 3` en `notebooks/qwen_profesor_kaggle.ipynb`). El enunciado pide trazas SFT de un modelo más grande, y hoy 109 de las 170 son del modelo objetivo.
-2. Medir la línea base de al menos un modelo más: el enunciado pide varios.
-3. Dejar claro el formato de respuesta en el mensaje que llega con los resultados de la herramienta, por las respuestas sin claves en selección.
-4. Decidir qué hacer con composición hard, que casi no da señal.
-5. Escribir el informe final de línea base. [docs/auditoria_verificador.md](docs/auditoria_verificador.md) y [docs/robustez_verificador.md](docs/robustez_verificador.md) cubren la parte de robustez.
+1. Terminar la línea base de Qwen3-0.6B: faltan 200 rollouts, unas 3 horas en Kaggle. Se continúa agregando la salida anterior como entrada del cuaderno.
+2. Dejar claro el formato de respuesta en el mensaje que llega con los resultados de la herramienta, por las respuestas sin claves en selección. Obliga a repetir las corridas.
+3. Decidir qué hacer con composición hard, que casi no da señal en ningún modelo.
+4. Escribir el informe final de línea base. [docs/auditoria_verificador.md](docs/auditoria_verificador.md) y [docs/robustez_verificador.md](docs/robustez_verificador.md) cubren la parte de robustez.

@@ -1,0 +1,57 @@
+{
+  "stage": "piloto",
+  "dry_run": false,
+  "dataset": {
+    "split": "eval",
+    "n_per_cell": 10,
+    "base_seed": 2026,
+    "fingerprint": "efb77852b9c86edc5c478be0de30fa11515d288e272a6cf09f624c3bd0453e5b"
+  },
+  "n_samples": 5,
+  "limit": null,
+  "conditions": [
+    "tools",
+    "visible"
+  ],
+  "only": null,
+  "seeds": {
+    "dataset": 2026,
+    "generation": 2026
+  },
+  "entorno": {
+    "python": "3.13.16",
+    "plataforma": "Linux-6.18.55+-x86_64-with-glibc2.39",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2",
+    "gpu": "Tesla T4"
+  },
+  "code_hash": "27f29db9ca698f3e",
+  "git_commit": null,
+  "created_at": "2026-11-12T22:59:05+00:00",
+  "gen_configs": {
+    "Qwen/Qwen3-0.6B+think": {
+      "model": "Qwen/Qwen3-0.6B+think",
+      "model_id": "Qwen/Qwen3-0.6B",
+      "enable_thinking": true,
+      "max_new_tokens": 4096,
+      "do_sample": true,
+      "temperature": 0.7,
+      "top_p": 0.95,
+      "top_k": 50,
+      "repetition_penalty": 1.0,
+      "seed": 2026,
+      "batch_size": 8
+    }
+  },
+  "modelos": {
+    "Qwen/Qwen3-0.6B+think": {
+      "estado": "corriendo",
+      "error": null,
+      "esperados": 900,
+      "hechos": 700,
+      "segundos_por_rollout": 55.912
+    }
+  },
+  "notas": [],
+  "updated_at": "2026-11-13T09:51:36+00:00"
+}
