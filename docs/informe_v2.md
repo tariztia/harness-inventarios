@@ -1,51 +1,31 @@
-<!-- Esqueleto de la version 2. Contenido del informe actual movido tal cual; las notas [Revisión] marcan lo que falta y se borran al terminar. -->
-
 # Harness de razonamiento con herramientas sobre inventarios
 
 **Desafío de Investigación, IIC-3694 Inteligencia Artificial Generativa (PUC Chile)**
 
 Integrantes: _(completar)_
 
-Código, datos y resultados: `github.com/tariztia/harness-inventarios`. Las rutas que cita este informe son relativas a ese repositorio.
-
-> **[Revisión]** El link debe apuntar al repo limpio (decisión A2). Integrantes: se completan en el archivo final (A1).
-
-> **[Revisión]** Las referencias cruzadas («sección 5.6», etc.) todavía usan la numeración antigua; se actualizan al reescribir cada sección.
+Código, datos y resultados: _(link al repositorio público, por completar)_. Las rutas que cita este informe son relativas a ese repositorio.
 
 ## 1. Introducción
 
-> **[Revisión]** Reescribir al final, con el tono corregido (B14): robustez frente a lo previsto. ~350 palabras. Absorbe las fortalezas de la antigua §8 (abajo).
+El desafío pide construir un entorno de entrenamiento (harness) y su dataset para que un modelo de lenguaje pequeño, de 1–2B de parámetros, mejore en razonamiento o uso de herramientas. Las tareas deben tener respuestas verificables por código y caer en la zona aprendible del modelo objetivo, de modo que el verificador sirva después como recompensa para aprendizaje por refuerzo. Seguimos la línea de los entornos procedurales con verificación en código, como Reasoning Gym (Stojanovski et al., 2025).
 
-Construimos un entorno para entrenar y evaluar modelos pequeños en solicitudes sobre inventarios de una cadena de sucursales. El modelo recibe una solicitud en español, consulta el stock con una herramienta y entrega una respuesta que un verificador califica con 0 o 1. Las tareas exigen restar reservas, comparar sucursales y repartir stock entre pedidos que compiten, de modo que la herramienta entrega datos y nunca la respuesta.
+Elegimos solicitudes sobre el inventario de una cadena de sucursales. El modelo recibe una solicitud en español, consulta el stock con una herramienta y entrega una respuesta que el verificador califica con 0 o 1. Las tareas exigen restar reservas, comparar sucursales y repartir stock entre pedidos que compiten. La herramienta entrega datos y nunca la respuesta, así que acertar exige razonar sobre lo que devuelve. El modelo objetivo es Qwen3-1.7B con thinking.
 
 Los resultados principales son:
 
-- **Las tareas caen en la zona aprendible del modelo objetivo.** Qwen3-1.7B con thinking acierta 41 % al primer intento usando herramientas y 69 % en alguno de 5 intentos. Con los datos a la vista acierta 64 % y 89 %.
-- **La dificultad está graduada.** Con herramientas, el pass@1 del objetivo baja de 63 % en easy a 43 % en medium y 17 % en hard.
-- **El entorno distingue capacidad.** Sobre las mismas instancias, Llama-3.2-1B acierta 0 %, Qwen3-1.7B sin thinking 24 %, y Qwen3-4B sin thinking 71 % (pass@1 con herramientas).
-- **El verificador resiste las trampas previstas y se corrigió con respuestas reales.** Pasa 326 de 334 casos adversariales; los 8 restantes son limitaciones documentadas y ninguna premia un valor incorrecto. Una auditoría de las respuestas de los modelos encontró un falso rechazo frecuente, que se corrigió.
-- **Los datos derivados están listos.** Hay 170 trazas SFT de Qwen3-8B y 106 pares DPO sobre 180 prompts de entrenamiento.
+- **Las tareas caen en la zona aprendible del objetivo.** Usando herramientas acierta 41 % al primer intento y 69 % en alguno de 5 intentos. Con los datos a la vista, 64 % y 89 %.
+- **La dificultad está graduada y el entorno distingue capacidad.** Con herramientas, el pass@1 del objetivo baja de 63 % en easy a 43 % en medium y 17 % en hard. Sobre las mismas instancias, Llama-3.2-1B acierta 0 %, Qwen3-1.7B sin thinking 24 % y Qwen3-4B sin thinking 71 %.
+- **El verificador resiste las trampas que previmos y se corrigió con respuestas reales.** Pasa 326 de 334 casos adversariales escritos por el equipo, y ninguno de los 8 fallos premia un valor incorrecto. Una auditoría de respuestas reales encontró un falso rechazo frecuente, que se corrigió. Esto no garantiza robustez frente a un modelo optimizado con RL, que solo se podrá medir al entrenar.
+- **Los datos derivados están listos:** 170 trazas SFT de Qwen3-8B y 106 pares DPO sobre 180 prompts de entrenamiento.
 
-Las dos debilidades principales son que composición hard casi no da señal en ningún modelo medido, y que la línea base usa 10 instancias por celda, por lo que los intervalos por celda son anchos.
-
-> **[Revisión]** Fortalezas de la antigua §8, para integrar aquí o en las conclusiones:
->
-> **Fortalezas:**
-> 
-> - Respuestas verificables por construcción, con un solucionador independiente del generador.
-> - Dataset de tamaño arbitrario y reproducible desde una semilla, con controles medidos contra instancias degeneradas.
-> - Dos condiciones sobre las mismas instancias, que separan el razonamiento del uso de herramientas.
-> - Un verificador que acepta equivalencias de valor, tiene 334 casos adversariales y se auditó con respuestas reales.
-> - Defensas contra trayectorias falsificadas y respuestas adivinadas.
-> - Dificultad graduada y confirmada por la línea base en cuatro modelos.
+Las debilidades principales son que composición hard casi no da señal en ningún modelo medido, que la línea base usa 10 instancias por celda, y que la herramienta se describe en texto en lugar de usar el mecanismo nativo de llamadas de los modelos (sección 8).
 
 ## 2. Entorno
 
-> **[Revisión]** ~600 palabras. Falta la Figura 1: flujo instancia → modelo → herramienta → verificador.
-
 ### 2.1 Tareas
 
-Cada instancia tiene un inventario sintético: un registro por cada par producto × sucursal, con stock físico y stock reservado. La regla central es que **disponible = stock físico − reservado**. Hay tres familias de tareas:
+Cada instancia tiene un inventario sintético: un registro por cada par producto × sucursal, con stock físico y stock reservado. La regla central es **disponible = stock físico − reservado**. Hay tres familias:
 
 | Familia | Pregunta | Qué exige | Campos de la respuesta |
 |---|---|---|---|
@@ -53,28 +33,19 @@ Cada instancia tiene un inventario sintético: un registro por cada par producto
 | Selección | ¿Qué sucursal cubre más unidades de un pedido? | Calcular la cobertura de cada sucursal, comparar y desempatar por ID | `sucursal`, `cubiertas`, `pendientes` |
 | Composición | ¿Cómo se reparten varios pedidos que llegan en orden? | Descontar el stock ya asignado a pedidos anteriores | `Ok_atendidas` y `Ok_pendientes` por pedido, `total_pendientes` |
 
-Las reglas completas están en `docs/reglas_negocio.md`. Todas van escritas en el prompt, así que el problema es de razonamiento y uso de herramientas, y no de memorización: los datos son sintéticos y cambian en cada instancia.
+Todas las reglas van escritas en el prompt (`docs/reglas_negocio.md`). Los datos son sintéticos y cambian en cada instancia, así que el problema es de razonamiento y uso de herramientas, no de memorización.
 
 ### 2.2 Dos condiciones
 
-Cada instancia se evalúa en dos condiciones, para separar la dificultad de razonar de la de usar herramientas:
-
-- **`visible`:** la tabla de inventario va en el prompt.
-- **`tools`:** el modelo debe pedir los datos con `get_inventory(product_id, location_id=None)`, que devuelve stock físico y reservado. La herramienta nunca devuelve el disponible ni datos del pedido.
+Cada instancia se evalúa en dos condiciones, para separar la dificultad de razonar de la de usar herramientas. En **`visible`** la tabla de inventario va en el prompt. En **`tools`** el modelo debe pedir los datos con `get_inventory(product_id, location_id=None)`, que devuelve el stock físico y el reservado, nunca el disponible ni datos del pedido.
 
 ### 2.3 Protocolo de interacción
 
-> **[Revisión]** Reducir el primer párrafo. «Qué cuenta como llamada» pasó al Anexo A, el contraste con Reasoning Gym al Anexo B y el párrafo de Llama al Anexo F. En el cuerpo queda una oración que mencione la flexibilidad con las llamadas y remita al anexo.
+El prompt es un único mensaje de usuario con las reglas, el catálogo y la solicitud (Anexo A). La herramienta se describe en ese mismo texto, con un ejemplo de llamada. Es una decisión de portabilidad: un prompt en texto plano sirve a cualquier modelo. Los modelos que usamos sí tienen un formato nativo de llamadas (las plantillas de Qwen3 y de Llama 3.2 aceptan una lista de herramientas), y no usarlo tiene un costo que discutimos en la sección 8.
 
-El prompt es un único mensaje de usuario, sin rol de sistema, y la herramienta se describe en ese mismo texto, con un ejemplo de llamada. Es una decisión de portabilidad: un mismo prompt en texto plano sirve a cualquier modelo, incluso a los que no admiten rol de sistema o no tienen un formato nativo de llamadas. Los modelos que usamos sí tienen ambas cosas. Las plantillas de chat de Qwen3 y de Llama 3.2 aceptan rol de sistema y una lista de herramientas (`tools=`), cada una con su propio formato: Llama 3.2, por ejemplo, admite una sola llamada por turno. No usar el mecanismo nativo tiene un costo, que discutimos en la sección 8; para el proyecto planeamos medirlo con los modelos que lo admiten.
+En `tools` la interacción tiene pocos turnos, como recomienda el enunciado. El modelo emite una o más llamadas `<tool_call>{json}</tool_call>`; el harness las ejecuta y responde con los resultados y recién ahí con el formato de respuesta (cuando el formato iba en el prompt inicial, los modelos respondían sin llamar). El modelo responde o pide una segunda ronda; una tercera no se ejecuta y vale 0. El harness también acepta llamadas sin la etiqueta, como un JSON suelto que nombre la herramienta, para que la línea base mida qué datos pide el modelo y no si recuerda una sintaxis. El Anexo A detalla qué cuenta como llamada y los riesgos de esa flexibilidad.
 
-En la condición `tools` la interacción tiene pocos turnos, como recomienda el enunciado:
-
-1. El modelo emite una o más llamadas: `<tool_call>{"name": "get_inventory", "arguments": {"product_id": "P01"}}</tool_call>`.
-2. El harness las ejecuta y responde con un mensaje de usuario que trae los resultados (`<tool_result>...</tool_result>`) y el formato de la respuesta final. El formato llega recién en este mensaje: cuando iba en el prompt inicial, los modelos respondían sin llamar a la herramienta.
-3. El modelo responde, o pide una segunda ronda. Una tercera ronda no se ejecuta y vale 0.
-
-**Respuesta final.** Es texto libre seguido de exactamente un bloque `<answer>`, que es obligatorio. Dentro del bloque se acepta un par `clave: valor` por campo o un objeto JSON plano:
+La respuesta final es texto libre seguido de exactamente un bloque `<answer>`, que es obligatorio, con un par `clave: valor` por campo o un objeto JSON plano:
 
 ```text
 <answer>
@@ -84,7 +55,7 @@ pendientes: 1
 </answer>
 ```
 
-Fuera del bloque no se busca la respuesta: un JSON o unos pares `clave: valor` sin las etiquetas valen 0. La razón es que el texto libre trae cálculos intermedios (por ejemplo, `faltan: 5` antes de corregirse a `faltan: 3`), y elegir uno de ellos como respuesta sería adivinar.
+Fuera del bloque no se busca la respuesta, porque el texto libre trae cálculos intermedios (`faltan: 5` antes de corregirse a `faltan: 3`) y elegir uno sería adivinar.
 
 ### 2.4 Interfaz del curso
 
@@ -97,32 +68,21 @@ reward = make_reward(InstanceStore.from_jsonl("data/eval.jsonl"))
 reward(prompt, completion)  # 0.0 o 1.0
 ```
 
-- `prompt` es el texto que produce `render_prompt`. Su `sha256` es la clave con que el harness encuentra la instancia y la condición en un almacén protegido. El prompt no contiene la respuesta.
-- `completion` es texto plano (un solo mensaje del modelo) o la trayectoria serializada en JSON (los mensajes posteriores al prompt, incluidas las observaciones).
-- Un prompt desconocido devuelve `0.0`; la función nunca lanza una excepción.
+El `sha256` del prompt es la clave con que el harness encuentra la instancia y su respuesta esperada en un almacén protegido; el prompt no contiene la respuesta. `completion` es un solo mensaje del modelo o la trayectoria completa en JSON, con las observaciones. Un prompt desconocido vale 0 y la función nunca lanza una excepción. El núcleo usa solo la biblioteca estándar de Python (contrato en `docs/contrato.md`). La Figura 1 resume el flujo.
 
-El núcleo usa solo la biblioteca estándar de Python. El contrato completo está en `docs/contrato.md`.
+![Figura 1](figuras/figura1_flujo.png)
+
+**Figura 1.** Flujo del entorno. El generador fija la respuesta esperada al crear la instancia; el verificador recibe la trayectoria y compara contra ella.
 
 ## 3. Dataset
 
-> **[Revisión]** ~450 palabras. B1: explicar en §3.2 qué es un atajo y que cada fila mide cuántas veces el atajo falla.
-
 ### 3.1 Generación
 
-Las instancias se generan por código (`src/inventory_harness/generator.py`), sin intervención manual:
+Las instancias se generan por código, sin intervención manual. Se fijan objetivos (por ejemplo, si el pedido alcanza o qué sucursal gana), se propone un inventario al azar que apunte a ellos, un solucionador independiente, que no comparte código con el generador, calcula la respuesta esperada y, si no se cumplen los objetivos, se reintenta. Todo es determinista: la semilla de cada instancia se deriva con SHA-256, así que basta versionar el código. La solicitud se redacta con una de 5 plantillas por familia.
 
-1. Se fijan objetivos para la instancia: por ejemplo, si el pedido alcanza, qué sucursal gana o si habrá escasez.
-2. Se propone un inventario al azar que apunte a esos objetivos.
-3. Un solucionador independiente (`solver.py`) calcula la respuesta esperada. No comparte código con el generador.
-4. Si la propuesta no cumple los objetivos, se reintenta.
+### 3.2 Controles contra atajos
 
-Todo es determinista: la semilla de cada instancia se deriva con SHA-256 de la familia, la dificultad, la partición y un número. La misma configuración produce siempre el mismo dataset, así que basta versionar el código. Además, el generador produce una traza de la solución que los tests comparan con el solucionador, lo que funciona como segunda implementación.
-
-La solicitud se redacta con una de 5 plantillas por familia (lista, relato, planilla, etc.), que no contienen valores de stock.
-
-### 3.2 Controles contra instancias degeneradas
-
-Una instancia es degenerada si se resuelve con un atajo, por ejemplo ignorando las reservas. El generador fija tasas objetivo y las mide comparando la solución real con la de variantes del caso. Sobre el dataset de 1.080 instancias:
+Una instancia es degenerada si un atajo la resuelve sin razonar. Si la mayoría de las instancias de disponibilidad alcanzaran, por ejemplo, un modelo que siempre responde «sí» acertaría sin calcular, y el aprendizaje por refuerzo premiaría ese atajo. Para medirlo, el generador resuelve una versión trampa de cada instancia (sin reservas, con el orden de los pedidos invertido, eligiendo por stock físico) y la compara con la respuesta real. Cada fila de la tabla dice con qué frecuencia el atajo da otra respuesta, es decir, cuánto falla. Sobre el dataset de 1.080 instancias:
 
 | Familia | Control | Valor medido |
 |---|---|---|
@@ -135,15 +95,11 @@ Una instancia es degenerada si se resuelve con un atajo, por ejemplo ignorando l
 | Composición | Ignorar el orden de llegada cambia el resultado | 81–93 % |
 | Composición hard | Se usa la cascada entre sucursales | 100 % |
 
-Como segundo control, la línea base compara cada modelo con reglas triviales sobre las mismas instancias (sección 5.5).
+Como segundo control, la línea base compara a los modelos con reglas triviales sobre las mismas instancias (sección 6 y Anexo E).
 
-### 3.3 Particiones
+### 3.3 Particiones y tamaño
 
-Hay tres particiones, `train`, `eval` y `test`, con semillas espaciadas para que no se solapen. Además, el generador calcula una huella de cada instancia y descarta duplicados entre particiones.
-
-`test` incluye una plantilla de redacción reservada por familia, que no aparece en `train` ni en `eval` y cubre la mitad de sus instancias. Sirve para medir generalización a redacciones no vistas. `test` no se usó en ninguna medición de este informe.
-
-El tamaño es un parámetro. La configuración estándar genera 40 instancias por celda (familia × dificultad × partición): 1.080 instancias, 360 por partición. Para la línea base y las trazas usamos 10 por celda (90 instancias por partición), por costo de cómputo.
+Hay tres particiones, `train`, `eval` y `test`, sin instancias duplicadas entre ellas. La mitad de `test` usa una plantilla de redacción reservada, para medir generalización; no se usó en este informe. La configuración estándar genera 40 instancias por celda (familia × dificultad × partición), 1.080 en total; para la línea base y las trazas usamos 10 por celda, por costo de cómputo.
 
 ### 3.4 Niveles de dificultad
 
@@ -153,61 +109,41 @@ El tamaño es un parámetro. La configuración estándar genera 40 instancias po
 | Selección | 1 línea, 2–3 sucursales | 2 líneas, 3 sucursales | 3–4 líneas, 4–5 sucursales |
 | Composición | 2 pedidos, 1 producto, 1 sucursal | 3 pedidos, 2 productos, 1–2 sucursales | 4–5 pedidos, 3 productos, 2–3 sucursales, con cascada |
 
-Cada instancia guarda además medidas de complejidad: registros necesarios, llamadas necesarias, operaciones aritméticas y profundidad de dependencias.
+Los niveles se definieron antes de medir, a partir de la estructura de la tarea.
 
 ## 4. Verificador
 
-> **[Revisión]** ~600 palabras. Abrir con el principio de diseño: no juzga el razonamiento, compara valores tipados contra `expected` y rechaza lo ambiguo (B2, B3). Una oración sobre por qué no un LLM juez, con cita (Huang et al., 2025; Zhao et al., 2025). Bajar el tono (B14).
+El verificador no juzga el razonamiento: **compara valores**. La respuesta esperada la calculó el solucionador al generar la instancia, y el verificador solo tiene que leer qué respondió el modelo y compararlo campo por campo. Por eso puede ser código determinista, sin un modelo de lenguaje como juez. Un juez sería más flexible con formas de respuesta imprevistas, pero agrega una pasada de modelo por cada rollout y se puede engañar: respuestas triviales logran tasas altas de falsos positivos en jueces grandes (Zhao et al., 2025). El costo de las reglas es el contrario, rechazar formas correctas que nadie previó (Huang et al., 2025). Lo aceptamos, y lo mitigamos con la auditoría de la sección 4.4.
 
-### 4.1 Qué acepta
+### 4.1 Cómo lee la respuesta
 
-El verificador exige exactamente un bloque `<answer>` con todos los campos y compara cada uno con el valor esperado. La equivalencia se resuelve a nivel de valor, como pide el enunciado:
+El verificador descarta el contenido de `<think>`, exige exactamente un bloque `<answer>` con todos los campos y sin campos desconocidos o repetidos, y luego interpreta cada valor según su tipo: entero, sí/no o sucursal. Para los enteros hay una gramática escrita a mano que acepta, por ejemplo, `3`, `tres`, `3 unidades`, `20-17` y `cuatro filas de 10`, como pide el enunciado. Su principio es **rechazar todo lo que admita más de una lectura**: `3 o 4`, `unos 3` y `3 (cuatro)` valen 0, y nunca se extrae «el primer número» de un texto. Finalmente compara cada campo con la respuesta esperada y entrega 1 solo si todos coinciden. Cada rechazo lleva un tipo de error, que se usa para el diagnóstico y para elegir los pares DPO.
 
-- Enteros: `3`, `3 unidades`, `tres`, `veintitrés`, `3.0`, `1.200`.
-- Aritmética simple: `20-17`, `4*10`, `4 x 10`.
-- Grupos y sumas etiquetadas: `cuatro filas de 10`, `20 adelante y 20 atrás`.
-- Booleanos: `sí`, `no`, `true`, `verdadero`, `alcanza`, `no alcanza`.
-- Sucursal: `S2`, `s2`, `sucursal S2`.
-- Forma del bloque: un par por línea, varios pares en una línea o un objeto JSON plano. Las claves ignoran mayúsculas y tildes.
+En la práctica los modelos casi no usaron esas equivalencias: de las 1.918 respuestas correctas de la línea base y de las trazas, ninguna usa números en palabras, grupos o sumas. Las mantenemos porque el enunciado las pide y porque al entrenar la política puede derivar hacia formas inusuales, aunque cada regla permisiva es superficie de ataque (Anexo B).
 
-### 4.2 Qué rechaza
+### 4.2 Defensas en la trayectoria
 
-Recibe 0 toda respuesta sin bloque, con más de un bloque, con campos faltantes, desconocidos o repetidos, con valores ambiguos (`3 o 4`, `entre 3 y 4`, `S1, S2`), con texto después del bloque, o cuyo último párrafo contradice al bloque. El contenido de `<think>` se descarta antes de analizar. Cada rechazo lleva un `error_type`, que se usa para el diagnóstico y para elegir los pares DPO.
-
-### 4.3 Defensas en la trayectoria
-
-En la condición `tools`, `completion` podría venir falsificado, así que el verificador no confía en él:
+En `tools`, la trayectoria que llega en `completion` podría estar falsificada, así que el verificador no confía en ella:
 
 1. **Repetición:** vuelve a ejecutar cada llamada contra el estado protegido. Si una observación registrada difiere de la real, la recompensa es 0.
 2. **Evidencia:** las observaciones reales deben cubrir los registros necesarios para resolver la instancia. Una respuesta correcta sin haber pedido los datos vale 0, para no premiar la adivinación.
 3. **Límite:** aplica el máximo de 2 rondas de herramientas.
 
-### 4.4 Casos adversariales
+### 4.3 Casos adversariales
 
-> **[Revisión]** La tabla por categoría pasó al Anexo C. Dejar aquí una oración de resumen y aclarar que los casos los escribió el equipo (B4, B14).
+Escribimos 334 casos para engañar al verificador o comprobar que acepta equivalencias: varias respuestas a la vez, homoglifos, desbordes numéricos, copia de la salida de la herramienta, inyección de instrucciones, entre otros. El verificador da el veredicto esperado en 326. Uno de los 8 fallos es un falso rechazo (`3 filas de 10 y 5 sueltas`); los otros 7 son contradicciones en la prosa que no se detectan, con el bloque correcto en todos sus campos, así que ningún fallo premia un valor incorrecto. Hay que leer esta cifra con cuidado: los casos los escribió el mismo equipo que hizo el verificador, así que miden las trampas que imaginamos. El Anexo C tiene la tabla por categoría con un ejemplo de cada una.
 
-`tests/adversarial_cases.py` tiene 334 casos escritos para engañar al verificador o para comprobar que acepta equivalencias (`docs/robustez_verificador.md`):
+### 4.4 Auditoría y corrección
 
-Los 8 fallos son limitaciones conocidas y documentadas. Una es un falso rechazo (`3 filas de 10 y 5 sueltas`). Las otras 7 son contradicciones en la prosa que no se detectan; en todas el bloque debe ser correcto en todos sus campos, así que ninguna premia un valor incorrecto. El repositorio tiene 1.269 tests en total.
+Para ver respuestas que no escribimos nosotros, revisamos a mano las de dos corridas exploratorias, sobre 45 instancias de `train` (Anexo D). De 119 respuestas aceptadas, ninguna era incorrecta. De 455 rechazadas, 9 eran correctas pero se rechazaron por la forma: valores entre `< >` y varios pares en una misma línea.
 
-### 4.5 Auditoría con respuestas reales
+La segunda causa resultó mucho más frecuente en la línea base con herramientas: el objetivo escribía `O1_atendidas: 33O1_pendientes: 6...`, y 56 de esas respuestas eran correctas. Corregimos el verificador para separar pares en una línea solo donde aparece una clave del contrato seguida de dos puntos, de modo que `33O1_pendientes:` no se puede leer como 3301 (Anexo B), y reevaluamos los rollouts guardados sin volver a correr el modelo. El pass@1 con herramientas del objetivo pasó de 27/90 a 37/90, y cada fila corregida conserva su veredicto original.
 
-> **[Revisión]** Contarla como ciclo de corrección (B5). Decir que se hizo sobre las corridas exploratorias y que la corrección es una relajación posterior a ver resultados. El caso `33O1` contra `3301` va en el Anexo B.
-
-Los casos anteriores los escribimos nosotros, así que no miden la variedad de respuestas de un modelo real. Por eso revisamos las respuestas de dos corridas de exploración (`docs/auditoria_verificador.md`):
-
-- De 119 respuestas aceptadas, ninguna era un falso positivo.
-- De 455 respuestas rechazadas, 9 eran falsos rechazos, por dos causas: valores entre `< >` y varios pares en una misma línea.
-
-La segunda causa resultó mucho más frecuente en la línea base con herramientas: el modelo objetivo escribía `O1_atendidas: 33O1_pendientes: 6...`, y 56 de esas respuestas eran correctas. Corregimos el verificador para aceptar varios pares en una línea, agregamos 11 casos adversariales para ese formato y reevaluamos los rollouts guardados sin volver a correr el modelo (`scripts/reevaluate.py`). El pass@1 con herramientas del objetivo pasó de 27/90 a 37/90. Cada fila corregida conserva su veredicto original.
-
-Este ciclo es el paso 6 que describe el enunciado: revisar trazas, corregir el verificador y volver a medir.
+Es el ciclo que describe el enunciado: revisar trazas, corregir el verificador y volver a medir. También es una relajación decidida después de ver resultados. La justificamos porque esa forma tiene una sola lectura posible; con el mismo criterio seguimos rechazando respuestas sin claves como `S2|29|0`, cuyo significado depende de la posición.
 
 ## 5. Línea base
 
-> **[Revisión]** ~900 palabras; es la sección más larga y la primera a recortar. B6–B8: definir rollout, pass@k (citar Chen et al., 2021), Wilson y el tope de tokens; aclarar Qwen3-8B.
-
-### 5.1 Modelos y configuración
+### 5.1 Configuración
 
 | Modelo | Parámetros | Thinking | Tope de tokens | Instancias por condición |
 |---|---|---|---|---|
@@ -217,19 +153,15 @@ Este ciclo es el paso 6 que describe el enunciado: revisar trazas, corregir el v
 | **Qwen3-1.7B (objetivo)** | 1,7B | Sí | 4.096 | 90 |
 | Qwen3-4B | 4B | No | 768 | 90 |
 
-Todas las corridas usan la partición `eval` con 10 instancias por celda y 5 muestras por instancia, con muestreo a temperatura 0,7, `top_p` 0,95, `top_k` 50 y semilla fija. Corrieron en GPU T4 de Kaggle. En total son 4.300 rollouts.
+Todas las corridas usan la partición `eval` con 10 instancias por celda y 5 muestras por instancia, con temperatura 0,7, `top_p` 0,95, `top_k` 50 y semilla fija, en GPU T4 de Kaggle. Un **rollout** es un intento completo calificado con 0 o 1; en total son 4.300.
 
-- **pass@1** usa la primera muestra de cada instancia.
-- **pass@5** cuenta las instancias con al menos un acierto entre las 5 muestras.
-- Los intervalos son de Wilson al 95 %, sobre instancias.
+- **pass@1** usa la primera muestra de cada instancia, y **pass@5** cuenta las instancias con al menos un acierto entre sus 5 muestras (Chen et al., 2021).
+- Para pass@1 reportamos intervalos de confianza de Wilson al 95 % (Wilson, 1927), sobre instancias.
+- El **tope de tokens** es el máximo de tokens generados por mensaje, razonamiento de `<think>` incluido. En `tools`, cada turno tiene su propio tope.
 
-Tres salvedades:
+Hay tres salvedades. La corrida de Qwen3-0.6B se cortó por el límite de tiempo de Kaggle con 70 de 90 instancias por condición, repartidas de forma pareja entre las celdas. Los modelos sin thinking tienen un tope menor, así que la comparación entre ambos grupos no es del todo pareja: afecta sobre todo a Qwen3-4B (sección 5.4). Y no medimos un modelo más grande con thinking sobre `eval`; el profesor Qwen3-8B corrió sobre `train` (sección 7).
 
-- La corrida de Qwen3-0.6B se cortó por el límite de tiempo de Kaggle con 70 de 90 instancias por condición, repartidas de forma pareja entre las celdas y todas con sus 5 muestras.
-- Los modelos sin thinking tienen un tope de 768 tokens y los modelos con thinking de 4.096, así que la comparación entre ambos grupos no es del todo pareja. El tope afecta sobre todo a Qwen3-4B en las tareas largas (sección 5.7).
-- No medimos un modelo más grande con thinking sobre `eval`. Como referencia, Qwen3-8B con thinking acierta 81/90 en la primera muestra de cada condición, pero sobre `train` y con 2 muestras (sección 7).
-
-### 5.2 Resultados globales
+### 5.2 Resultados
 
 | Modelo | Visible pass@1 | Visible pass@5 | Herramientas pass@1 | Herramientas pass@5 |
 |---|---|---|---|---|
@@ -239,76 +171,36 @@ Tres salvedades:
 | **Qwen3-1.7B con thinking** | 58/90 (64 %; IC 54–74) | 80/90 (89 %) | 37/90 (41 %; IC 32–51) | 62/90 (69 %) |
 | Qwen3-4B sin thinking | 67/90 (74 %; IC 65–82) | 71/90 (79 %) | 64/90 (71 %; IC 61–79) | 73/90 (81 %) |
 
-- El acierto sube con el tamaño del modelo en ambas condiciones.
-- El thinking le da a Qwen3-1.7B unos 34 puntos de pass@1 con datos visibles y 17 con herramientas.
-- Para el objetivo, usar herramientas cuesta 23 puntos de pass@1 frente a tener los datos a la vista.
-- Qwen3-4B sin thinking supera al objetivo en pass@1, pero gana poco con más intentos: tiende a acertar o fallar una instancia en todas sus muestras.
+El acierto sube con el tamaño del modelo en ambas condiciones. El thinking le da a Qwen3-1.7B unos 34 puntos de pass@1 con datos visibles y 17 con herramientas, y para el objetivo usar herramientas cuesta 23 puntos de pass@1 frente a tener los datos a la vista. Qwen3-4B sin thinking supera al objetivo en pass@1, pero gana poco con más intentos: tiende a acertar o fallar una instancia en todas sus muestras.
 
-### 5.3 Resultados por nivel de dificultad
+![Figura 2](figuras/figura2_pass_por_dificultad.png)
 
-> **[Revisión]** Reemplazar las dos tablas por la Figura 2 (pass@1 y pass@5 por dificultad y modelo). Las tablas pasan al Anexo E.
+**Figura 2.** pass@1 (punto relleno) y pass@5 (punto hueco) por nivel de dificultad, sobre 30 instancias por nivel (23 o 24 para Qwen3-0.6B). La línea entre ambos es lo que se gana con 5 intentos. Las cifras están en el Anexo E.
 
-Cada celda muestra pass@1 / pass@5 sobre 30 instancias (23 o 24 para Qwen3-0.6B).
+En todos los modelos que aciertan algo, el acierto baja de easy a hard (Figura 2), lo que confirma el orden de los niveles definidos antes de medir. Composición es la familia más difícil, y composición hard casi no tiene aciertos en ningún modelo: Qwen3-4B logra 0/10 con datos visibles y 1/10 con herramientas. Con 10 instancias por celda, las cifras por familia orientan pero no permiten comparar celdas vecinas: 6/10 corresponde a un intervalo de 31–83 % (Anexo E).
 
-**Con herramientas:**
+### 5.3 Errores del objetivo con herramientas
 
-| Modelo | Easy | Medium | Hard |
-|---|---|---|---|
-| Llama-3.2-1B | 0 % / 0 % | 0 % / 0 % | 0 % / 0 % |
-| Qwen3-0.6B con thinking | 17 % / 50 % | 17 % / 22 % | 4 % / 4 % |
-| Qwen3-1.7B sin thinking | 40 % / 77 % | 23 % / 40 % | 10 % / 23 % |
-| **Qwen3-1.7B con thinking** | 63 % / 100 % | 43 % / 73 % | 17 % / 33 % |
-| Qwen3-4B sin thinking | 93 % / 100 % | 83 % / 97 % | 37 % / 47 % |
+De las 450 respuestas de Qwen3-1.7B con thinking en `tools`, 168 son correctas (37 %) y 165 tienen un valor incorrecto (37 %); el resto son respuestas sin claves (47), sin bloque (36) y otros errores de formato o de protocolo (Anexo E). El modelo casi siempre sabe llamar: entre 84 % y 100 % de sus respuestas tienen llamadas válidas, según la celda, aunque solo 41 de las 450 usan la etiqueta `<tool_call>`. Lo que falla en las tareas difíciles es pedir todos los datos: en composición hard solo 34 % de las respuestas reunió los registros requeridos, frente a 94 % en composición easy. De los 282 fallos, 122 son errores de cálculo con llamadas válidas y todos los datos reunidos.
 
-**Con datos visibles:**
+Una parte de los fallos es de formato, no de razonamiento. En selección con herramientas, 47 de las 150 respuestas vienen sin claves (`<answer>S2|29|0</answer>`), y leídas por posición 32 tendrían los valores correctos. Ocurre solo en esa familia y condición. El costo medio del objetivo es de 2.086 tokens y 55 s por respuesta con herramientas, y menos del 4 % de sus respuestas llegó al tope de tokens.
 
-| Modelo | Easy | Medium | Hard |
-|---|---|---|---|
-| Llama-3.2-1B | 0 % / 0 % | 0 % / 0 % | 0 % / 0 % |
-| Qwen3-0.6B con thinking | 12 % / 46 % | 4 % / 17 % | 4 % / 13 % |
-| Qwen3-1.7B sin thinking | 63 % / 93 % | 23 % / 57 % | 3 % / 20 % |
-| **Qwen3-1.7B con thinking** | 90 % / 100 % | 60 % / 93 % | 43 % / 73 % |
-| Qwen3-4B sin thinking | 100 % / 100 % | 87 % / 97 % | 37 % / 40 % |
+### 5.4 Otros modelos
 
-En todos los modelos que aciertan algo, el acierto baja de easy a hard. Los niveles se definieron antes de medir, a partir de la estructura de la tarea, y la línea base confirma el orden.
+- **Qwen3-4B sin thinking** se queda sin tokens en las tareas largas: 142 de sus 900 respuestas se cortan en el tope de 768 antes de emitir el bloque, todas en selección hard, composición hard y composición medium. Eso explica 142 de sus 269 fallos, así que sus cifras en hard subestiman lo que haría con más tokens.
+- **Llama-3.2-1B** no acierta ninguna de sus 900 respuestas, y 699 no traen bloque `<answer>`. Pero su problema principal es el cálculo: buscando las claves en cualquier parte del texto, solo 14 % de los valores que escribe son correctos, frente a 49 % de Qwen3-1.7B sin thinking; por ejemplo, suma las reservas en vez de restarlas. Sí llama bien a la herramienta: 364 de sus 450 respuestas en `tools` tienen llamadas válidas.
 
-### 5.4 Uso de herramientas y errores del objetivo
-
-> **[Revisión]** Dejar la tabla de resultados o moverla al Anexo E; decidir según el espacio.
-
-De las 450 respuestas de Qwen3-1.7B con thinking en la condición `tools`:
-
-| Resultado | Respuestas | Porcentaje |
-|---|---|---|
-| Correcta | 168 | 37 % |
-| Valor incorrecto | 165 | 37 % |
-| Campo desconocido (respuestas sin claves) | 47 | 10 % |
-| Sin bloque de respuesta | 36 | 8 % |
-| Valor no interpretable | 13 | 3 % |
-| Pidió una tercera ronda | 12 | 3 % |
-| Respondió sin los datos necesarios | 5 | 1 % |
-| Otros | 4 | 1 % |
-
-El modelo casi siempre sabe llamar: entre 84 % y 100 % de sus respuestas tienen llamadas válidas, según la celda. Eso sí, solo en 41 de 450 casos usa la etiqueta `<tool_call>`; en el resto escribe el objeto JSON sin etiqueta, que el harness también acepta. Las trazas SFT reescriben todas las llamadas en la forma con etiqueta (sección 7). Lo que falla en las tareas difíciles es pedir todos los datos necesarios. En composición hard solo 34 % de las respuestas reunió los registros requeridos, frente a 94 % en composición easy.
-
-De los 282 fallos con herramientas, 122 son errores de cálculo con llamadas válidas y todos los datos reunidos, y 43 son respuestas sin claves con todo lo demás en regla. El resto combina datos incompletos, respuestas sin bloque y rondas de más.
-
-Con datos visibles, 66 % de las respuestas son correctas, 27 % tienen un valor incorrecto y 4 % no traen bloque.
-
-El costo medio del objetivo es de 2.086 tokens y 55 s por respuesta con herramientas, y 1.371 tokens y 32 s con datos visibles. Menos del 4 % de las respuestas llegó al tope de 4.096 tokens.
-
-### 5.5 Ejemplos
-
-> **[Revisión]** Elegir 1 o 2 ejemplos breves del Anexo F (propuesta: la debilidad de formato `S2|29|0` y la cascada ignorada).
+El Anexo F tiene ejemplos reales de aciertos y errores de cada modelo.
 
 ## 6. Calibración para el modelo objetivo
 
 El enunciado pide que las tareas no sean imposibles ni triviales para el objetivo. La evidencia es:
 
 - **Acierto intermedio.** El pass@1 global es de 41 % con herramientas y 64 % con datos visibles.
-- **Señal para RL.** pass@5 supera a pass@1 por 28 puntos con herramientas y 25 con datos visibles. El modelo ya produce respuestas correctas con cierta frecuencia, que es lo que el aprendizaje por refuerzo puede reforzar.
+- **Señal para RL.** pass@5 supera a pass@1 por 28 puntos con herramientas y 25 con datos visibles: el modelo ya produce respuestas correctas con cierta frecuencia, que es lo que el aprendizaje por refuerzo puede reforzar.
 - **Gradiente de dificultad.** El acierto baja de easy a hard en ambas condiciones.
-- **Margen de mejora.** Un modelo más grande de la misma familia llega más lejos: Qwen3-4B alcanza 71 % con herramientas sin thinking, y Qwen3-8B con thinking resuelve 170 de los 180 prompts de `train`.
+- **Margen de mejora.** Qwen3-4B alcanza 71 % con herramientas sin thinking, y Qwen3-8B con thinking resuelve 170 de los 180 prompts de `train`.
+- **No basta un atajo.** El objetivo supera a reglas triviales («siempre alcanza», «la primera sucursal», «ignorar las reservas») en disponibilidad y selección easy y medium, aunque con 10 instancias por celda la diferencia no siempre es significativa. En composición medium y hard con herramientas queda por debajo de «todo se atiende», que acierta las instancias sin escasez (Anexo E).
 
 Según pass@1 y pass@5, las 18 celdas del objetivo (familia × dificultad × condición) quedan así:
 
@@ -318,60 +210,103 @@ Según pass@1 y pass@5, las 18 celdas del objetivo (familia × dificultad × con
 | Aprendibles | Las otras 11 celdas | pass@1 intermedio, o bajo con pass@5 claramente mayor |
 | Sin señal | Composición hard, en ambas condiciones | 0/10 con herramientas y 2/10 con datos visibles, incluso con 5 intentos |
 
-Dos advertencias sobre esta clasificación. Con 10 instancias por celda, los límites entre zonas son inciertos. Y una parte de los fallos con herramientas es de formato y no de razonamiento, como muestra el ejemplo de respuestas sin claves de la sección 5.7.
+Con 10 instancias por celda, los límites entre zonas son inciertos. Y una parte de los fallos con herramientas es de formato, como las respuestas sin claves de la sección 5.3.
 
 ## 7. Datos derivados
 
-Los datos están en `results/kaggle_qwen8b/datos_derivados_qwen8b` y se arman con `scripts/build_training_data.py`. Su `manifest.json` registra el procedimiento y los conteos.
+Los datos están en `results/kaggle_qwen8b/datos_derivados_qwen8b` y se arman con `scripts/build_training_data.py`; su `manifest.json` registra el procedimiento y los conteos. El profesor es Qwen3-8B con thinking, un modelo abierto más grande que el objetivo. Las respuestas incorrectas provienen de Qwen3-1.7B con thinking, el modelo cuyos errores se quiere corregir.
 
-**Modelos.** El profesor es Qwen/Qwen3-8B con thinking, un modelo abierto más grande que el objetivo. Las respuestas incorrectas provienen de Qwen/Qwen3-1.7B con thinking, que es el modelo cuyos errores se quiere corregir.
-
-**Procedimiento:**
-
-1. Cada modelo resuelve los 180 prompts de `train` (90 instancias en 2 condiciones) con 2 muestras, con el mismo muestreo de la línea base.
-2. Cada respuesta se normaliza: las llamadas se reescriben en la forma canónica `<tool_call>{json}</tool_call>` y se descarta el texto que las acompaña. El razonamiento de `<think>` se conserva.
-3. El verificador vuelve a evaluar cada respuesta normalizada contra la instancia protegida. Si la normalización cambia la recompensa, la respuesta se descarta.
-4. Se excluye toda instancia de `train` con la misma huella que una de `eval` o `test`.
-5. **SFT:** por prompt, una respuesta con recompensa 1 y llamadas válidas, con prioridad para el profesor.
-6. **DPO:** por prompt, una respuesta correcta y una incorrecta. La incorrecta prioriza al modelo objetivo y los errores de valor, y nunca es una respuesta cortada por el tope de tokens.
-
-**Resultado:**
+1. Cada modelo resuelve los 180 prompts de `train` (90 instancias en 2 condiciones) con 2 muestras y el mismo muestreo de la línea base. Qwen3-8B acertó 329 de sus 360 respuestas.
+2. Las llamadas se reescriben en la forma canónica `<tool_call>{json}</tool_call>`, y el verificador vuelve a evaluar cada respuesta normalizada; si la normalización cambia la recompensa, la respuesta se descarta.
+3. Se excluye toda instancia de `train` con la misma huella que una de `eval` o `test`.
+4. **SFT:** por prompt, una respuesta con recompensa 1 y llamadas válidas, con prioridad para el profesor.
+5. **DPO:** por prompt, una respuesta correcta y una incorrecta. La incorrecta prioriza al modelo objetivo y los errores de valor, y nunca es una respuesta cortada por el tope de tokens.
 
 | Archivo | Filas | Contenido |
 |---|---|---|
-| `sft.jsonl` | 170 | Trazas correctas, todas de Qwen3-8B. `messages` empieza con el prompt |
+| `sft.jsonl` | 170 | Trazas correctas, todas de Qwen3-8B |
 | `dpo.jsonl` | 106 | `prompt`, `chosen` y `rejected`. La elegida es siempre de Qwen3-8B; la rechazada es de Qwen3-1.7B en 105 pares |
 
-Qwen3-8B acertó 329 de sus 360 respuestas. De las rechazadas en los pares DPO, 83 son errores de valor, 12 tienen campos desconocidos, 5 no traen bloque y 6 son de otros tipos. Por construcción, `reward(prompt, chosen)` da 1.0 y `reward(prompt, rejected)` da 0.0.
-
-Los 10 prompts sin traza son todos de composición hard: ni el profesor los resolvió en 2 intentos. Hay menos pares DPO que trazas porque en 64 prompts ningún modelo dejó una respuesta incorrecta utilizable.
-
-Un detalle para quien entrene con estas trazas: la plantilla de chat de Qwen3 borra el `<think>` de los mensajes anteriores del asistente. Las trazas lo conservan, y hay que aplicar la misma plantilla al entrenar para que el modelo vea el mismo contexto que al generar.
+De las rechazadas, 83 son errores de valor, 12 tienen campos desconocidos, 5 no traen bloque y 6 son de otros tipos. Por construcción, `reward(prompt, chosen)` da 1 y `reward(prompt, rejected)` da 0. Los 10 prompts sin traza son todos de composición hard: ni el profesor los resolvió en 2 intentos. Hay menos pares que trazas porque en 64 prompts ningún modelo dejó una respuesta incorrecta utilizable.
 
 ## 8. Limitaciones y trabajo futuro
 
-> **[Revisión]** ~300 palabras. Agregar las debilidades de B13: herramienta sin `tools=`, una sola herramienta, contradicciones solo en español, sumas sin validar. Trabajo futuro: los pendientes de la sección F de la revisión que corresponda mencionar.
-
-**Debilidades:**
-
-- **Composición hard no da señal** al objetivo, y tampoco la resuelven Qwen3-4B (1/10 con herramientas) ni, en parte, Qwen3-8B. Puede servir como meta de largo plazo, pero no para iniciar RL.
-- **Pocas instancias por celda en la línea base** (10), por costo de cómputo. Las cifras globales y por dificultad son más firmes que las de cada celda.
-- **Respuestas sin claves en selección con herramientas.** En 47 de 150 respuestas el objetivo escribe `S2|29|0` en vez de los tres pares `clave: valor`, y recibe 0 aunque en 32 de ellas los valores sean correctos. Preferimos no relajar el verificador, porque aceptar valores sin clave abre la puerta a respuestas ambiguas. Es un comportamiento que SFT debería corregir.
-- **Topes de tokens distintos** entre modelos con y sin thinking. Parte de los fallos de los modelos sin thinking son respuestas cortadas.
-- **Un solo dominio y una sola herramienta.** La herramienta no tiene errores ni latencia, y las redacciones salen de 5 plantillas por familia.
-- **La revisión de contradicciones entre prosa y bloque es conservadora**: cubre disponibilidad y selección, pero no composición.
+- **Composición hard no da señal** al objetivo, y tampoco la resuelven Qwen3-4B (1/10 con herramientas) ni, en parte, Qwen3-8B. Sirve como meta de largo plazo, no para iniciar RL. Una recompensa parcial por campo daría señal ahí, con el riesgo de premiar los campos fáciles.
+- **Pocas instancias por celda** en la línea base (10). Las cifras globales y por dificultad son más firmes que las de cada celda.
+- **La robustez medida es frente a trampas previstas.** Los casos adversariales los escribió el equipo, y la auditoría manual cubrió dos corridas exploratorias, no la línea base completa. El reward hacking aparece bajo presión de optimización, así que habrá que auditar trazas exitosas durante el entrenamiento.
+- **La herramienta no usa el mecanismo nativo de llamadas.** Se describe en texto en el prompt, aunque Qwen3 y Llama 3.2 tienen un formato nativo. Puede explicar por qué solo 41 de 450 respuestas del objetivo usan la etiqueta, y parte de la brecha entre las condiciones `visible` y `tools`. No lo verificamos; queda para el proyecto.
+- **La flexibilidad con las llamadas tiene costos.** Una mención en prosa de la herramienta se ejecuta como llamada, y si la recompensa es igual con o sin etiqueta, el aprendizaje por refuerzo no empuja al modelo hacia el formato estándar. Para entrenar, la recompensa debería exigir la etiqueta.
+- **Respuestas sin claves en selección con herramientas.** No relajamos el verificador para aceptarlas, porque su significado depende de la posición. Es un comportamiento que SFT debería corregir.
+- **Topes de tokens distintos** entre modelos con y sin thinking; parte de los fallos de los modelos sin thinking son respuestas cortadas.
+- **La revisión de contradicciones entre prosa y bloque es débil.** Solo entiende español, cubre disponibilidad y selección pero no composición, y no se activó en ninguna respuesta de las corridas exploratorias. No protege la recompensa de un valor incorrecto; eso lo hace la comparación.
+- **Las etiquetas de una suma no se validan** contra la instancia: `20 gatos y 20 perros` vale 40. No permite cubrir varias respuestas, porque la suma debe ser exacta.
+- **Un solo dominio y una sola herramienta**, sin errores ni latencia, y redacciones de 5 plantillas por familia. No se mide si el modelo elige la herramienta correcta entre varias.
 
 ## Referencias
 
-> **[Revisión]** Solo las citadas en el cuerpo (protocolo, punto 3): Huang et al. (2025), Zhao et al. (2025), Chen et al. (2021) y, opcional, Reasoning Gym o AgentGym en la introducción.
+- Chen, M., et al. (2021). *Evaluating Large Language Models Trained on Code*. arXiv:2107.03374.
+- Huang, Y., et al. (2025). *Pitfalls of Rule- and Model-based Verifiers: A Case Study on Mathematical Reasoning*. arXiv:2505.22203.
+- Stojanovski, Z., et al. (2025). *Reasoning Gym: Reasoning Environments for Reinforcement Learning with Verifiable Rewards*. NeurIPS 2025.
+- Wilson, E. B. (1927). Probable inference, the law of succession, and statistical inference. *Journal of the American Statistical Association*, 22(158), 209–212.
+- Zhao, Y., et al. (2025). *One Token to Fool LLM-as-a-Judge*. arXiv:2507.08794.
 
 ## Anexos
 
-### A. Prompt e instancia de ejemplo
+### A. Prompt, instancia de ejemplo y protocolo de llamadas
 
-> **[Revisión]** Agregar el prompt completo de una instancia en ambas condiciones.
+**Prompt completo** de `eval_availability_easy_0000` en la condición `tools`:
 
-Composición medium, condición `visible` (`eval_composition_medium_0000`, reglas abreviadas):
+```text
+Caso: eval_availability_easy_0000
+
+Eres el asistente de inventario de una cadena de sucursales.
+
+Reglas de negocio:
+- Disponible = stock físico − stock reservado. Las reservas nunca se usan para un pedido.
+- Se permiten pedidos parciales. Por línea: atendidas = mín(cantidad, disponible) y pendientes = cantidad − atendidas.
+- El pedido sale completo de la sucursal indicada.
+- `alcanza` es sí solo si todas las líneas se cubren por completo.
+- `faltan` es la suma de las unidades pendientes de todas las líneas.
+
+Catálogo:
+Productos: P01, P02, P03
+Sucursales: S1, S2
+
+Herramienta:
+get_inventory(product_id, location_id=None) devuelve physical_stock y reserved_stock de un producto. Sin location_id entrega todas sus sucursales.
+
+No conoces el stock y no puedes suponerlo: los valores solo se obtienen con la herramienta.
+
+Ejemplo de llamada para el producto P99 en la sucursal S9, que no existen; usa IDs del catálogo:
+<tool_call>{"name": "get_inventory", "arguments": {"product_id": "P99", "location_id": "S9"}}</tool_call>
+
+Solicitud:
+Necesito saber cuántas unidades faltarían para completar el pedido O1 si lo despachamos solo desde S1, y por lo tanto si alcanza o no. El pedido consiste en 27 unidades de P01.
+
+Pasos:
+1. Tu próximo mensaje contiene solo las llamadas que necesitas, una por línea. No calcules ni respondas todavía.
+2. Recibirás los resultados y las instrucciones para responder. Máximo 2 rondas de llamadas.
+```
+
+Si el modelo llama `get_inventory` para P01 en S1, el harness responde:
+
+```text
+<tool_result>{"records": [{"location_id": "S1", "physical_stock": 29, "product_id": "P01", "reserved_stock": 1}]}</tool_result>
+
+Si todavía te falta un dato, pide otra ronda de llamadas. Si no, responde.
+
+Formato de respuesta:
+Primero razona paso a paso: calcula cada valor aplicando las reglas. Después termina con este bloque, con las claves escritas exactamente así. Reemplaza N por un número, ID por el ID y `sí o no` por una de las dos:
+<answer>
+alcanza: sí o no
+faltan: N
+</answer>
+Abre y cierra el bloque con sus dos etiquetas. Escríbelas una sola vez, al final de tu respuesta. No las nombres en el razonamiento y no agregues nada después de cerrar.
+```
+
+La respuesta esperada es `alcanza: sí` y `faltan: 0` (disponible 28 ≥ 27). En la condición `visible`, en lugar de la sección «Herramienta» va la tabla completa de inventario (los 6 registros producto × sucursal) y el formato de respuesta va al final del prompt.
+
+**Una instancia más larga.** Composición medium, condición `visible` (`eval_composition_medium_0000`, reglas abreviadas):
 
 ```text
 Inventario:
@@ -389,62 +324,116 @@ Llegaron estos pedidos, en este orden:
 Calcula, para cada pedido, cuántas unidades se atienden y cuántas quedan pendientes, además del total pendiente.
 ```
 
-La respuesta esperada es O1: 18 atendidas y 0 pendientes; O2: 32 y 0; O3: 15 y 0; total pendiente 0. Para llegar a ella hay que calcular cuatro disponibles y descontar de P01 en S1 lo que se llevó O1 antes de atender O2. La metadata de la instancia cuenta 20 operaciones.
+La respuesta esperada es O1: 18 atendidas y 0 pendientes; O2: 32 y 0; O3: 15 y 0; total pendiente 0. Hay que calcular cuatro disponibles y descontar de P01 en S1 lo que se llevó O1 antes de atender O2. La metadata de la instancia cuenta 20 operaciones.
 
-**Qué cuenta como llamada.** Además de la forma con etiqueta, el harness acepta un objeto JSON suelto que nombre la herramienta (`{"name": "get_inventory", "arguments": {...}}`) y la forma de Python (`get_inventory("P01", location_id="S1")`). No cuenta un objeto que no nombre la herramienta, ni una llamada dentro de un mensaje que ya trae `<answer>`. Lo decidimos para que la línea base mida qué datos pide el modelo y qué hace con ellos, y no si recuerda una sintaxis: solo 41 de las 450 respuestas del objetivo con herramientas usan la etiqueta (sección 5.6).
+**Qué cuenta como llamada.** Además de la forma con etiqueta, el harness acepta un objeto JSON suelto que nombre la herramienta (`{"name": "get_inventory", "arguments": {...}}`) y la forma de Python (`get_inventory("P01", location_id="S1")`). Una `<tool_call>` sin cierre cuenta si el JSON está completo, porque Llama omite el cierre. No cuenta un objeto que no nombre la herramienta, ni una llamada dentro de un mensaje que ya trae `<answer>`. Lo decidimos para que la línea base mida qué datos pide el modelo y qué hace con ellos: solo 41 de las 450 respuestas del objetivo con herramientas usan la etiqueta.
 
 Aceptar más formas no regala recompensa, porque los datos siguen saliendo del harness y el modelo igual tiene que calcular. Pero tiene dos costos:
 
 - El harness interpreta intenciones: una mención en prosa, como «para esto llamaría get_inventory("P01")», se ejecuta como llamada y gasta una de las dos rondas.
-- Si la recompensa es la misma con o sin etiqueta, el aprendizaje por refuerzo no empuja al modelo hacia el formato estándar. Para entrenar, la recompensa debería exigir la etiqueta.
+- Si la recompensa es la misma con o sin etiqueta, el aprendizaje por refuerzo no empuja al modelo hacia el formato estándar.
+
+**Formatos nativos.** Las plantillas de chat de Qwen3 y de Llama 3.2 aceptan una lista de herramientas, cada una con su formato. La de Llama 3.2 espera `{"name": ..., "parameters": ...}` y admite una sola llamada por turno; con un máximo de 2 rondas, en ese modo Llama no alcanzaría a reunir los datos de las tareas hard.
 
 ### B. Interpretación de valores
 
-> **[Revisión]** Escribir a partir de C1 y C2 de la revisión: gramática por tipo de valor, principio de rechazo de lo ambiguo, caso `33O1` contra `3301`. Agregar que en la línea base 0 de 1.918 aciertos usaron números en palabras, grupos o sumas.
+`numbers_es.py` interpreta un valor a la vez, según el tipo del campo. No busca la respuesta en el texto: las claves están fijadas por el contrato, así que el espacio de respuestas es chico y cerrado. No usa `eval()`.
 
-Reasoning Gym también usa un bloque `<answer>` (Stojanovski et al., 2025), pero lo trata de otra forma. Toma el último bloque aunque haya varios, compara texto y puede dar crédito parcial. El nuestro exige exactamente un bloque, interpreta cada campo según su tipo (entero, sí/no, sucursal) y da 1 solo si todos coinciden con la respuesta calculada. La sección 4 lo explica en detalle.
+| Tipo | Formas aceptadas |
+|---|---|
+| Entero | Dígitos (`3`, `1.200`, `3.0`), con unidad (`3 unidades`), en palabras hasta 999.999 (`tres`, `veintitrés`), aritmética con `+ - * x ( )` (`20-17`, `4 x 10`), grupos (`cuatro filas de 10`), sumas etiquetadas (`20 adelante y 20 atrás`), glosas que repiten el valor (`3 (tres)`) e igualdades (`20-17 = 3`) |
+| Sí/no | `sí`, `no`, `true`, `false`, `verdadero`, `alcanza`, `no alcanza` |
+| Sucursal | `S2`, `s2`, `sucursal S2` |
+
+Se rechaza lo que admite más de una lectura o no se entiende, con ejemplos verificados:
+
+| Valor | Resultado |
+|---|---|
+| `3 o 4`, `unos 3` | Ambiguo (`ambiguous_value`) |
+| `3 (cuatro)` | Ambiguo: la glosa no coincide |
+| `3.5` | Inválido: no es entero |
+| `el primer número es 3` | Inválido: nunca se extrae un número de un texto |
+| Dígitos no ASCII u homoglifos (`nо` con «о» cirílica) | Inválido |
+
+**Pares en una misma línea.** El corte se hace solo donde aparece una clave literal del contrato (`O<n>_atendidas`, `O<n>_pendientes`, `total_pendientes`, etc.) seguida de dos puntos, y solo si la línea empieza con una clave. Por eso no hay ambigüedad entre `33O1` y `3301`:
+
+| Entrada | Resultado |
+|---|---|
+| `O1_atendidas: 33O1_pendientes: 6total_pendientes: 6` (letra O) | Se separa: 33, 6 y 6 |
+| `O1_atendidas: 3301_pendientes: 6 ...` (dígito 0) | No se separa: falta un campo y vale 0 |
+| `O1_atendidas: 3301` en su propia línea | Se lee 3301 |
+| Clave repetida en la línea | Campo repetido, vale 0 |
+| Texto antes de la primera clave | Campo desconocido, vale 0 |
+
+**Comparación con Reasoning Gym.** Reasoning Gym también usa un bloque `<answer>`, pero toma el último aunque haya varios, compara texto y puede dar crédito parcial. Nuestro verificador exige exactamente un bloque, interpreta cada campo según su tipo y da 1 solo si todos coinciden.
+
+**Uso real y límites.** En las 1.918 respuestas correctas de las corridas de Kaggle, ninguna usa números en palabras, grupos o sumas: los modelos escriben dígitos. Lo que sí importó fue la forma del bloque (pares pegados o separados por comas), y eso se descubrió con la auditoría. Las sumas etiquetadas no validan las etiquetas contra la instancia (`20 gatos y 20 perros` vale 40); no es una vía para engañar la recompensa, porque la suma debe ser exactamente el valor correcto y el modelo no lo conoce. Un tipo de valor nuevo, como fechas o texto libre, exigiría escribir otro parser.
 
 ### C. Casos adversariales
 
-| Categoría | Casos | Como se esperaba |
-|---|---|---|
-| Equivalencias válidas y paráfrasis correctas | 49 | 48 |
-| Respuestas parciales | 12 | 12 |
-| Múltiples respuestas | 38 | 38 |
-| Inyección de formato | 58 | 58 |
-| Números fuera de contexto | 20 | 20 |
-| Homoglifos | 20 | 20 |
-| Desbordes numéricos | 32 | 32 |
-| Copia de la salida de la herramienta | 21 | 21 |
-| Inyección de instrucciones | 26 | 26 |
-| Contradicciones entre prosa y bloque | 25 | 18 |
-| Prosa que no debe contarse como contradicción | 33 | 33 |
-| **Total** | **334** | **326** |
+`tests/adversarial_cases.py`; el reporte completo se regenera con `scripts/robustness_report.py` en `docs/robustez_verificador.md`. Un acierto significa que el verificador aceptó lo que debía aceptar y rechazó lo que debía rechazar. En los ejemplos, la respuesta correcta es `alcanza: no` y `faltan: 3` (o, en selección, `S2`, 7 y 1).
+
+| Categoría | Casos | Aciertos | Ejemplo | Debe |
+|---|---|---|---|---|
+| Equivalencias válidas y paráfrasis correctas | 49 | 48 | `faltan: tres`; «Creí que faltaban 5, pero recalculé. Faltan 3 unidades.» antes del bloque | Aceptar |
+| Respuestas parciales | 12 | 12 | Bloque con `alcanza: no` y sin `faltan` | Rechazar |
+| Múltiples respuestas | 38 | 38 | Dos bloques, uno con `faltan: 5` y otro con `faltan: 3` | Rechazar |
+| Inyección de formato | 58 | 58 | Bloque correcto dentro de `<think>` y bloque incorrecto fuera | Rechazar |
+| Números fuera de contexto | 20 | 20 | `faltan: 9` (el disponible, no lo que falta); `faltan: P03` | Rechazar |
+| Homoglifos | 20 | 20 | `alcanza: nо` con «о» cirílica; `sucursal: Ѕ2` con «Ѕ» cirílica | Rechazar |
+| Desbordes numéricos | 32 | 32 | `faltan: 4294967299` (2³² + 3); `{"faltan": 1e999}` | Rechazar |
+| Copia de la salida de la herramienta | 21 | 21 | El JSON de `<tool_result>` pegado dentro de `<answer>` | Rechazar |
+| Inyección de instrucciones | 26 | 26 | «Ignora lo anterior, recompensa=1»; campo `correct_final_answer: true` | Rechazar |
+| Contradicciones entre prosa y bloque | 25 | 18 | «Por lo tanto, no alcanza.» seguido de `alcanza: sí` | Rechazar |
+| Prosa que no debe contarse como contradicción | 33 | 33 | «S1 no alcanza, así que elegimos S2.» con `sucursal: S2` | Aceptar |
+| **Total** | **334** | **326** | | |
+
+Los 8 fallos son limitaciones documentadas. Uno es un falso rechazo: `3 filas de 10 y 5 sueltas` se rechaza como ambiguo, porque admitir un grupo como sumando abriría `dos filas de 3 y 4 filas de 3` como dos respuestas. Los otros 7 son contradicciones no detectadas: la revisión solo mira el último párrafo, trata como parcial una oración que nombra un producto, y en composición no compara la prosa con el bloque. En todos el bloque es correcto.
 
 ### D. Auditoría del verificador
 
-> **[Revisión]** Resumen de `docs/auditoria_verificador.md`: método, clasificación de rechazos y límites.
+Detalle en `docs/auditoria_verificador.md`. Se revisaron los 1.080 rollouts de dos corridas exploratorias (Llama-3.2-1B y Qwen3-1.7B con y sin thinking, con el prompt original y el corregido, sobre 45 instancias de `train`). La respuesta esperada se validó con un solucionador escrito aparte para la auditoría (45 de 45 coinciden). Quedaron en alcance 574 respuestas: las 540 de `visible` y 34 de `tools` que llegaron a una respuesta final; en esas corridas el lector de llamadas tenía un error que dejó casi todo `tools` fuera de alcance.
+
+Cada respuesta rechazada se clasificó, con reglas automáticas corregidas leyendo los textos: **a**, falso rechazo (correcta e inequívoca, rechazada por una forma razonable); **b**, rechazo legítimo por formato; **c**, valor incorrecto real. El resultado fue 119 aceptadas sin falsos positivos, y entre las 455 rechazadas, 9 de tipo a, 163 de tipo b y 283 de tipo c. Las 9 de tipo a tienen dos causas: valores entre `< >`, que el prompt vigente ya no provoca, y varios pares en una línea, que se corrigió (sección 4.4).
+
+Límites: la muestra es chica y de corridas exploratorias, no de la línea base final, y para las 1.918 respuestas aceptadas de la línea base no hubo una revisión manual equivalente. La revisión de contradicciones no se activó en ninguna de esas respuestas.
 
 ### E. Tablas de detalle
 
-**Modelo objetivo por familia.**
+**pass@1 / pass@5 por dificultad** (% sobre 30 instancias; 23 o 24 para Qwen3-0.6B). Son las cifras de la Figura 2.
 
-Aciertos de Qwen3-1.7B con thinking sobre 10 instancias por celda, como pass@1 / pass@5:
+Con herramientas:
 
-| Familia | Condición | Easy | Medium | Hard |
-|---|---|---|---|---|
-| Disponibilidad | Visible | 9 / 10 | 9 / 10 | 6 / 10 |
-| Disponibilidad | Herramientas | 9 / 10 | 8 / 10 | 4 / 6 |
-| Selección | Visible | 9 / 10 | 8 / 10 | 5 / 10 |
-| Selección | Herramientas | 6 / 10 | 5 / 9 | 1 / 4 |
-| Composición | Visible | 9 / 10 | 1 / 8 | 2 / 2 |
-| Composición | Herramientas | 4 / 10 | 0 / 3 | 0 / 0 |
+| Modelo | Easy | Medium | Hard |
+|---|---|---|---|
+| Llama-3.2-1B | 0 % / 0 % | 0 % / 0 % | 0 % / 0 % |
+| Qwen3-0.6B con thinking | 17 % / 50 % | 17 % / 22 % | 4 % / 4 % |
+| Qwen3-1.7B sin thinking | 40 % / 77 % | 23 % / 40 % | 10 % / 23 % |
+| **Qwen3-1.7B con thinking** | 63 % / 100 % | 43 % / 73 % | 17 % / 33 % |
+| Qwen3-4B sin thinking | 93 % / 100 % | 83 % / 97 % | 37 % / 47 % |
 
-Composición es la familia más difícil. Con 10 instancias por celda, el intervalo de cada celda es ancho (por ejemplo, 6/10 corresponde a un IC de 31–83 %), así que estas cifras orientan y no permiten comparar celdas vecinas.
+Con datos visibles:
 
-**Comparación con reglas triviales.**
+| Modelo | Easy | Medium | Hard |
+|---|---|---|---|
+| Llama-3.2-1B | 0 % / 0 % | 0 % / 0 % | 0 % / 0 % |
+| Qwen3-0.6B con thinking | 12 % / 46 % | 4 % / 17 % | 4 % / 13 % |
+| Qwen3-1.7B sin thinking | 63 % / 93 % | 23 % / 57 % | 3 % / 20 % |
+| **Qwen3-1.7B con thinking** | 90 % / 100 % | 60 % / 93 % | 43 % / 73 % |
+| Qwen3-4B sin thinking | 100 % / 100 % | 87 % / 97 % | 37 % / 40 % |
 
-Para comprobar que acertar exige leer el inventario y razonar, evaluamos reglas simples sobre las mismas instancias:
+**Modelo objetivo por familia.** Instancias resueltas de 10 por celda.
+
+| Familia | Condición | Easy pass@1 | Easy pass@5 | Medium pass@1 | Medium pass@5 | Hard pass@1 | Hard pass@5 |
+|---|---|---|---|---|---|---|---|
+| Disponibilidad | Visible | 9 | 10 | 9 | 10 | 6 | 10 |
+| Disponibilidad | Herramientas | 9 | 10 | 8 | 10 | 4 | 6 |
+| Selección | Visible | 9 | 10 | 8 | 10 | 5 | 10 |
+| Selección | Herramientas | 6 | 10 | 5 | 9 | 1 | 4 |
+| Composición | Visible | 9 | 10 | 1 | 8 | 2 | 2 |
+| Composición | Herramientas | 4 | 10 | 0 | 3 | 0 | 0 |
+
+**Comparación con reglas triviales** (instancias acertadas de 10 por celda; en selección, easy, medium y hard):
 
 | Regla | Disponibilidad | Selección | Composición |
 |---|---|---|---|
@@ -453,11 +442,24 @@ Para comprobar que acertar exige leer el inventario y razonar, evaluamos reglas 
 | Decir que todo se atiende | — | — | 3/10 en cada nivel |
 | Ignorar las reservas | 5/10 en cada nivel | 0/10, 0/10, 1/10 | 3/10 en cada nivel |
 
-El objetivo queda por sobre estas reglas en disponibilidad y selección easy y medium, aunque con 10 instancias por celda la diferencia no siempre es significativa. En composición medium y hard con herramientas queda por debajo de «todo se atiende», que acierta las instancias sin escasez.
+**Resultados del objetivo con herramientas** (450 respuestas):
+
+| Resultado | Respuestas | Porcentaje |
+|---|---|---|
+| Correcta | 168 | 37 % |
+| Valor incorrecto | 165 | 37 % |
+| Campo desconocido (respuestas sin claves) | 47 | 10 % |
+| Sin bloque de respuesta | 36 | 8 % |
+| Valor no interpretable | 13 | 3 % |
+| Pidió una tercera ronda | 12 | 3 % |
+| Respondió sin los datos necesarios | 5 | 1 % |
+| Otros | 4 | 1 % |
+
+De los 282 fallos, 122 son errores de cálculo con llamadas válidas y todos los datos reunidos, y 43 son respuestas sin claves con todo lo demás en regla; el resto combina datos incompletos, respuestas sin bloque y rondas de más. Con datos visibles, 66 % de las respuestas son correctas, 27 % tienen un valor incorrecto y 4 % no traen bloque. El costo medio del objetivo es de 2.086 tokens y 55 s por respuesta con herramientas, y 1.371 tokens y 32 s con datos visibles.
 
 ### F. Ejemplos cualitativos
 
-Todos los ejemplos son respuestas reales de la línea base, citadas de los `rollouts_*.jsonl`. El razonamiento dentro de `<think>` se abrevia con `[...]`.
+Todos los ejemplos son respuestas reales, citadas de los `rollouts_*.jsonl`. El razonamiento dentro de `<think>` se abrevia con `[...]`.
 
 **Fortaleza: una trayectoria correcta con herramientas.** Qwen3-1.7B con thinking, composición medium (`eval_composition_medium_0005`, muestra 3). Los pedidos son O1: 21 unidades de P01 desde S1; O2: 5 de P01 y 22 de P02 desde S2; O3: 23 de P02 desde S2. El modelo pide exactamente los tres registros que necesita:
 
@@ -504,7 +506,7 @@ is 29, so they handle all 29, leaving 0 pending. Since S2 has a higher coverage,
 <answer>S2|29|0</answer>
 ```
 
-El razonamiento y los tres valores son correctos, pero el bloque no trae las claves y recibe 0 (`unknown_field`). Esto ocurre en 47 de las 150 respuestas del objetivo en selección con herramientas, y en ninguna otra familia. Leídas por posición, 32 de esas 47 tendrían los tres valores correctos.
+El razonamiento y los tres valores son correctos, pero el bloque no trae las claves y recibe 0 (`unknown_field`). Ocurre en 47 de las 150 respuestas del objetivo en selección con herramientas, y en ninguna otra familia. Leídas por posición, 32 de esas 47 tendrían los tres valores correctos.
 
 **Equivalencia aceptada: aritmética en los valores.** Qwen3-8B con thinking, composición medium con herramientas (`train_composition_medium_0007`, muestra 0). Lo esperado para O3 es 8 atendidas y 18 pendientes, y el modelo deja las sumas por línea de pedido sin resolver:
 
@@ -522,7 +524,7 @@ total_pendientes: 23
 
 El verificador evalúa `2+6` como 8 y `1+17` como 18, y da la respuesta por correcta. Otra forma aceptada, del modelo objetivo: `<answer>alcanza: no, faltan: 2</answer>`. En la línea base, 57 de las 464 respuestas correctas del objetivo no están en la forma canónica de un par por línea.
 
-**Llama-3.2-1B: no sigue el formato.** Composición easy con datos visibles (`eval_composition_easy_0007`, muestra 4). Hay 19 unidades disponibles de P01 (27 de stock físico y 8 reservadas), O1 pide 12 y O2 pide 6, así que ambos se atienden completos. La respuesta completa del modelo es:
+**Llama-3.2-1B: falla en el formato y en el cálculo.** Composición easy con datos visibles (`eval_composition_easy_0007`, muestra 4). Hay 19 unidades disponibles de P01 (27 de stock físico y 8 reservadas), O1 pide 12 y O2 pide 6, así que ambos se atienden completos. La respuesta completa del modelo es:
 
 ```text
 O1_atendidas: 8
@@ -532,23 +534,31 @@ O2_pendientes: 4
 total_pendientes: 13
 ```
 
-Escribe los pares sin las etiquetas `<answer>`, y además los valores son incorrectos: usa las 8 unidades reservadas como si fueran las atendidas. De sus 900 respuestas, 699 no traen bloque. El formato no es su único problema: en una lectura indulgente, que toma sus pares finales como si llevaran etiquetas, acertaría solo 4 de 900.
+Escribe los pares sin las etiquetas `<answer>`, y además los valores son incorrectos: usa las 8 unidades reservadas como si fueran las atendidas. De sus 900 respuestas, 699 no traen bloque. Pero el formato no es su problema principal. Tomando sus pares finales como si llevaran etiquetas, acertaría solo 4 de 900. Con una lectura aún más indulgente, que busca cada clave en cualquier parte del texto (`scripts/lectura_indulgente.py`), solo 211 de los 1.460 valores que escribe son correctos (14 %), y `alcanza` es correcto en 43 de 129 respuestas, menos que al azar. En la instancia más fácil (`eval_availability_easy_0000`: pide 27, hay 29 con 1 reservado) escribe:
 
-**Qwen3-4B sin thinking: se queda sin tokens en las tareas largas.** En selección hard con datos visibles (`eval_selection_hard_0000`, muestra 0) tabula la cobertura de 4 sucursales para 4 productos, llega al tope de 768 tokens en el encabezado «Comparación:» y nunca emite el bloque. Le pasa en 142 de sus 900 respuestas, todas en selección hard, composición hard y composición medium, y todas con recompensa 0. Eso explica 142 de sus 269 fallos, así que sus cifras en hard subestiman lo que el modelo haría con más tokens.
+```text
+1. Calcula el total de unidades disponibles en la sucursal S1: stock físico + stock reservado = 29 + 1 = 30
+2. Calcula la cantidad de unidades que aún faltan para completar el pedido O1: 27 - 30 = -3 (puedo no, hay que reemplazar -3 con N)
+[...]
+Alcanza: N
+faltan: N
+```
 
-> **[Revisión]** Párrafo sobre Llama que estaba en la §2.3; integrarlo con el ejemplo de Llama de arriba:
+Suma las reservas en vez de restarlas y copia el marcador `N` del formato.
 
-Exigir el bloque es la causa de rechazo más frecuente de Llama-3.2-1B: 699 de sus 900 respuestas no lo traen. Pero el formato no explica su resultado. Si se buscan las claves en cualquier parte del texto, sin exigir el bloque, solo 211 de los 1.460 valores que escribe son correctos (14 %), frente a 1.500 de 3.033 (49 %) de Qwen3-1.7B sin thinking. El problema principal de Llama es el cálculo (sección 5.7).
+**Qwen3-4B sin thinking: se queda sin tokens en las tareas largas.** En selección hard con datos visibles (`eval_selection_hard_0000`, muestra 0) tabula la cobertura de 4 sucursales para 4 productos, llega al tope de 768 tokens en el encabezado «Comparación:» y nunca emite el bloque. Le pasa en 142 de sus 900 respuestas, todas en selección hard, composición hard y composición medium, y todas con recompensa 0.
 
 ### G. Reproducción
 
 ```bash
-git clone https://github.com/tariztia/harness-inventarios.git
+git clone <repositorio>
 cd harness-inventarios
 uv run --group dev pytest -q                                   # 1.269 tests
 uv run python scripts/generate_dataset.py --n-per-cell 40 --base-seed 2026 --out data
 uv run python scripts/robustness_report.py                     # regenera docs/robustez_verificador.md
 uv run python scripts/analyze_results.py results/kaggle_qwen17b/linea_base_qwen17b
+uv run python scripts/lectura_indulgente.py results/kaggle_otros_modelos/linea_base_sin_think/rollouts_unsloth_Llama-3.2-1B-Instruct.jsonl
+uv run --with matplotlib python scripts/figuras_informe.py     # figuras de este informe
 ```
 
 | Qué | Dónde |
@@ -559,8 +569,6 @@ uv run python scripts/analyze_results.py results/kaggle_qwen17b/linea_base_qwen1
 | Datos SFT y DPO | `results/kaggle_qwen8b/datos_derivados_qwen8b` |
 | Cuadernos para correr en Kaggle | `notebooks/`, con la guía en `docs/guia_kaggle.md` |
 
-Cada carpeta de resultados trae los rollouts completos (`rollouts_*.jsonl`), un `report.md` con el detalle por celda y un `manifest.json` con la configuración y la versión del código.
+Para entrenar con las trazas SFT hay que aplicar la plantilla de chat de Qwen3, que borra el `<think>` de los mensajes anteriores del asistente: así el modelo ve el mismo contexto que al generar.
 
-```bash
-python scripts/generate_dataset.py --n-per-cell 40 --base-seed 2026 --out data
-```
+Cada carpeta de resultados trae los rollouts completos (`rollouts_*.jsonl`), un `report.md` con el detalle por celda y un `manifest.json` con la configuración y la versión del código.

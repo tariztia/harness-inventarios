@@ -30,3 +30,24 @@ Criterios de la revisión:
 | Estructura tipo paper, a lo más 7 páginas a doble columna, como pide el proyecto: Introducción, Entorno, Dataset, Verificador, Línea base, Calibración, Datos derivados, Limitaciones y trabajo futuro, Referencias | El informe actual era difícil de leer (~15 páginas) |
 | A anexos: ejemplo de instancia y detalle de las llamadas (A), interpretación de valores (B), tabla de casos adversariales (C), auditoría (D), tablas por familia y reglas triviales (E), ejemplos cualitativos (F) y reproducción (G) | El cuerpo cuenta qué se hizo y qué muestra; la evidencia detallada va en anexos |
 | Las notas **[Revisión]** marcan lo pendiente de cada sección y se borran al terminar | Para que el equipo vea qué falta en cada parte |
+
+## Versión 2 completa (`docs/informe_v2.md`)
+
+Cuerpo de ~4.250 palabras (tablas incluidas) con 2 figuras, más anexos A–G. Todas las cifras se cruzaron con `docs/informe.md` y los documentos de la revisión; las únicas cifras nuevas son las de Llama por campo (`scripts/lectura_indulgente.py`), las 364 llamadas válidas de Llama y las 1.918 respuestas correctas sin equivalencias, verificadas sobre los rollouts.
+
+| Sección | Cambio | Por qué |
+|---|---|---|
+| §1 Introducción | Reemplaza al resumen. Sitúa el trabajo (Reasoning Gym) y la robustez se presenta como "frente a las trampas que previmos" | Tono acorde a lo medido (B14) |
+| §2 Entorno | Protocolo reducido; detalle de llamadas y formatos nativos al Anexo A. **Figura 1** con el flujo del entorno y del verificador | Largo tipo paper; faltaba explicar el flujo (B2) |
+| §3 Dataset | §3.2 explica qué es un atajo y qué mide cada fila | B1 |
+| §4 Verificador | Abre con el principio (compara valores, no juzga razonamiento), por qué reglas y no un LLM juez (Huang et al.; Zhao et al.), cómo interpreta valores, defensas, casos adversariales con su límite y la auditoría como ciclo, incluida la relajación posterior | B2–B5, B14 |
+| §5 Línea base | Define rollout, pass@k (Chen et al.), Wilson y el tope de tokens; Qwen3-8B se remite a §7. **Figura 2** reemplaza las tablas por dificultad, que pasan al Anexo E. Ejemplos al Anexo F | B6–B10 |
+| §6 Calibración | Incorpora la comparación con reglas triviales | Es evidencia de calibración |
+| §8 Limitaciones | Agrega herramienta sin `tools=`, flexibilidad de llamadas, robustez solo frente a lo previsto, contradicciones débiles y sumas sin validar | B13, B14 |
+| Referencias | 5 referencias, todas citadas en el cuerpo | A5 y protocolo |
+| Anexo B | Interpretación de valores, caso `33O1` contra `3301`, contraste con Reasoning Gym | C1, C2 |
+| Anexo C | Un ejemplo por categoría adversarial | B4 |
+| Anexo E | Tabla por familia con pass@1 y pass@5 en columnas separadas | B9: "9 / 10" se leía como "9 de 10" |
+| Figuras | `docs/figuras/`, generadas con `scripts/figuras_informe.py` | Reproducibles |
+
+Pendiente: integrantes y link al repo limpio (A1, A2), y exportar a PDF (A3).

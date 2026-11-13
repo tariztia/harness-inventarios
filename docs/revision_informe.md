@@ -55,6 +55,8 @@ Estructura acordada:
 | B13 | §8 | Faltan debilidades | Agregar: (1) la herramienta se describe en texto en el prompt y no con el mecanismo nativo (`tools=` en el chat template), que tienen **tanto Qwen3 como Llama 3.2** (C6, C7), lo que puede explicar el bajo uso de la etiqueta; (2) una sola herramienta, así que no se mide elegir entre varias; (3) la revisión de contradicciones solo entiende español y no se activó en las corridas reales (C3); (4) las etiquetas de una suma no se validan contra la instancia (C1) | pendiente |
 | B14 | §1, §4 y §8 | El tono sobre la robustez promete más de lo medido | Cambiar "el verificador resiste las trampas" por "resiste las trampas previstas por el equipo (326 de 334 casos que escribimos nosotros)"; decir que en la línea base los modelos casi no usaron las equivalencias (0 de 1.918 aciertos usaron números en palabras, grupos o sumas) y que el reward hacking real se verá al entrenar con RL | pendiente |
 
+**Estado al cierre del 13-11:** los ítems B1–B14 y A5 quedaron aplicados en `docs/informe_v2.md` (ver `docs/cambios_informe.md`). Faltan A1 (integrantes), A2 (link al repo limpio) y A3 (PDF).
+
 ## C. Análisis crítico del verificador
 
 **C1. ¿El parser de valores es "hardcodeado"?** Sí, son reglas escritas a mano: `numbers_es.py` (~640 líneas) y `verifier.py` (~570). No es una lista de respuestas, sino una gramática por tipo de valor:
