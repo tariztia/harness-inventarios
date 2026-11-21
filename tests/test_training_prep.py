@@ -281,3 +281,31 @@ def test_evaluar_un_adaptador_en_seco_guarda_los_rollouts_con_su_propia_etiqueta
     assert files == ["rollouts_Qwen_Qwen3-1.7B+think+lora_sft.jsonl"]
     row = json.loads((out / files[0]).read_text(encoding="utf-8").splitlines()[0])
     assert row["model"] == "Qwen/Qwen3-1.7B+think+lora:sft"
+
+
+# --- Auditoria ---------------------------------------------------------------
+
+
+def test_la_muestra_de_auditoria_solo_trae_aciertos_y_es_reproducible(tmp_path):
+    import csv
+
+    import audit_sample
+
+    rows = []
+    for index in range(12):
+        rows.append({"model": "m", "condition": "visible" if index % 2 else "tools", "family": "availability",
+                     "difficulty": "easy", "instance_id": f"i{index}", "sample": 0,
+                     "messages": [{"role": "assistant", "content": f"respuesta {index}"}],
+                     "verdict": {"reward": 1.0 if index % 3 else 0.0}})
+    folder = tmp_path / "corrida"
+    folder.mkdir()
+    (folder / "rollouts_m.jsonl").write_text("
+".join(json.dumps(r) for r in rows), encoding="utf-8")
+    out1, out2 = tmp_path / "a.csv", tmp_path / "b.csv"
+    assert audit_sample.main([str(folder), "--n", "5", "--out", str(out1)]) == 0
+    assert audit_sample.main([str(folder), "--n", "5", "--out", str(out2)]) == 0
+    first = list(csv.DictReader(out1.open(encoding="utf-8-sig")))
+    assert len(first) == 5 and out1.read_text(encoding="utf-8") == out2.read_text(encoding="utf-8")
+    assert not {r["instancia"] for r in first} & {"i0", "i3", "i6", "i9"}  # los que fallaron
+    assert {r["condicion"] for r in first} == {"visible", "tools"}  # reparte entre celdas
+    assert all(r["genuino"] == "" for r in first)
