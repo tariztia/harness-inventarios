@@ -185,6 +185,7 @@ class HFBackend(Backend):
         torch_dtype: Any = "auto",
         device_map: Any = "auto",
         model_kwargs: dict[str, Any] | None = None,
+        adapter: str | None = None,
     ) -> None:
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -209,6 +210,12 @@ class HFBackend(Backend):
             trust_remote_code=trust_remote_code,
             **(model_kwargs or {}),
         )
+        if adapter:
+            # Adaptador LoRA entrenado con scripts/train_*.py: se funde con el modelo base, de
+            # modo que generar cuesta lo mismo que sin adaptador.
+            from peft import PeftModel
+
+            self.model = PeftModel.from_pretrained(self.model, adapter).merge_and_unload()
         self.model.eval()
         self._eos_ids = self._collect_eos_ids()
 

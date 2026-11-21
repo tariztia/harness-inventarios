@@ -215,15 +215,21 @@ src/inventory_harness/
   verifier.py, numbers_es.py   analizan y verifican la respuesta final
   tools.py, prompts.py         herramienta y mensajes del modelo
   rollout.py, backends.py      ejecutan modelos, con lotes y reanudación
+  training_prep.py             datos y recompensa para SFT, DPO y GRPO
   reward.py                    interfaz reward(prompt, completion)
   metrics.py, baselines.py     pass@k, intervalos y reglas triviales
 scripts/                       generar datos, correr, analizar y empaquetar
+scripts/train_*.py             SFT, DPO y GRPO con LoRA (docs/guia_entrenamiento.md)
 notebooks/piloto_colab.ipynb   ejecución en Colab
 tests/                         tests y casos adversariales
 results/                       corridas de exploración
 docs/                          contrato, reglas, guía de Colab y robustez
 docs/propuesta/                enunciado del desafío y propuestas
 ```
+
+## Entrenamiento
+
+`scripts/train_sft.py`, `train_dpo.py` y `train_grpo.py` entrenan a Qwen3-1.7B con LoRA, y `run_pilot.py --stage eval_final --adapter ...` mide el resultado con el mismo protocolo de la línea base. Los pasos, los argumentos y los límites están en [docs/guia_entrenamiento.md](docs/guia_entrenamiento.md); las versiones probadas, en `requirements-train.txt`. Los scripts se probaron de punta a punta en CPU con Qwen3-0.6B, pero todavía no en una GPU.
 
 ## Próximos pasos
 
