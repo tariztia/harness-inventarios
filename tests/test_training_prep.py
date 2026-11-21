@@ -299,8 +299,8 @@ def test_la_muestra_de_auditoria_solo_trae_aciertos_y_es_reproducible(tmp_path):
                      "verdict": {"reward": 1.0 if index % 3 else 0.0}})
     folder = tmp_path / "corrida"
     folder.mkdir()
-    (folder / "rollouts_m.jsonl").write_text("
-".join(json.dumps(r) for r in rows), encoding="utf-8")
+    lines = [json.dumps(r) for r in rows]
+    (folder / "rollouts_m.jsonl").write_text(chr(10).join(lines), encoding="utf-8")
     out1, out2 = tmp_path / "a.csv", tmp_path / "b.csv"
     assert audit_sample.main([str(folder), "--n", "5", "--out", str(out1)]) == 0
     assert audit_sample.main([str(folder), "--n", "5", "--out", str(out2)]) == 0
