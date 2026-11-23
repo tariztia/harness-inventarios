@@ -41,6 +41,17 @@ Corre Qwen3-8B sobre las tareas de `train` para dar respuestas correctas donde Q
 
 Cada versión deja en *Output* `resultados_qwen8b.zip`, con `trazas_qwen8b`, `datos_derivados_qwen8b` y las listas de pendientes.
 
+### Corrida grande con vLLM (pasos 0 y 4)
+
+Con `transformers`, el 8B generó ~21 tok/s en las dos T4 (360 rollouts tomaron 6,9 h de GPU), así que ~7.200 rollouts serían del orden de 100 h. vLLM atiende muchas secuencias a la vez y se espera que sea mucho más rápido, pero **su velocidad real en la T4 de Kaggle no está medida**: el paso 0 la mide.
+
+- **Paso 0, prueba de velocidad** (`PASO = 0`, `BACKEND = "vllm"`): 18 instancias de `train` con 4 muestras (144 rollouts). En el log, la sección 6b imprime los tok/s y el porcentaje de aciertos. Con ~21 tok/s como referencia de `transformers`, decide si la corrida grande cabe en la cuota de Kaggle. Para comprobar que vLLM no cambia los resultados, repite con `BACKEND = "hf"` (más lento: baja `HUMO_N` a 9 y `MUESTRAS_HUMO` a 2) y compara los aciertos de las dos carpetas.
+- **Paso 4, corrida grande** (`PASO = 4`): 100 instancias por celda (900 en total, que incluyen las 90 de antes) con 4 muestras por prompt en las dos condiciones. Para repartirla, cada persona pone un `SHARD` distinto (`"1/3"`, `"2/3"`, `"3/3"`) con el mismo zip de código; cada una obtiene su `resultados_trazas_<modelo>_vllm_parte<i>de<N>.zip`. Si una sesión no termina, agrega su salida como entrada y vuelve a correr: continúa donde quedó.
+- `MODELO = "Qwen/Qwen3-1.7B"` en el paso 4 genera las respuestas incorrectas para los pares DPO sobre las mismas instancias.
+- Los datos SFT/DPO se arman después, en el repositorio, juntando todas las carpetas: `python scripts/build_training_data.py <partes del 8B> <partes del 1.7B> --out results/datos_derivados`. Las partes deben ser disjuntas, venir del mismo zip y tener la misma semilla y el mismo `n_per_cell`; si no, el script lo avisa.
+- Una carpeta hecha con `transformers` no se puede continuar con vLLM (ni al revés): `run_pilot.py` lo rechaza porque la configuración de generación cambió.
+- Si vLLM no arranca en la T4, el log lo dirá en la instalación o en la carga del modelo; las alternativas son un checkpoint AWQ en una sola GPU o una sesión corta de Colab con A100.
+
 ## Línea base de otros modelos (`linea_base_otros_kaggle.ipynb`)
 
 Mide pass@1 y pass@5 sobre `eval`, con las mismas instancias que la línea base de Qwen3-1.7B con thinking, para Llama-3.2-1B, Qwen3-1.7B y Qwen3-4B sin thinking (GPU 0) y Qwen3-0.6B con thinking (GPU 1). No usa `train`.
