@@ -58,6 +58,11 @@ STAGES: dict[str, dict[str, Any]] = {
 }
 DEFAULT_BATCH_SIZE = {TARGET_MODEL: 16, LLAMA_MODEL: 16, LARGE_MODEL: 8}
 FALLBACK_BATCH_SIZE = 16
+BACKENDS = ("hf", "vllm")
+# Con vLLM el lote del motor lo decide el motor; este valor solo fija la cohorte de
+# rollout.py (4 * batch_size trayectorias en vuelo), que debe ser grande para llenar la GPU.
+VLLM_BATCH_SIZE = 64
+VLLM_MAX_MODEL_LEN = 8192
 MAX_NEW_TOKENS_OFF = 768
 # Con 2.048, la exploracion corto 37 de 180 rollouts con thinking, sobre todo en medium y hard.
 MAX_NEW_TOKENS_THINKING = 4096
@@ -84,6 +89,32 @@ def build_dataset(split: str, n_per_cell: int, base_seed: int) -> list[Instance]
         if instance.split == split:
             by_cell[(instance.family, instance.difficulty)].append(instance)
     return [members[i] for i in range(n_per_cell) for members in by_cell.values()]
+
+
+def parse_shard(text: str) -> tuple[int, int]:
+    """'2/3' -> (2, 3): la parte 2 de 3, contando desde 1."""
+    try:
+        index, count = (int(part) for part in text.split("/"))
+    except ValueError:
+        raise SystemExit(f"--shard debe ser 'i/N' (por ejemplo 1/3), no {text!r}") from None
+    if count < 1 or not 1 <= index <= count:
+        raise SystemExit(f"--shard {text}: se exige 1 <= i <= N")
+    return index, count
+
+
+def shard_instances(instances: list[Instance], index: int, count: int) -> list[Instance]:
+    """La parte `index` de `count`, repartida celda por celda: cada celda
+    (familia, dificultad) aporta una fraccion pareja a cada parte, y las partes no se
+    solapan. `instances` viene intercalado por celda, asi que repartir por posicion
+    dejaria celdas enteras fuera de una parte."""
+    seen: dict[tuple[str, str], int] = defaultdict(int)
+    chosen = []
+    for instance in instances:
+        cell = (instance.family, instance.difficulty)
+        if seen[cell] % count == index - 1:
+            chosen.append(instance)
+        seen[cell] += 1
+    return chosen
 
 
 def dataset_fingerprint(instances: list[Instance]) -> str:
@@ -172,6 +203,12 @@ def environment() -> dict[str, Any]:
             info["gpu"] = torch.cuda.get_device_name(0)
     except ImportError:
         pass
+    try:
+        import vllm
+
+        info["vllm"] = vllm.__version__
+    except ImportError:
+        pass
     return info
 
 
@@ -227,7 +264,7 @@ def check_same_run(previous: dict[str, Any], manifest: dict[str, Any], out: Path
 
 def build_gen_config(args: argparse.Namespace, variant: dict[str, Any], batch_size: int) -> dict[str, Any]:
     default = MAX_NEW_TOKENS_THINKING if variant["thinking"] else MAX_NEW_TOKENS_OFF
-    return {
+    config = {
         "model": variant["label"],
         "model_id": variant["model"],
         "enable_thinking": variant["thinking"],
@@ -236,6 +273,11 @@ def build_gen_config(args: argparse.Namespace, variant: dict[str, Any], batch_si
         "seed": GENERATION_SEED,
         "batch_size": batch_size,
     }
+    if args.backend != "hf":
+        # Solo si no es HF: las carpetas anteriores no traen la clave y se siguen
+        # reanudando. Asi una carpeta hecha con HF rechaza reanudarse con vLLM.
+        config["backend"] = args.backend
+    return config
 
 
 def comparable_config(gen_config: dict[str, Any]) -> dict[str, Any]:
@@ -308,11 +350,36 @@ def quantization_kwargs(model: str) -> dict[str, Any]:
     return {"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
 
 
-def make_backend(variant: dict[str, Any], dry_run: bool, instances: list[Instance]) -> Any:
-    from inventory_harness.backends import HFBackend, ScriptedBackend
+def vllm_dtype(model: str) -> str:
+    """Precision para vLLM: float16 en la T4 (sin bfloat16 nativo), 'auto' donde se puede."""
+    import torch
+
+    dtype = choose_dtype(model)
+    return {torch.float16: "float16", torch.float32: "float32"}.get(dtype, "auto")
+
+
+def make_backend(
+    variant: dict[str, Any],
+    dry_run: bool,
+    instances: list[Instance],
+    backend: str = "hf",
+    vllm_options: dict[str, Any] | None = None,
+) -> Any:
+    from inventory_harness.backends import HFBackend, ScriptedBackend, VLLMBackend
 
     if dry_run:
         return ScriptedBackend(scripted_policy(instances), name=variant["label"])
+    if backend == "vllm":
+        options = dict(vllm_options or {})
+        if not options.get("tensor_parallel_size"):
+            import torch
+
+            # El 8B no cabe en una T4: se reparte entre todas las GPU. Los modelos chicos, en una.
+            big = variant["model"] in QUANTIZE_BELOW_GIB
+            options["tensor_parallel_size"] = torch.cuda.device_count() if big else 1
+        return VLLMBackend(
+            variant["model"], name=variant["label"], dtype=vllm_dtype(variant["model"]), **options
+        )
     return HFBackend(
         variant["model"],
         name=variant["label"],
@@ -426,6 +493,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--thinking", choices=("off", "on", "both"), default="off")
     parser.add_argument("--limit", type=int, help="humo: solo las primeras N instancias, intercaladas por celda")
     parser.add_argument("--dry-run", action="store_true", help="usa ScriptedBackend, sin GPU")
+    parser.add_argument("--backend", choices=BACKENDS, default="hf",
+                        help="hf (transformers, por omision) o vllm (batching continuo, mucho mas rapido)")
+    parser.add_argument("--tensor-parallel-size", type=int, default=0,
+                        help="solo vllm: GPU por modelo; 0 = todas para Qwen3-8B y 1 para los demas")
+    parser.add_argument("--max-model-len", type=int, default=VLLM_MAX_MODEL_LEN,
+                        help="solo vllm: prompt + generacion maximos; acota la memoria del KV cache")
+    parser.add_argument("--shard", help="i/N: corre solo la parte i de N de las instancias "
+                        "(para repartir una corrida entre sesiones o personas; usa un --out por parte)")
     parser.add_argument("--only", type=Path,
                         help="JSON de scripts/pending_prompts.py: solo esos pares (instancia, condicion)")
     return parser.parse_args(argv)
@@ -459,7 +534,11 @@ def main(argv: list[str] | None = None) -> int:
         "base_seed": stage["base_seed"],
         "fingerprint": dataset_fingerprint(instances),
     }
-    selected = instances[: args.limit] if args.limit else instances
+    # El manifest guarda la huella del dataset completo: asi, partes distintas de una misma
+    # corrida son compatibles entre si y build_training_data las junta sin problema.
+    shard = parse_shard(args.shard) if args.shard else None
+    selected = shard_instances(instances, *shard) if shard else instances
+    selected = selected[: args.limit] if args.limit else selected
     allowed = load_only(args.only, instances) if args.only else None
     variants, notes = expand_variants(list(args.models), args.thinking)
     for note in notes:
@@ -471,6 +550,8 @@ def main(argv: list[str] | None = None) -> int:
         "dataset": dataset,
         "n_samples": n_samples,
         "limit": args.limit,
+        "shard": args.shard,
+        "backend": args.backend,
         "conditions": list(args.conditions),
         # Solo la ultima invocacion; las claves de cada rollout dicen que se corrio.
         "only": None if allowed is None else {
@@ -503,7 +584,12 @@ def main(argv: list[str] | None = None) -> int:
     failures = 0
     for variant in variants:
         label = variant["label"]
-        batch_size = args.batch_size or DEFAULT_BATCH_SIZE.get(variant["model"], FALLBACK_BATCH_SIZE)
+        default_batch = (
+            VLLM_BATCH_SIZE
+            if args.backend == "vllm"
+            else DEFAULT_BATCH_SIZE.get(variant["model"], FALLBACK_BATCH_SIZE)
+        )
+        batch_size = args.batch_size or default_batch
         gen_config = build_gen_config(args, variant, batch_size)
         known = manifest["gen_configs"].get(label)
         if known and comparable_config(known) != comparable_config(gen_config):
@@ -523,7 +609,14 @@ def main(argv: list[str] | None = None) -> int:
 
         path = rollouts_path(out, label)
         try:
-            backend = make_backend(variant, args.dry_run, selected)
+            if args.backend == "hf":
+                backend = make_backend(variant, args.dry_run, selected)
+            else:
+                backend = make_backend(
+                    variant, args.dry_run, selected, args.backend,
+                    {"tensor_parallel_size": args.tensor_parallel_size,
+                     "max_model_len": args.max_model_len},
+                )
         except Exception as exc:  # Modelo restringido, sin red, version incompatible...
             state.update({"estado": "no_cargo", "error": f"{type(exc).__name__}: {str(exc)[:300]}"})
             print(f"[{label}] no cargo y se salta: {state['error']}", flush=True)
