@@ -1,0 +1,1702 @@
+{
+  "k": 1,
+  "carpeta": "/kaggle/working/evaluacion_grpo_pass1/base",
+  "archivos": [
+    "rollouts_Qwen_Qwen3-1.7B+think.jsonl"
+  ],
+  "problemas_de_carga": {
+    "linea_final_truncada": 0,
+    "lineas_corruptas": 0,
+    "filas_sin_campos_requeridos": 0,
+    "duplicados_descartados": 0
+  },
+  "manifest": {
+    "stage": "eval_final",
+    "dry_run": false,
+    "dataset": {
+      "split": "eval",
+      "n_per_cell": 10,
+      "base_seed": 2026,
+      "fingerprint": "efb77852b9c86edc5c478be0de30fa11515d288e272a6cf09f624c3bd0453e5b"
+    },
+    "n_samples": 1,
+    "limit": null,
+    "conditions": [
+      "visible"
+    ],
+    "only": null,
+    "seeds": {
+      "dataset": 2026,
+      "generation": 2026
+    },
+    "entorno": {
+      "python": "3.13.16",
+      "plataforma": "Linux-6.18.55+-x86_64-with-glibc2.39",
+      "torch": "2.11.0+cu130",
+      "transformers": "5.24.0",
+      "gpu": "Tesla T4"
+    },
+    "code_hash": "9b6422ea39f9397c",
+    "git_commit": null,
+    "created_at": "2026-11-24T21:57:05+00:00",
+    "gen_configs": {
+      "Qwen/Qwen3-1.7B+think": {
+        "model": "Qwen/Qwen3-1.7B+think",
+        "model_id": "Qwen/Qwen3-1.7B",
+        "enable_thinking": true,
+        "max_new_tokens": 4096,
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.95,
+        "top_k": 50,
+        "repetition_penalty": 1.0,
+        "seed": 2026,
+        "batch_size": 8
+      }
+    },
+    "modelos": {
+      "Qwen/Qwen3-1.7B+think": {
+        "estado": "completo",
+        "error": null,
+        "esperados": 90,
+        "hechos": 90,
+        "segundos_por_rollout": 17.273,
+        "errores_internos": 0
+      }
+    },
+    "notas": [],
+    "updated_at": "2026-11-24T22:23:17+00:00"
+  },
+  "aviso_baselines": null,
+  "grupos": [
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 10,
+        "n": 10,
+        "tasa": 1.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 10,
+        "n": 10,
+        "tasa": 1.0,
+        "ic95": [
+          0.7224672001371107,
+          1.0
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 10,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 5013.0,
+        "tokens_por_muestra": 501.3,
+        "segundos": 161.4409,
+        "segundos_por_muestra": 16.14409
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 10,
+        "n": 10,
+        "tasa": 1.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 10,
+        "n": 10,
+        "tasa": 1.0,
+        "ic95": [
+          0.7224672001371107,
+          1.0
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 10,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 9117.0,
+        "tokens_por_muestra": 911.7,
+        "segundos": 144.4631,
+        "segundos_por_muestra": 14.44631
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 4,
+        "n": 10,
+        "tasa": 0.4
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 4,
+        "n": 10,
+        "tasa": 0.4,
+        "ic95": [
+          0.16818032970623614,
+          0.6873262302663417
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 3,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 4,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 4,
+        "wrong_value": 3,
+        "invalid_value": 2,
+        "no_answer_block": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 12644.0,
+        "tokens_por_muestra": 1264.4,
+        "segundos": 165.68869999999998,
+        "segundos_por_muestra": 16.568869999999997
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 7,
+        "n": 10,
+        "tasa": 0.7
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 7,
+        "n": 10,
+        "tasa": 0.7,
+        "ic95": [
+          0.39677814746114537,
+          0.8922087325936989
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 7,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 7,
+        "wrong_value": 3
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 11370.0,
+        "tokens_por_muestra": 1137.0,
+        "segundos": 140.5472,
+        "segundos_por_muestra": 14.05472
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "medium",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 9,
+        "n": 10,
+        "tasa": 0.9
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 9,
+        "n": 10,
+        "tasa": 0.9,
+        "ic95": [
+          0.5958499732047615,
+          0.9821237869049271
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 9,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 9,
+        "wrong_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 12730.0,
+        "tokens_por_muestra": 1273.0,
+        "segundos": 151.9374,
+        "segundos_por_muestra": 15.19374
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 6,
+        "n": 10,
+        "tasa": 0.6
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 6,
+        "n": 10,
+        "tasa": 0.6,
+        "ic95": [
+          0.31267376973365824,
+          0.8318196702937638
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 6,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 6,
+        "wrong_value": 4
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 19632.0,
+        "tokens_por_muestra": 1963.2,
+        "segundos": 262.5878,
+        "segundos_por_muestra": 26.25878
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 7,
+        "n": 10,
+        "tasa": 0.7
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 7,
+        "n": 10,
+        "tasa": 0.7,
+        "ic95": [
+          0.39677814746114537,
+          0.8922087325936989
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 7,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 7,
+        "wrong_value": 3
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 7073.0,
+        "tokens_por_muestra": 707.3,
+        "segundos": 90.9958,
+        "segundos_por_muestra": 9.09958
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.2775327998628892
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 10
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 18536.0,
+        "tokens_por_muestra": 1853.6,
+        "segundos": 174.0779,
+        "segundos_por_muestra": 17.40779
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.2775327998628892
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 2,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 8,
+        "no_answer_block": 2
+      },
+      "tope_de_tokens": {
+        "si": 2,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 27133.0,
+        "tokens_por_muestra": 2713.3,
+        "segundos": 262.5878,
+        "segundos_por_muestra": 26.25878
+      }
+    }
+  ],
+  "por_modelo_condicion": [
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "n_instancias": 90,
+      "n_muestras": 90,
+      "tasa_media_muestra": {
+        "aciertos": 53,
+        "n": 90,
+        "tasa": 0.5888888888888889
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 53,
+        "n": 90,
+        "tasa": 0.5888888888888889,
+        "ic95": [
+          0.48563237347145555,
+          0.684867959761553
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 5,
+        "n": 90
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 90
+      },
+      "correct_final_answer": {
+        "si": 53,
+        "n": 90
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 90
+      },
+      "error_types": {
+        "ok": 53,
+        "wrong_value": 32,
+        "no_answer_block": 3,
+        "invalid_value": 2
+      },
+      "tope_de_tokens": {
+        "si": 2,
+        "n": 90
+      },
+      "uso": {
+        "tokens_nuevos": 123248.0,
+        "tokens_por_muestra": 1369.4222222222222,
+        "segundos": 1554.3266,
+        "segundos_por_muestra": 17.270295555555556
+      }
+    }
+  ],
+  "clasificacion": [
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "cerca_de_100",
+      "certeza": "tentativa",
+      "ancho_ic_max": 0.27753279986288926,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "easy",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "easy",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_informada": "supera"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "cerca_de_100",
+      "certeza": "tentativa",
+      "ancho_ic_max": 0.27753279986288926,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "medium",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "medium",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_informada": "supera"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5191459005601056,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "hard",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "hard",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.49543058513255356,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "easy",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "primera_sucursal_contada",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_informada": "supera"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "cerca_de_100",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.38627381370016556,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "medium",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "primera_sucursal_contada",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "medium",
+        "aciertos": 2,
+        "n": 10,
+        "tasa": 0.2
+      },
+      "frente_a_informada": "supera"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5191459005601056,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "hard",
+        "aciertos": 1,
+        "n": 10,
+        "tasa": 0.1
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "sucursal_azar_contada",
+        "clase": "azar",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_informada": "supera"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.49543058513255356,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_informada": "supera"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "cerca_de_0",
+      "certeza": "tentativa",
+      "ancho_ic_max": 0.2775327998628892,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "medium",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_trivial": "por_debajo",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "medium",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_informada": "por_debajo"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "tentativa",
+      "ancho_ic_max": 0.2775327998628892,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_trivial": "por_debajo",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_informada": "por_debajo"
+    }
+  ],
+  "clasificacion_entre_condiciones": [
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    }
+  ],
+  "baselines": [
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 5,
+      "n": 10,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 5,
+      "n": 10,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 5,
+      "n": 10,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 1,
+      "n": 10,
+      "tasa": 0.1
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "no_descontar_stock",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "no_descontar_stock",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "no_descontar_stock",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "nunca_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "nunca_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "nunca_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "primera_sucursal",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "primera_sucursal",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 1,
+      "n": 10,
+      "tasa": 0.1
+    },
+    {
+      "baseline": "primera_sucursal",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "primera_sucursal_contada",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "primera_sucursal_contada",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 2,
+      "n": 10,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "primera_sucursal_contada",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 10,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "siempre_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 5,
+      "n": 10,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "siempre_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 5,
+      "n": 10,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "siempre_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 5,
+      "n": 10,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "sucursal_azar",
+      "clase": "azar",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "sucursal_azar",
+      "clase": "azar",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "sucursal_azar",
+      "clase": "azar",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "sucursal_azar_contada",
+      "clase": "azar",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 2,
+      "n": 10,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "sucursal_azar_contada",
+      "clase": "azar",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "sucursal_azar_contada",
+      "clase": "azar",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 10,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "todo_atendido",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "todo_atendido",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "todo_atendido",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    }
+  ],
+  "umbrales": {
+    "cerca_de_100": 0.9,
+    "cerca_de_0": 0.1,
+    "ganancia_apreciable": 0.15,
+    "visible_bueno": 0.7,
+    "brecha_condiciones": 0.3,
+    "mal_en_ambas": 0.3,
+    "ic_muy_ancho": 0.3
+  },
+  "n_rollouts": 90,
+  "n_muestra_errores": 24
+}

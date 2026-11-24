@@ -1,0 +1,22 @@
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]
+Loading weights:   0%|          | 1/311 [00:00<04:53,  1.06it/s]
+Loading weights:   1%|          | 2/311 [00:01<02:25,  2.12it/s]
+Loading weights:  44%|████▍     | 137/311 [00:01<00:00, 204.59it/s]
+Loading weights:  63%|██████▎   | 197/311 [00:01<00:00, 234.13it/s]
+Loading weights:  79%|███████▉  | 245/311 [00:01<00:00, 242.89it/s]
+Loading weights:  92%|█████████▏| 286/311 [00:01<00:00, 241.06it/s]
+Loading weights: 100%|██████████| 311/311 [00:01<00:00, 169.40it/s]
+/usr/local/lib/python3.13/dist-packages/peft/import_utils.py:195: UserWarning: Found an incompatible version of torchao. Found version 0.10.0, but only versions above 0.16.0 are supported. torchao support in PEFT is disabled; if you want to use a torchao-quantized model with PEFT, please upgrade torchao.
+  warnings.warn(
+[Qwen/Qwen3-1.7B+think+lora:grpo_s2027|visible] 25/32 muestras, 0.06 muestras/s, ETA 2.1 min, errores 0
+[Qwen/Qwen3-1.7B+think+lora:grpo_s2027|visible] 32/32 muestras, 0.07 muestras/s, ETA 0.0 min, errores 0
+[Qwen/Qwen3-1.7B+think+lora:grpo_s2027] TOTAL 32/90 rollouts; 14.18 s/rollout; faltan ~14 min
+[Qwen/Qwen3-1.7B+think+lora:grpo_s2027|visible] 25/32 muestras, 0.04 muestras/s, ETA 3.0 min, errores 0
+[Qwen/Qwen3-1.7B+think+lora:grpo_s2027|visible] 32/32 muestras, 0.05 muestras/s, ETA 0.0 min, errores 0
+[Qwen/Qwen3-1.7B+think+lora:grpo_s2027] TOTAL 64/90 rollouts; 17.23 s/rollout; faltan ~7 min
+[Qwen/Qwen3-1.7B+think+lora:grpo_s2027|visible] 25/26 muestras, 0.04 muestras/s, ETA 0.4 min, errores 0
+[Qwen/Qwen3-1.7B+think+lora:grpo_s2027|visible] 26/26 muestras, 0.04 muestras/s, ETA 0.0 min, errores 0
+[Qwen/Qwen3-1.7B+think+lora:grpo_s2027] TOTAL 90/90 rollouts; 18.75 s/rollout; faltan ~0 min
+Salida en /kaggle/working/evaluacion_grpo_pass1/grpo_s2027

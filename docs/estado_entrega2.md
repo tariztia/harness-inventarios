@@ -6,6 +6,8 @@ La Entrega 2 pide una implementación inicial del trabajo propuesto, la línea b
 
 **Actualización del 23 de noviembre.** El piloto de GRPO en Kaggle terminó con dos semillas (42 y 45 pasos). Ya están disponibles las curvas y los adaptadores LoRA. Queda medir ambos adaptadores en `eval` para estimar la mejora del modelo. [Resultados y cómo continuar](../results/grpo_kaggle/README.md)
 
+**Actualización del 24 de noviembre.** Los adaptadores se midieron en `eval` (condición `visible`, 1 muestra, mismas 90 instancias): pass@1 de 53/90 en el base reevaluado a 69/90 (semilla 2026) y 67/90 (semilla 2027); hard, no entrenado, de 10/30 a 16/30. Falta pass@5. Resultados en `results/grpo_kaggle/eval_pass1`; borrador del informe en [informe_avance_E2.docx](informe_avance_E2.docx).
+
 ## Ya hecho
 
 **Del Desafío** (en `main`, informe en `docs/informe.md`):

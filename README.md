@@ -28,7 +28,7 @@ Integrantes: Tomás Ariztía, Arturo Herreros, Rodrigo Meza, Matías Retamales.
 | Hito | Fecha | Estado |
 |---|---|---|
 | Entrega 1: propuesta | 11 nov | [docs/propuesta_proyecto.md](docs/propuesta_proyecto.md) |
-| Entrega 2: avance con línea base y primeras curvas | 25 nov | Piloto GRPO con dos semillas y curvas de recompensa. Estado en [docs/estado_entrega2.md](docs/estado_entrega2.md) |
+| Entrega 2: avance con línea base y primeras curvas | 25 nov | Piloto GRPO con dos semillas, curvas y evaluación en `eval`. Borrador del informe en [docs/informe_avance_E2.docx](docs/informe_avance_E2.docx); estado en [docs/estado_entrega2.md](docs/estado_entrega2.md) |
 | Entrega 3: paper, poster y video | 9 dic | Pendiente |
 
 | Camino | Estado |
@@ -36,7 +36,7 @@ Integrantes: Tomás Ariztía, Arturo Herreros, Rodrigo Meza, Matías Retamales.
 | 1. Modelo base | Medido (línea base) |
 | 2. Solo SFT | Script listo; sin correr en GPU |
 | 3. SFT seguido de GRPO | Script listo; sin correr |
-| 4. Solo GRPO | Piloto en Kaggle con dos semillas ([resultados](results/grpo_kaggle/README.md)); falta medirlo en `eval` |
+| 4. Solo GRPO | Piloto con dos semillas medido en `eval`: pass@1 de 53/90 (base) a 69/90 y 67/90 ([resultados](results/grpo_kaggle/README.md)); falta pass@5 |
 | 5. DPO | Script listo; sin correr en GPU |
 
 ## Línea base de Qwen3-1.7B
@@ -125,9 +125,23 @@ Qwen3-1.7B desde el modelo base, en `visible` con easy y medium, 2 problemas por
 Lectura:
 
 - El entorno da señal: cerca de la mitad de los grupos mezclan aciertos y errores.
-- La curva es ruidosa, porque cada paso usa solo 2 problemas, y son tasas sobre `train`. Si el modelo mejoró solo se sabrá midiendo los adaptadores en `eval` (`notebooks/evaluar_grpo_kaggle.ipynb`).
+- La curva es ruidosa, porque cada paso usa solo 2 problemas, y son tasas sobre `train`; la mejora se mide aparte, en `eval` (abajo).
 - La recompensa ya parte en 75–80 % en easy y medium, así que muchos grupos aciertan las 8 respuestas y no aportan gradiente.
 - `train_grpo.py` no fija `loss_type`, así que TRL 1.18.2 usó `"dapo"`, y `beta=0` (sin KL). Hay que fijarlo explícitamente antes de las corridas comparables.
+
+**Evaluación en `eval`** (`notebooks/evaluar_grpo_kaggle.ipynb`, resultados en `results/grpo_kaggle/eval_pass1`). Mismas 90 instancias `visible` de la línea base (misma huella), 1 muestra por instancia, 4.096 tokens. El base se volvió a correr en la misma sesión para comparar con el mismo protocolo.
+
+| Modelo | Easy | Medium | Hard (no entrenado) | pass@1 |
+|---|---|---|---|---|
+| Base (reevaluado) | 24/30 | 19/30 | 10/30 | 53/90 (59 %; IC95 49–68) |
+| GRPO semilla 2026 | 30/30 | 23/30 | 16/30 | 69/90 (77 %; IC95 67–84) |
+| GRPO semilla 2027 | 30/30 | 21/30 | 16/30 | 67/90 (74 %; IC95 65–82) |
+
+- Pareado por instancia: la semilla 2026 resuelve 18 que el base fallaba y pierde 2 (McNemar exacto, p = 0,0004); la 2027, 18 y 4 (p = 0,004). 12 las resuelven ambas.
+- Hard sube de 10 a 16 de 30 en ambas semillas sin haberlo entrenado (disponibilidad y selección). Composición hard sigue en 0/10 en los tres modelos.
+- La semilla 2027 llega al tope de 4.096 tokens en 13 de 90 respuestas (el base en 2, la 2026 en 3), y 12 de ellas fallan solo por no cerrar el bloque de respuesta.
+- El base reevaluado da 53/90 frente a 58/90 de la línea base: dentro del ruido de muestreo (los IC se solapan).
+- Falta pass@5 (`MUESTRAS = 5` en el cuaderno) para saber si GRPO amplía lo que el modelo resuelve o solo lo hace más consistente. Tampoco se midió `tools`.
 
 Los adaptadores están en `results/grpo_kaggle/resultados_grpo.zip`, con Git LFS: `git lfs install && git lfs pull`.
 
@@ -257,7 +271,7 @@ results/
   kaggle_qwen17b/              línea base y trazas del objetivo
   kaggle_otros_modelos/        línea base de los otros modelos
   kaggle_qwen8b/               trazas del profesor y datos derivados
-  grpo_kaggle/                 piloto GRPO: curvas, métricas y adaptadores
+  grpo_kaggle/                 piloto GRPO: curvas, métricas, adaptadores y evaluación en eval
 docs/                          ver la sección siguiente
 docs/propuesta/                enunciados del Desafío y del Proyecto, y propuestas del Desafío
 ```
@@ -268,6 +282,7 @@ docs/propuesta/                enunciados del Desafío y del Proyecto, y propues
 |---|---|
 | [docs/informe.md](docs/informe.md), [docs/informe_v2.md](docs/informe_v2.md) | Informe del Desafío y su revisión |
 | [docs/propuesta_proyecto.md](docs/propuesta_proyecto.md) | Propuesta del Proyecto: caminos, diseño experimental y plan |
+| [docs/informe_avance_E2.docx](docs/informe_avance_E2.docx) | Borrador del informe de avance (Entrega 2) |
 | [docs/estado_entrega2.md](docs/estado_entrega2.md) | Estado y plan hasta la entrega final |
 | [docs/guia_entrenamiento.md](docs/guia_entrenamiento.md) | Cómo entrenar y evaluar cada camino |
 | [docs/auditoria_tool_calling.md](docs/auditoria_tool_calling.md) | Formato de herramientas en texto o nativo: análisis y recomendación |
@@ -279,7 +294,7 @@ docs/propuesta/                enunciados del Desafío y del Proyecto, y propues
 
 El plan completo está en [docs/estado_entrega2.md](docs/estado_entrega2.md) y en la sección 5 de [docs/propuesta_proyecto.md](docs/propuesta_proyecto.md). Lo inmediato:
 
-1. Medir los adaptadores del piloto GRPO en `eval` con el mismo protocolo de la línea base.
+1. pass@5 de los adaptadores del piloto GRPO en `eval` (`MUESTRAS = 5` en `notebooks/evaluar_grpo_kaggle.ipynb`).
 2. Fijar `loss_type` en `train_grpo.py` antes de las corridas comparables.
 3. Correr SFT (con los datos de vLLM), DPO y SFT seguido de GRPO, y fijar el presupuesto de cómputo comparable entre caminos.
 4. Decidir el formato de `tools` (texto o nativo), porque afecta a las 2.138 trazas de `tools`.

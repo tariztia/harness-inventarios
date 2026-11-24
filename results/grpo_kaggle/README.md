@@ -2,7 +2,7 @@
 
 ## Evaluación del piloto
 
-**El piloto entregó las curvas de recompensa solicitadas para la Entrega 2.** Las dos corridas terminaron con código 0, produjeron curvas de recompensa y mostraron que el verificador entrega señal a GRPO. La recompensa media subió del primer al último tercio en ambas semillas. El aumento fue más claro en la semilla 2026. La mejora en preguntas nuevas sigue pendiente de evaluación.
+**El piloto entregó las curvas de recompensa solicitadas para la Entrega 2.** Las dos corridas terminaron con código 0, produjeron curvas de recompensa y mostraron que el verificador entrega señal a GRPO. La recompensa media subió del primer al último tercio en ambas semillas. El aumento fue más claro en la semilla 2026. Medidos sobre `eval`, los dos adaptadores mejoran al modelo base (pass@1 de 53/90 a 69/90 y 67/90); el detalle está en [Evaluación en eval](#evaluación-en-eval).
 
 ## Configuración
 
@@ -42,17 +42,34 @@ Para medir cuánto mejoró el modelo en casos nuevos, comparen al Qwen original 
 
 La corrida usó datos visibles. Para medir un efecto sobre el uso de herramientas haría falta una evaluación específica en esa condición. Las métricas disponibles tampoco permiten determinar si hubo casos de explotación del verificador. Eso requiere revisar muestras de respuestas premiadas.
 
+## Evaluación en eval
+
+Corrida con [el notebook de evaluación](../../notebooks/evaluar_grpo_kaggle.ipynb) el 24 de noviembre; los rollouts, informes y manifiestos están en [eval_pass1/](eval_pass1/resumen.md). Usa las mismas 90 instancias `visible` de la línea base (misma huella del conjunto), una muestra por instancia, temperatura 0,7 y 4.096 tokens. El modelo base se volvió a correr en la misma sesión.
+
+| Modelo | Easy | Medium | Hard (no entrenado) | pass@1 |
+|---|---:|---:|---:|---:|
+| Base (reevaluado) | 24/30 | 19/30 | 10/30 | 53/90 (59 %; IC95 49–68) |
+| GRPO semilla 2026 | 30/30 | 23/30 | 16/30 | 69/90 (77 %; IC95 67–84) |
+| GRPO semilla 2027 | 30/30 | 21/30 | 16/30 | 67/90 (74 %; IC95 65–82) |
+
+**La mejora se sostiene instancia por instancia.** La semilla 2026 resuelve 18 instancias que el base fallaba y pierde 2 (McNemar exacto, p = 0,0004). La semilla 2027 resuelve 18 y pierde 4 (p = 0,004). Doce instancias las resuelven ambas semillas y no el base.
+
+**Hard, que el entrenamiento no vio, sube de 10/30 a 16/30 en ambas semillas.** La ganancia está en disponibilidad hard (4 → 9 y 8 de 10) y selección hard (6 → 7 y 8). Composición hard sigue en 0/10 en los tres modelos. Composición medium pasa de 0 a 5 y 3 de 10.
+
+**La semilla 2027 razona más largo.** Promedia 1.607 tokens por respuesta, frente a 1.369 del base y 1.316 de la semilla 2026. 13 de sus 90 respuestas llegaron al tope de 4.096 tokens, y 12 fallaron solo por no cerrar el bloque de respuesta. Los errores de cálculo (`wrong_value`) bajan de 32 en el base a 17 y 10.
+
+El base reevaluado obtuvo 53/90, frente a 58/90 en la línea base; los intervalos se solapan, así que la diferencia cabe en el ruido de muestreo. Con una muestra por instancia no hay pass@5: falta medir si GRPO amplía lo que el modelo puede resolver o solo lo hace más consistente. La condición `tools` no se evaluó.
+
 ## Cómo continuar desde el repositorio
 
 [Notebook de entrenamiento](../../notebooks/grpo_curva_kaggle.ipynb) · [Notebook ejecutado](qwen-grpo.ipynb) · [Log de Kaggle](qwen-grpo.log) · [Métricas por paso](metricas_por_paso.json)
 
-El [ZIP original de Kaggle](resultados_grpo.zip) se guarda con Git LFS. Contiene los pesos LoRA de las semillas 2026 y 2027, las muestras de respuestas, los manifiestos y los registros de entrenamiento. Para traerlo en esta rama, instala Git LFS y ejecuta:
+El [ZIP original de Kaggle](resultados_grpo.zip) se guarda con Git LFS. Contiene los pesos LoRA de las semillas 2026 y 2027, las muestras de respuestas, los manifiestos y los registros de entrenamiento. Para traerlo, instala Git LFS y ejecuta:
 
 ```bash
 git lfs install
-git switch entrega-2
 git pull --ff-only
 git lfs pull
 ```
 
-Para medir los adaptadores, abre [el notebook de evaluación](../../notebooks/evaluar_grpo_kaggle.ipynb) en Kaggle y agrega los dos ZIP como entrada: [código de la corrida](codigo_grpo_kaggle.zip) y [resultados con los adaptadores](resultados_grpo.zip). El notebook evalúa primero con un intento por pregunta. Se puede configurar para medir cinco intentos.
+Para volver a medir los adaptadores, abre [el notebook de evaluación](../../notebooks/evaluar_grpo_kaggle.ipynb) en Kaggle y agrega los dos ZIP como entrada: [código de la corrida](codigo_grpo_kaggle.zip) y [resultados con los adaptadores](resultados_grpo.zip). Con `MUESTRAS = 1` reproduce la evaluación de arriba; con `MUESTRAS = 5` agrega pass@5, que es lo que falta.
