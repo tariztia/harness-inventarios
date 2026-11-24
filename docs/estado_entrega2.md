@@ -4,6 +4,8 @@ Corte: sábado 21 de noviembre de 2026. Entrega 2: miércoles 25 de noviembre. E
 
 La Entrega 2 pide una implementación inicial del trabajo propuesto, la línea base del modelo antes de entrenar y las curvas de recompensa de los primeros entrenamientos.
 
+**Actualización del 23 de noviembre.** El piloto de GRPO en Kaggle terminó con dos semillas (42 y 45 pasos). Ya están disponibles las curvas y los adaptadores LoRA. Queda medir ambos adaptadores en `eval` para estimar la mejora del modelo. [Resultados y cómo continuar](../results/grpo_kaggle/README.md)
+
 ## Ya hecho
 
 **Del Desafío** (en `main`, informe en `docs/informe.md`):

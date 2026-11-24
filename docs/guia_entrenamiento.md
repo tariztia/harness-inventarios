@@ -116,8 +116,26 @@ Señales a vigilar (ver la sección 4.5 de la propuesta): respuestas casi idént
 
 1. Instalar y correr las pruebas, generar `data/train_extra.jsonl` (sección 2).
 2. Una corrida de tres pasos de cada script y anotar tiempos y memoria (sección 3).
-3. SFT completo (el más barato) y medirlo en `eval` (`--n-samples 1` primero).
-4. GRPO desde el modelo base en `visible`, con pocos pasos, para tener las primeras curvas de recompensa.
+3. **GRPO primero**, desde el modelo base en `visible` y con `--max-minutes` para acotarlo: de ahí salen las curvas de recompensa, que es lo que pide la Entrega 2 (el SFT y el DPO solo dan curvas de pérdida).
+4. SFT completo (el más barato) y medirlo en `eval` (`--n-samples 1` primero), en paralelo si hay otra GPU libre.
 5. Con esos tiempos, fijar el presupuesto y lanzar el resto.
 
 Los pasos 1 a 4 alcanzan para lo que pide la Entrega 2: implementación inicial, línea base y curvas de los primeros entrenamientos.
+
+## 8. Sin Peteroa: la curva de recompensa en Kaggle
+
+`notebooks/grpo_curva_kaggle.ipynb` entrena GRPO en las dos T4 de Kaggle, una semilla por GPU, y deja `curva_recompensa.png`, `curva_senal.png` y `resultados_grpo.zip`. Es un respaldo para tener curvas sin esperar al cluster.
+
+1. **Zip del código.** Desde la carpeta del repo, en la rama `entrega-2`: `python scripts/package_for_colab.py --out codigo_grpo_kaggle.zip`. No hacen falta los datos: los prompts de entrenamiento se generan dentro del notebook.
+2. **Dataset en Kaggle.** *Create > New Dataset*, sube ese zip y agrégalo como entrada del notebook.
+3. **Notebook.** *Create > New Notebook > File > Import Notebook*: `notebooks/grpo_curva_kaggle.ipynb`. *Add Input*: el dataset. *Settings*: **GPU T4 x2** e **Internet On**.
+4. *Save Version > Save & Run All (Commit)*, y cierra la página. Con `MINUTOS = 150` (el valor por omisión) la corrida dura unas 3 horas, que salen de la cuota semanal de 30.
+5. En *Output* están `curva_recompensa.png`, `curva_senal.png` y `resultados_grpo.zip`.
+
+**Cómo leer la curva.** `reward` es el promedio de las respuestas de cada paso. `frac_reward_zero_std` es la fracción de grupos en que todas las respuestas tienen la misma recompensa: si es cercana a 1, GRPO no tiene de dónde aprender. Con pocos pasos y pocos prompts por paso, la recompensa puede subir poco o con ruido; para la Entrega 2 importa si hay señal.
+
+**Precauciones.** `LARGO = 2048` puede cortar respuestas con thinking. La línea base en `eval` usó 4.096 tokens, y las curvas miden recompensa durante `train`. La T4 no tiene bf16, por lo que entrena en fp16. Si falta memoria, baja `POR_GPU` a 1. Una prueba con `MODELO = "Qwen/Qwen3-0.6B"` permite comprobar si el problema es el tamaño del modelo.
+
+## 9. Evaluar los adaptadores del piloto en Kaggle
+
+El [informe de la corrida](../results/grpo_kaggle/README.md) enlaza el ZIP original de Kaggle con los dos adaptadores. En el [notebook de evaluación](../notebooks/evaluar_grpo_kaggle.ipynb), agrega ese ZIP y el del código como entradas. Con `MUESTRAS = 1` mide pass@1 sobre las 90 instancias visibles de la línea base. Con `MUESTRAS = 5` mide también pass@5. El notebook vuelve a evaluar el modelo base en el mismo entorno para comparar los tres resultados.

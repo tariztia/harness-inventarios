@@ -309,3 +309,42 @@ def test_la_muestra_de_auditoria_solo_trae_aciertos_y_es_reproducible(tmp_path):
     assert not {r["instancia"] for r in first} & {"i0", "i3", "i6", "i9"}  # los que fallaron
     assert {r["condicion"] for r in first} == {"visible", "tools"}  # reparte entre celdas
     assert all(r["genuino"] == "" for r in first)
+
+
+# --- Curva de recompensa en Kaggle --------------------------------------------
+
+
+def test_el_cuaderno_de_kaggle_es_valido_y_su_codigo_compila():
+    notebook = json.loads((ROOT / "notebooks" / "grpo_curva_kaggle.ipynb").read_text(encoding="utf-8"))
+    assert notebook["nbformat"] == 4
+    code = [cell for cell in notebook["cells"] if cell["cell_type"] == "code"]
+    assert code
+    for cell in code:
+        assert not cell["outputs"] and cell["execution_count"] is None
+        compile("".join(cell["source"]), "celda", "exec")
+    text = "".join("".join(cell["source"]) for cell in notebook["cells"])
+    for piece in ("scripts/train_grpo.py", "--max-minutes", "CUDA_VISIBLE_DEVICES", "make_train_prompts.py",
+                  "transformers==5.24.0", "trl==1.18.2", "resultados_grpo.zip"):
+        assert piece in text, piece
+
+
+def test_train_grpo_acepta_el_limite_de_minutos():
+    import train_grpo
+
+    args = train_grpo.parse_args(["--out", "x", "--max-minutes", "150", "--difficulties", "easy", "medium"])
+    assert args.max_minutes == 150 and args.difficulties == ["easy", "medium"]
+    assert train_grpo.parse_args(["--out", "x"]).max_minutes is None
+
+
+def test_plot_training_lee_el_registro_paso_a_paso(tmp_path):
+    import plot_training
+
+    folder = tmp_path / "grpo"
+    folder.mkdir()
+    rows = [{"paso": step, "reward": step / 10, "frac_reward_zero_std": 0.5} for step in (1, 2, 3)]
+    (folder / "log.jsonl").write_text(chr(10).join(json.dumps(r) for r in rows), encoding="utf-8")
+    key, points = plot_training.series(folder, None)
+    assert key == "reward" and points == [(1.0, 0.1), (2.0, 0.2), (3.0, 0.3)]
+    # Si la corrida termino, manda train_log.json.
+    (folder / "train_log.json").write_text(json.dumps([{"step": 9, "reward": 0.9}]), encoding="utf-8")
+    assert plot_training.series(folder, None)[1] == [(9.0, 0.9)]

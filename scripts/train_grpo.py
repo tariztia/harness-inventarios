@@ -17,14 +17,19 @@ Los prompts salen de `scripts/make_train_prompts.py`: instancias nuevas de `trai
 ninguna de eval ni de test. Si --train-file no existe, se generan al vuelo con la misma semilla.
 
 Salida en --out: `adapter/`, `train_log.json` (recompensa, largo y perdida por paso),
+`log.jsonl` (lo mismo, pero se escribe paso a paso: sirve si la corrida se corta),
 `reward_errors.jsonl` (tipos de error acumulados), `completions.jsonl` (respuestas con su
 recompensa, para auditar trazas exitosas y buscar reward hacking) y `manifest.json`.
+
+Con --max-minutes el entrenamiento se detiene solo al cumplirse el tiempo y guarda el adaptador
+y los registros como si hubiera terminado: sirve para acotar una corrida en Kaggle.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -54,6 +59,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--beta", type=float, default=0.0, help="coeficiente de la penalizacion KL")
     parser.add_argument("--use-vllm", action="store_true", help="generar con vLLM (debe estar instalado)")
     parser.add_argument("--trace-every", type=int, default=4, help="guarda 1 de cada N respuestas en completions.jsonl")
+    parser.add_argument("--max-minutes", type=float,
+                        help="detiene el entrenamiento tras N minutos de entrenar (sin contar la carga del modelo) y guarda lo hecho")
     return parser.parse_args(argv)
 
 
@@ -117,14 +124,29 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     errors_path = args.out / "reward_errors.jsonl"
+    log_path = args.out / "log.jsonl"
     errors_path.parent.mkdir(parents=True, exist_ok=True)
+    started = time.time()
+    stopped_by_time: list[bool] = []
 
-    class ErrorLog(TrainerCallback):
-        """Despues de cada registro, deja los tipos de error acumulados de la recompensa."""
+    class StepLog(TrainerCallback):
+        """Despues de cada registro, deja las metricas del paso y los tipos de error acumulados."""
 
         def on_log(self, _args, state, _control, logs=None, **kwargs):
+            row = {"paso": state.global_step, "minutos": round((time.time() - started) / 60, 2), **(logs or {})}
+            with log_path.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(row, ensure_ascii=False, default=str) + chr(10))
             with errors_path.open("a", encoding="utf-8") as handle:
-                handle.write(json.dumps({"paso": state.global_step, **reward.summary()}, ensure_ascii=False) + "\n")
+                handle.write(json.dumps({"paso": state.global_step, **reward.summary()}, ensure_ascii=False) + chr(10))
+
+    class TimeLimit(TrainerCallback):
+        """Detiene el entrenamiento al cumplirse --max-minutes; el resto del script guarda como siempre."""
+
+        def on_step_end(self, _args, state, control, **kwargs):
+            if args.max_minutes and (time.time() - started) / 60 >= args.max_minutes and not stopped_by_time:
+                stopped_by_time.append(True)
+                control.should_training_stop = True
+                print(f"Se cumplieron {args.max_minutes} minutos: se detiene en el paso {state.global_step}.", flush=True)
 
     trainer = GRPOTrainer(
         model=model,
@@ -133,8 +155,9 @@ def main(argv: list[str] | None = None) -> int:
         train_dataset=dataset,
         processing_class=tokenizer,
         peft_config=None if args.init_adapter else common.lora_config(args),
-        callbacks=[ErrorLog()],
+        callbacks=[StepLog(), TimeLimit()],
     )
+    started = time.time()  # el tiempo cuenta desde aqui, sin la carga del modelo
     trainer.train()
 
     trainer.model.save_pretrained(str(args.out / "adapter"))
@@ -144,6 +167,7 @@ def main(argv: list[str] | None = None) -> int:
         "datos": {"prompts": len(rows), "archivo": str(args.train_file), "instancias": len(instances)},
         "recompensa": reward.summary(),
         "pasos": trainer.state.global_step,
+        "detenido_por_tiempo": bool(stopped_by_time),
     })
     print(f"Adaptador guardado en {args.out / 'adapter'}", flush=True)
     print(f"Recompensa: {reward.summary()}", flush=True)

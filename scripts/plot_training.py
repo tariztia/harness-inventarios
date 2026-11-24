@@ -18,13 +18,25 @@ import sys
 from pathlib import Path
 
 
+def read_history(folder: Path) -> list[dict]:
+    """train_log.json, o log.jsonl (GRPO lo escribe paso a paso) si la corrida se corto antes de terminar."""
+    final = folder / "train_log.json"
+    if final.exists():
+        return json.loads(final.read_text(encoding="utf-8"))
+    partial = folder / "log.jsonl"
+    if partial.exists():
+        rows = [json.loads(line) for line in partial.read_text(encoding="utf-8").splitlines() if line.strip()]
+        return [{**row, "step": row.get("paso", index + 1)} for index, row in enumerate(rows)]
+    raise SystemExit(f"{folder}: no hay train_log.json ni log.jsonl")
+
+
 def series(folder: Path, metric: str | None) -> tuple[str, list[tuple[float, float]]]:
-    history = json.loads((folder / "train_log.json").read_text(encoding="utf-8"))
+    history = read_history(folder)
     kind = "grpo" if any("reward" in row for row in history) else "otro"
     key = metric or ("reward" if kind == "grpo" else "loss")
     points = [(row.get("step", index + 1), row[key]) for index, row in enumerate(history) if key in row]
     if not points:
-        raise SystemExit(f"{folder}: no hay valores de `{key}` en train_log.json")
+        raise SystemExit(f"{folder}: no hay valores de `{key}` en el registro de entrenamiento")
     return key, [(float(x), float(y)) for x, y in points]
 
 

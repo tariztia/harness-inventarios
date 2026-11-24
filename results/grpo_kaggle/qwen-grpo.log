@@ -1,0 +1,186 @@
+7.0s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+7.0s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+7.0s 3 0.00s - to python to disable frozen modules.
+7.0s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+7.6s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+7.6s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+7.6s 7 0.00s - to python to disable frozen modules.
+7.6s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+14.0s 9 GPU 0: Tesla T4 (14.6 GiB)
+14.0s 10 GPU 1: Tesla T4 (14.6 GiB)
+17.6s 11 Codigo desde /kaggle/input/datasets/matasretamalesiag/qwen-rpo
+38.1s 12 ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+38.1s 13 bigframes 2.51.0 requires google-cloud-bigquery-storage<3.0.0,>=2.30.0, which is not installed.
+38.1s 14 cudf-cu13 26.6.0 requires pyarrow<24,>=19.0.0, but you have pyarrow 26.0.1 which is incompatible.
+38.3s 15 ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+38.3s 16 bigframes 2.51.0 requires google-cloud-bigquery-storage<3.0.0,>=2.30.0, which is not installed.
+38.3s 17 cudf-cu13 26.6.0 requires pyarrow<24,>=19.0.0, but you have pyarrow 26.0.1 which is incompatible.
+38.3s 18 
+38.3s 19 ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+38.3s 20 bigframes 2.51.0 requires google-cloud-bigquery-storage<3.0.0,>=2.30.0, which is not installed.
+38.3s 21 cudf-cu13 26.6.0 requires pyarrow<24,>=19.0.0, but you have pyarrow 26.0.1 which is incompatible.
+38.4s 22 Modelo Qwen/Qwen3-1.7B; semillas [2026, 2027]; 150 min; grupo 8; 2 prompts por paso; largo 2048; niveles ['easy', 'medium']
+39.3s 23 360 instancias en /tmp/inventory_harness/data/train_extra.jsonl (semilla 5151); 0 repetidas de eval, test o el train del piloto.
+39.3s 24 availability|easy: 40
+39.3s 25 availability|hard: 40
+39.3s 26 availability|medium: 40
+39.3s 27 composition|easy: 40
+39.3s 28 composition|hard: 40
+39.3s 29 composition|medium: 40
+39.3s 30 selection|easy: 40
+39.3s 31 selection|hard: 40
+39.3s 32 selection|medium: 40
+39.5s 33 360 instancias en /tmp/inventory_harness/data/train_extra.jsonl (semilla 5151); 0 repetidas de eval, test o el train del piloto.
+39.5s 34 availability|easy: 40
+39.5s 35 availability|hard: 40
+39.5s 36 availability|medium: 40
+39.5s 37 composition|easy: 40
+39.5s 38 composition|hard: 40
+39.5s 39 composition|medium: 40
+39.5s 40 selection|easy: 40
+39.5s 41 selection|hard: 40
+39.5s 42 selection|medium: 40
+40.3s 43 Fetching 12 files:   0%|          | 0/12 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+40.5s 44 Fetching 12 files:  17%|█▋        | 2/12 [00:00<00:00, 16.51it/s]Fetching 12 files:   0%|          | 0/12 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+40.5s 45 Fetching 12 files:  17%|█▋        | 2/12 [00:00<00:00, 16.51it/s]
+40.5s 46 Fetching 12 files:   0%|          | 0/12 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+41.3s 47 Fetching 12 files:  17%|█▋        | 2/12 [00:00<00:00, 16.51it/s]Fetching 12 files:  83%|████████▎ | 10/12 [00:00<00:00, 11.85it/s]Fetching 12 files:  83%|████████▎ | 10/12 [00:00<00:00, 11.85it/s]
+60.5s 48 Fetching 12 files:  83%|████████▎ | 10/12 [00:00<00:00, 11.85it/s]Fetching 12 files:  92%|█████████▏| 11/12 [00:20<00:00, 11.85it/s]Fetching 12 files:  92%|█████████▏| 11/12 [00:20<00:00, 11.85it/s]
+63.0s 49 Fetching 12 files:  92%|█████████▏| 11/12 [00:20<00:00, 11.85it/s]Fetching 12 files: 100%|██████████| 12/12 [00:22<00:00,  2.62s/it]Fetching 12 files: 100%|██████████| 12/12 [00:22<00:00,  1.89s/it]
+63.2s 50 Fetching 12 files: 100%|██████████| 12/12 [00:22<00:00,  2.62s/it]Fetching 12 files: 100%|██████████| 12/12 [00:22<00:00,  1.89s/it]
+63.2s 51 
+63.2s 52 Fetching 12 files: 100%|██████████| 12/12 [00:22<00:00,  2.62s/it]Fetching 12 files: 100%|██████████| 12/12 [00:22<00:00,  1.89s/it]
+63.3s 53 Corrida con semilla 2026 en la GPU 0
+63.3s 54 Corrida con semilla 2027 en la GPU 1
+363.1s 55 [s2026] paso 1: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 1139 tok, cortadas 0% | 226 s/paso
+363.1s 56 [s2027] paso 1: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 1030 tok, cortadas 6% | 246 s/paso
+483.1s 57 [s2026] paso 2: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 738 tok, cortadas 0% | 153 s/paso
+543.1s 58 [s2027] paso 2: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 786 tok, cortadas 0% | 190 s/paso
+663.1s 59 ... 11 min desde el inicio; pasos: s2026=2, s2027=2
+723.2s 60 [s2027] paso 3: recompensa 0.75 (desv 0.45) | grupos sin senal 50% | largo 781 tok, cortadas 0% | 149 s/paso
+783.2s 61 [s2026] paso 3: recompensa 0.38 (desv 0.50) | grupos sin senal 0% | largo 1476 tok, cortadas 31% | 256 s/paso
+843.2s 62 [s2027] paso 4: recompensa 0.94 (desv 0.25) | grupos sin senal 50% | largo 609 tok, cortadas 0% | 111 s/paso
+1023.2s 63 [s2026] paso 4: recompensa 0.50 (desv 0.52) | grupos sin senal 0% | largo 1590 tok, cortadas 38% | 255 s/paso
+1023.2s 64 [s2027] paso 5: recompensa 0.81 (desv 0.40) | grupos sin senal 50% | largo 932 tok, cortadas 0% | 199 s/paso
+1143.2s 65 [s2026] paso 5: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 505 tok, cortadas 0% | 102 s/paso
+1263.2s 66 [s2027] paso 6: recompensa 0.75 (desv 0.45) | grupos sin senal 0% | largo 992 tok, cortadas 0% | 205 s/paso
+1263.2s 67 ... 21 min desde el inicio; pasos: s2026=5, s2027=6
+1323.2s 68 [s2027] paso 7: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 539 tok, cortadas 0% | 101 s/paso
+1383.2s 69 [s2026] paso 6: recompensa 0.31 (desv 0.48) | grupos sin senal 50% | largo 1378 tok, cortadas 44% | 258 s/paso
+1563.2s 70 [s2027] paso 8: recompensa 0.69 (desv 0.48) | grupos sin senal 0% | largo 1108 tok, cortadas 12% | 246 s/paso
+1623.2s 71 [s2026] paso 7: recompensa 0.62 (desv 0.50) | grupos sin senal 50% | largo 1008 tok, cortadas 0% | 218 s/paso
+1683.2s 72 [s2027] paso 9: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 734 tok, cortadas 0% | 125 s/paso
+1863.2s 73 [s2026] paso 8: recompensa 0.88 (desv 0.34) | grupos sin senal 0% | largo 876 tok, cortadas 6% | 249 s/paso
+1863.2s 74 ... 31 min desde el inicio; pasos: s2026=8, s2027=9
+1983.2s 75 [s2027] paso 10: recompensa 0.81 (desv 0.40) | grupos sin senal 0% | largo 1232 tok, cortadas 12% | 244 s/paso
+2103.2s 76 [s2026] paso 9: recompensa 0.94 (desv 0.25) | grupos sin senal 50% | largo 1059 tok, cortadas 0% | 245 s/paso
+2223.2s 77 [s2027] paso 11: recompensa 0.62 (desv 0.50) | grupos sin senal 0% | largo 928 tok, cortadas 6% | 242 s/paso
+2343.2s 78 [s2026] paso 10: recompensa 0.75 (desv 0.45) | grupos sin senal 0% | largo 695 tok, cortadas 0% | 204 s/paso
+2463.2s 79 [s2027] paso 12: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 1067 tok, cortadas 12% | 243 s/paso
+2463.2s 80 ... 41 min desde el inicio; pasos: s2026=10, s2027=12
+2583.2s 81 [s2026] paso 11: recompensa 0.12 (desv 0.34) | grupos sin senal 50% | largo 1560 tok, cortadas 38% | 255 s/paso
+2583.2s 82 [s2027] paso 13: recompensa 0.81 (desv 0.40) | grupos sin senal 0% | largo 723 tok, cortadas 0% | 137 s/paso
+2703.2s 83 [s2026] paso 12: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 669 tok, cortadas 0% | 114 s/paso
+2823.2s 84 [s2027] paso 14: recompensa 0.50 (desv 0.52) | grupos sin senal 100% | largo 1345 tok, cortadas 31% | 244 s/paso
+2943.2s 85 [s2026] paso 13: recompensa 0.31 (desv 0.48) | grupos sin senal 50% | largo 1098 tok, cortadas 6% | 248 s/paso
+3063.2s 86 [s2027] paso 15: recompensa 0.81 (desv 0.40) | grupos sin senal 50% | largo 1180 tok, cortadas 19% | 243 s/paso
+3063.2s 87 ... 51 min desde el inicio; pasos: s2026=13, s2027=15
+3183.2s 88 [s2026] paso 14: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 626 tok, cortadas 6% | 245 s/paso
+3243.2s 89 [s2027] paso 16: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 706 tok, cortadas 0% | 184 s/paso
+3423.2s 90 [s2026] paso 15: recompensa 0.94 (desv 0.25) | grupos sin senal 50% | largo 914 tok, cortadas 6% | 247 s/paso
+3543.2s 91 [s2027] paso 17: recompensa 0.38 (desv 0.50) | grupos sin senal 50% | largo 1540 tok, cortadas 50% | 254 s/paso
+3603.2s 92 [s2026] paso 16: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 619 tok, cortadas 0% | 147 s/paso
+3663.2s 93 ... 61 min desde el inicio; pasos: s2026=16, s2027=17
+3783.2s 94 [s2027] paso 18: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 1091 tok, cortadas 12% | 241 s/paso
+3843.2s 95 [s2026] paso 17: recompensa 0.56 (desv 0.51) | grupos sin senal 50% | largo 1221 tok, cortadas 25% | 250 s/paso
+4023.2s 96 [s2027] paso 19: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 1100 tok, cortadas 12% | 241 s/paso
+4083.2s 97 [s2026] paso 18: recompensa 0.56 (desv 0.51) | grupos sin senal 50% | largo 1169 tok, cortadas 19% | 253 s/paso
+4203.2s 98 [s2027] paso 20: recompensa 0.94 (desv 0.25) | grupos sin senal 50% | largo 1239 tok, cortadas 0% | 205 s/paso
+4263.2s 99 [s2026] paso 19: recompensa 0.75 (desv 0.45) | grupos sin senal 0% | largo 732 tok, cortadas 0% | 154 s/paso
+4263.2s 100 ... 71 min desde el inicio; pasos: s2026=19, s2027=20
+4503.3s 101 [s2026] paso 20: recompensa 0.50 (desv 0.52) | grupos sin senal 0% | largo 1308 tok, cortadas 12% | 251 s/paso
+4503.3s 102 [s2027] paso 21: recompensa 0.50 (desv 0.52) | grupos sin senal 100% | largo 1573 tok, cortadas 50% | 251 s/paso
+4683.3s 103 [s2026] paso 21: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 631 tok, cortadas 0% | 150 s/paso
+4743.3s 104 [s2027] paso 22: recompensa 0.69 (desv 0.48) | grupos sin senal 0% | largo 1181 tok, cortadas 12% | 245 s/paso
+4863.3s 105 [s2027] paso 23: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 902 tok, cortadas 0% | 152 s/paso
+4863.3s 106 ... 81 min desde el inicio; pasos: s2026=21, s2027=23
+4923.3s 107 [s2026] paso 22: recompensa 0.50 (desv 0.52) | grupos sin senal 0% | largo 1459 tok, cortadas 12% | 257 s/paso
+5043.3s 108 [s2026] paso 23: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 519 tok, cortadas 0% | 98 s/paso
+5163.3s 109 [s2027] paso 24: recompensa 0.50 (desv 0.52) | grupos sin senal 0% | largo 1417 tok, cortadas 31% | 250 s/paso
+5283.3s 110 [s2026] paso 24: recompensa 0.50 (desv 0.52) | grupos sin senal 0% | largo 1301 tok, cortadas 6% | 251 s/paso
+5403.3s 111 [s2026] paso 25: recompensa 0.94 (desv 0.25) | grupos sin senal 50% | largo 615 tok, cortadas 0% | 133 s/paso
+5403.3s 112 [s2027] paso 25: recompensa 0.38 (desv 0.50) | grupos sin senal 50% | largo 1273 tok, cortadas 44% | 248 s/paso
+5463.3s 113 ... 91 min desde el inicio; pasos: s2026=25, s2027=25
+5643.3s 114 [s2027] paso 26: recompensa 0.69 (desv 0.48) | grupos sin senal 50% | largo 1377 tok, cortadas 31% | 250 s/paso
+5703.3s 115 [s2026] paso 26: recompensa 0.50 (desv 0.52) | grupos sin senal 0% | largo 1509 tok, cortadas 50% | 255 s/paso
+5763.3s 116 [s2026] paso 27: recompensa 0.94 (desv 0.25) | grupos sin senal 50% | largo 618 tok, cortadas 0% | 107 s/paso
+5883.3s 117 [s2027] paso 27: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 918 tok, cortadas 6% | 244 s/paso
+6003.3s 118 [s2027] paso 28: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 596 tok, cortadas 0% | 104 s/paso
+6063.3s 119 [s2026] paso 28: recompensa 0.88 (desv 0.34) | grupos sin senal 0% | largo 1133 tok, cortadas 12% | 252 s/paso
+6063.3s 120 ... 101 min desde el inicio; pasos: s2026=28, s2027=28
+6183.3s 121 [s2027] paso 29: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 964 tok, cortadas 0% | 199 s/paso
+6243.3s 122 [s2026] paso 29: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 850 tok, cortadas 0% | 191 s/paso
+6363.3s 123 [s2026] paso 30: recompensa 0.94 (desv 0.25) | grupos sin senal 50% | largo 501 tok, cortadas 0% | 120 s/paso
+6363.3s 124 [s2027] paso 30: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 728 tok, cortadas 0% | 180 s/paso
+6603.3s 125 [s2026] paso 31: recompensa 0.75 (desv 0.45) | grupos sin senal 50% | largo 1313 tok, cortadas 6% | 248 s/paso
+6603.3s 126 [s2027] paso 31: recompensa 0.62 (desv 0.50) | grupos sin senal 0% | largo 1011 tok, cortadas 19% | 241 s/paso
+6663.3s 127 ... 111 min desde el inicio; pasos: s2026=31, s2027=31
+6843.3s 128 [s2026] paso 32: recompensa 0.94 (desv 0.25) | grupos sin senal 50% | largo 853 tok, cortadas 0% | 227 s/paso
+6843.3s 129 [s2027] paso 32: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 881 tok, cortadas 0% | 221 s/paso
+7023.3s 130 [s2027] paso 33: recompensa 0.94 (desv 0.25) | grupos sin senal 50% | largo 811 tok, cortadas 0% | 150 s/paso
+7083.3s 131 [s2026] paso 33: recompensa 0.56 (desv 0.51) | grupos sin senal 50% | largo 1147 tok, cortadas 38% | 255 s/paso
+7143.3s 132 [s2027] paso 34: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 663 tok, cortadas 0% | 149 s/paso
+7263.3s 133 [s2027] paso 35: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 599 tok, cortadas 0% | 118 s/paso
+7263.3s 134 ... 121 min desde el inicio; pasos: s2026=33, s2027=35
+7503.4s 135 [s2027] paso 36: recompensa 0.94 (desv 0.25) | grupos sin senal 50% | largo 949 tok, cortadas 6% | 240 s/paso
+7623.4s 136 [s2026] paso 34: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 715 tok, cortadas 0% | 519 s/paso
+7743.4s 137 [s2027] paso 37: recompensa 0.56 (desv 0.51) | grupos sin senal 50% | largo 1177 tok, cortadas 25% | 243 s/paso
+7863.4s 138 [s2026] paso 35: recompensa 0.88 (desv 0.34) | grupos sin senal 0% | largo 1030 tok, cortadas 6% | 248 s/paso
+7863.4s 139 ... 131 min desde el inicio; pasos: s2026=35, s2027=37
+7923.4s 140 [s2027] paso 38: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 729 tok, cortadas 0% | 153 s/paso
+7983.4s 141 [s2026] paso 36: recompensa 0.88 (desv 0.34) | grupos sin senal 50% | largo 611 tok, cortadas 0% | 110 s/paso
+8043.4s 142 [s2026] paso 37: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 508 tok, cortadas 0% | 86 s/paso
+8103.4s 143 [s2027] paso 39: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 838 tok, cortadas 0% | 199 s/paso
+8223.4s 144 [s2026] paso 38: recompensa 0.69 (desv 0.48) | grupos sin senal 50% | largo 769 tok, cortadas 0% | 156 s/paso
+8223.4s 145 [s2027] paso 40: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 607 tok, cortadas 0% | 118 s/paso
+8403.4s 146 [s2026] paso 39: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 897 tok, cortadas 0% | 195 s/paso
+8463.4s 147 [s2027] paso 41: recompensa 0.50 (desv 0.52) | grupos sin senal 100% | largo 1326 tok, cortadas 25% | 241 s/paso
+8463.4s 148 ... 141 min desde el inicio; pasos: s2026=39, s2027=41
+8643.4s 149 [s2026] paso 40: recompensa 0.94 (desv 0.25) | grupos sin senal 50% | largo 897 tok, cortadas 0% | 204 s/paso
+8763.4s 150 [s2027] paso 42: recompensa 0.69 (desv 0.48) | grupos sin senal 0% | largo 1100 tok, cortadas 19% | 239 s/paso
+8883.4s 151 [s2026] paso 41: recompensa 0.56 (desv 0.51) | grupos sin senal 0% | largo 1425 tok, cortadas 31% | 256 s/paso
+9003.4s 152 [s2027] paso 43: recompensa 0.50 (desv 0.52) | grupos sin senal 100% | largo 1404 tok, cortadas 44% | 244 s/paso
+9063.4s 153 [s2027] paso 44: recompensa 1.00 (desv 0.00) | grupos sin senal 100% | largo 586 tok, cortadas 0% | 106 s/paso
+9063.4s 154 ... 151 min desde el inicio; pasos: s2026=41, s2027=44
+9183.4s 155 [s2026] Se cumplieron 150.0 minutos: se detiene en el paso 42.
+9183.4s 156 [s2026] paso 42: recompensa 0.56 (desv 0.51) | grupos sin senal 0% | largo 1256 tok, cortadas 31% | 255 s/paso
+9303.4s 157 [s2027] Se cumplieron 150.0 minutos: se detiene en el paso 45.
+9303.4s 158 [s2027] paso 45: recompensa 0.94 (desv 0.25) | grupos sin senal 50% | largo 933 tok, cortadas 0% | 217 s/paso
+9303.4s 159 Semilla 2026 termino con codigo 0; 42 pasos registrados.
+9303.4s 160 Semilla 2027 termino con codigo 0; 45 pasos registrados.
+9303.4s 161 Tiempo total: 155 min
+9304.3s 162 Serie en /kaggle/working/curva_recompensa.csv
+9304.3s 163 Figura en /kaggle/working/curva_recompensa.png
+9304.5s 164 Serie en /kaggle/working/curva_recompensa.csv
+9304.5s 165 Figura en /kaggle/working/curva_recompensa.png
+9305.1s 166 Serie en /kaggle/working/curva_senal.csv
+9305.1s 167 Figura en /kaggle/working/curva_senal.png
+9305.2s 168 Serie en /kaggle/working/curva_senal.csv
+9305.2s 169 Figura en /kaggle/working/curva_senal.png
+9305.2s 170 corrida | pasos | recompensa 1er tercio -> ultimo tercio | desv media | grupos sin senal | cortadas | s/paso
+9305.2s 171 grpo_s2026 | 42 | 0.68 -> 0.83 | 0.33 | 44% | 10% | 212
+9305.2s 172 grpo_s2027 | 45 | 0.81 -> 0.84 | 0.30 | 58% | 11% | 201
+9311.9s 173 2026-11-23T21:01:58
+9311.9s 174 LISTO (128 MiB): /kaggle/working/resultados_grpo.zip
+9311.9s 175 Descargalo desde la pestana Output de esta version, junto con curva_recompensa.png.
+9314.9s 176 /usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+9314.9s 177 cells[i][c] = re.sub('\\\\\|', '|', cell)
+9315.0s 178 /usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+9315.0s 179 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+9315.7s 180 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+9315.8s 181 [NbConvertApp] Writing 252988 bytes to __notebook__.ipynb
+9318.3s 182 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+9318.8s 183 [NbConvertApp] Support files will be in __results___files/
+9318.8s 184 [NbConvertApp] Making directory __results___files
+9318.8s 185 [NbConvertApp] Making directory __results___files
+9318.8s 186 [NbConvertApp] Writing 354286 bytes to __results__.html

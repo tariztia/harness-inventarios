@@ -15,6 +15,8 @@ El modelo recibe una solicitud en español, consulta la herramienta `get_invento
 | Línea base del modelo objetivo (pass@1 y pass@5) | Lista: 900 rollouts de Qwen3-1.7B sobre `eval` |
 | Línea base de otros modelos | Lista para Llama-3.2-1B, Qwen3-1.7B sin thinking y Qwen3-4B; Qwen3-0.6B va en 70 de 90 instancias |
 | Trazas SFT y pares DPO | Listos: 170 trazas, todas de Qwen3-8B, y 106 pares |
+| Piloto GRPO en Kaggle | Dos semillas completas (42 y 45 pasos). [Informe, curvas y adaptadores](results/grpo_kaggle/README.md) |
+| Evaluación de GRPO en `eval` | Pendiente. [Notebook de evaluación](notebooks/evaluar_grpo_kaggle.ipynb) |
 | Informe final | Borrador completo en [docs/informe.md](docs/informe.md) |
 
 ## Línea base de Qwen3-1.7B
