@@ -1,25 +1,43 @@
 # Harness de razonamiento con herramientas sobre inventarios
 
-Entorno y dataset del Desafío de Investigación de IIC-3694 (Inteligencia Artificial Generativa, PUC Chile), y entrenamiento del Proyecto del curso sobre ese mismo entorno. Evalúa si un modelo pequeño, de 1–2B de parámetros, puede resolver solicitudes sobre inventarios combinando datos, comparando alternativas y aplicando restricciones.
+Entorno, dataset y entrenamiento para IIC-3694 Inteligencia Artificial Generativa (PUC Chile). El repositorio cubre las dos partes del curso:
 
-El modelo recibe una solicitud en español, consulta la herramienta `get_inventory` y responde. Un verificador independiente calcula la recompensa 0/1, que luego servirá para entrenamiento con SFT, DPO y RL.
+- **Desafío de Investigación** (terminado): un harness donde un modelo pequeño, de 1–2B de parámetros, resuelve solicitudes sobre inventarios combinando datos, comparando alternativas y aplicando restricciones. Incluye generador de tareas, verificador, línea base y datos para SFT y DPO.
+- **Proyecto** (en curso): entrenar al modelo objetivo sobre ese entorno y comparar cinco caminos: modelo base, solo SFT, SFT seguido de GRPO, solo GRPO y DPO.
 
-**Modelo objetivo:** `Qwen/Qwen3-1.7B` con thinking.
+El modelo recibe una solicitud en español, consulta la herramienta `get_inventory` (o recibe los datos en el prompt) y responde. Un verificador independiente calcula la recompensa 0/1, que sirve a la vez para evaluar, filtrar trazas de SFT, armar pares de DPO y como recompensa de GRPO.
+
+**Modelo objetivo:** `Qwen/Qwen3-1.7B` con thinking. **Profesor** para las trazas: `Qwen/Qwen3-8B` con thinking.
+
+Integrantes: Tomás Ariztía, Arturo Herreros, Rodrigo Meza, Matías Retamales.
 
 ## Estado
 
+### Desafío
+
 | Entregable | Estado |
 |---|---|
-| Harness y verificador | Listos |
-| Generador de tareas | Listo |
-| Línea base del modelo objetivo (pass@1 y pass@5) | Lista: 900 rollouts de Qwen3-1.7B sobre `eval` |
-| Línea base de otros modelos | Lista para Llama-3.2-1B, Qwen3-1.7B sin thinking y Qwen3-4B; Qwen3-0.6B va en 70 de 90 instancias |
-| Trazas SFT y pares DPO | Listos: 170 trazas, todas de Qwen3-8B, y 106 pares |
-| Piloto GRPO en Kaggle | Dos semillas completas (42 y 45 pasos). [Informe, curvas y adaptadores](results/grpo_kaggle/README.md) |
-| Evaluación de GRPO en `eval` | Pendiente. [Notebook de evaluación](notebooks/evaluar_grpo_kaggle.ipynb) |
-| Informe del Desafío | [docs/informe.md](docs/informe.md); versión revisada en [docs/informe_v2.md](docs/informe_v2.md) |
-| Propuesta del Proyecto | [docs/propuesta_proyecto.md](docs/propuesta_proyecto.md) |
-| Estado de la Entrega 2 | [docs/estado_entrega2.md](docs/estado_entrega2.md) |
+| Harness, generador de tareas y verificador | Listos. 334 casos adversariales, pasan 326 |
+| Línea base del modelo objetivo | Lista: 900 rollouts de Qwen3-1.7B sobre `eval` (pass@1 y pass@5) |
+| Línea base de otros modelos | Llama-3.2-1B, Qwen3-1.7B sin thinking y Qwen3-4B completas; Qwen3-0.6B en 70 de 90 instancias |
+| Trazas SFT y pares DPO | 170 trazas y 106 pares (primera versión); 4.330 trazas y 148 pares (corrida grande con vLLM) |
+| Informe | [docs/informe.md](docs/informe.md); versión revisada con figuras en [docs/informe_v2.md](docs/informe_v2.md) |
+
+### Proyecto
+
+| Hito | Fecha | Estado |
+|---|---|---|
+| Entrega 1: propuesta | 11 nov | [docs/propuesta_proyecto.md](docs/propuesta_proyecto.md) |
+| Entrega 2: avance con línea base y primeras curvas | 25 nov | Piloto GRPO con dos semillas y curvas de recompensa. Estado en [docs/estado_entrega2.md](docs/estado_entrega2.md) |
+| Entrega 3: paper, poster y video | 9 dic | Pendiente |
+
+| Camino | Estado |
+|---|---|
+| 1. Modelo base | Medido (línea base) |
+| 2. Solo SFT | Script listo; sin correr en GPU |
+| 3. SFT seguido de GRPO | Script listo; sin correr |
+| 4. Solo GRPO | Piloto en Kaggle con dos semillas ([resultados](results/grpo_kaggle/README.md)); falta medirlo en `eval` |
+| 5. DPO | Script listo; sin correr en GPU |
 
 ## Línea base de Qwen3-1.7B
 
@@ -68,48 +86,50 @@ Lectura:
 - Composición hard sigue casi en cero para todos: Qwen3-4B logra 0/10 con datos visibles y 1/10 con herramientas.
 - Qwen3-0.6B se cortó a las 11 horas con 70 de 90 instancias por condición, todas con sus 5 muestras. La corrida se puede continuar.
 
-Como referencia de un modelo más grande, Qwen3-8B con thinking acierta 81/90 en la primera muestra de cada condición, pero sobre `train` y con 2 muestras (`results/kaggle_qwen8b/trazas_qwen8b`), así que no es comparable punto a punto con esta tabla.
+Qwen3-8B con thinking, el profesor, se midió solo sobre `train` (ver la sección siguiente), así que no es comparable punto a punto con esta tabla.
 
 ## Datos derivados
 
-`results/kaggle_qwen8b/datos_derivados_qwen8b` tiene los datos de entrenamiento, armados con `scripts/build_training_data.py` sobre los 180 prompts de `train` (90 instancias por 2 condiciones):
+Los dos conjuntos se arman con `scripts/build_training_data.py`, que vuelve a verificar cada respuesta, descarta cualquier instancia igual a una de `eval` o `test` y deja el procedimiento y los conteos en `manifest.json`.
 
-- `sft.jsonl`: 170 trazas correctas, todas de Qwen3-8B (el profesor).
-- `dpo.jsonl`: 106 pares (correcta, incorrecta). La correcta es siempre de Qwen3-8B; la incorrecta es de Qwen3-1.7B en 105 pares. 83 de las incorrectas son errores de valor.
+| Conjunto | Prompts de `train` | Trazas SFT | Pares DPO | Rechazada del par |
+|---|---|---|---|---|
+| `results/kaggle_qwen8b/datos_derivados_qwen8b` | 180 (90 instancias × 2 condiciones) | 170 | 106 | Qwen3-1.7B (105 pares) |
+| `results/kaggle_qwen8b/datos_derivados_vllm` | 2.338 (1.170 instancias × 2 condiciones, 130 por celda) | 4.330 | 148 | Qwen3-8B |
 
-Qwen3-8B corrió los 180 prompts con 2 muestras y acertó 329 de 360 respuestas. Los 10 prompts sin respuesta correcta son todos de composición hard (6 con herramientas y 4 con datos visibles). `results/kaggle_qwen8b/pendientes.json` es la lista de 71 prompts que se corrió primero, antes de extender la corrida a todos.
+En los dos, la traza correcta es siempre de Qwen3-8B.
 
-## Resultados de la exploración
+**Primera versión.** Qwen3-8B corrió los 180 prompts con 2 muestras y acertó 329 de 360 respuestas. Los 10 prompts sin respuesta correcta son todos de composición hard. En DPO, la rechazada es del modelo objetivo, y 83 de las 106 son errores de valor.
 
-Son 45 instancias con 2 muestras cada una, por condición (`results/exploracion_prompt_corregido`). Los intervalos son anchos: sirven para orientar, no para concluir.
+**Corrida grande con vLLM.** 4.680 rollouts del 8B, repartidos en dos cuentas de Kaggle (`trazas_qwen8b_vllm_parte1de2` y `parte2de2`), a unos 7,5 s por rollout frente a 40–100 s con `transformers`. Se descartaron 4 instancias iguales a `eval` o `test`. El 8B acertó 4.337 de 4.680 respuestas, casi todas salvo en composición: en hard, pass@1 es 52 % con herramientas y 55 % con datos visibles (130 instancias cada una). Diferencias con la primera versión que conviene tener presentes:
 
-Con datos visibles:
+- Las rechazadas de DPO son errores del propio 8B, no del 1.7B, y se concentran en composición (122 de 148 pares).
+- Las trazas de `tools` usan el formato de herramienta en texto. Si se adopta el formato nativo ([docs/auditoria_tool_calling.md](docs/auditoria_tool_calling.md)), hay que convertirlas.
+- `train_sft.py` y `train_dpo.py` siguen usando por defecto la primera versión. Para usar esta hay que pasar `--data results/kaggle_qwen8b/datos_derivados_vllm/sft.jsonl` (o `dpo.jsonl`).
 
-| Modelo | pass@1 | pass@2 | Segundos por rollout |
-|---|---|---|---|
-| Qwen 1.7B con thinking | 25/45 (56 %) | 31/45 (69 %) | 14,9 |
-| Qwen 1.7B sin thinking | 14/45 (31 %) | 20/45 (44 %) | 3,8 |
-| Llama 3.2 1B | 0/45 | 0/45 | 3,4 |
+## Entrenamiento
 
-Qwen con thinking, por dificultad:
+`scripts/train_sft.py`, `train_dpo.py` y `train_grpo.py` entrenan a Qwen3-1.7B con LoRA, y `run_pilot.py --stage eval_final --adapter ...` mide el resultado con el mismo protocolo y las mismas 90 instancias de `eval` que la línea base. Los pasos, los argumentos y los límites están en [docs/guia_entrenamiento.md](docs/guia_entrenamiento.md); las versiones probadas, en `requirements-train.txt`. GRPO entrena solo en la condición `visible`.
 
-| Dificultad | pass@1 | pass@2 |
-|---|---|---|
-| Easy | 13/15 | 14/15 |
-| Medium | 9/15 | 12/15 |
-| Hard | 3/15 | 5/15 |
+### Piloto GRPO (camino 4)
 
-Con herramientas, todos los modelos quedaron cerca de 0 porque el harness aún no reconocía las llamadas sin etiqueta (`<tool_call>`): Qwen acertó 1 de 90 rollouts con y sin thinking, y Llama 0 de 90. Eso se corrigió después; los resultados válidos con herramientas son los de la línea base de arriba.
+Qwen3-1.7B desde el modelo base, en `visible` con easy y medium, 2 problemas por paso y 8 respuestas por problema, 150 minutos por semilla en una T4 de Kaggle (`notebooks/grpo_curva_kaggle.ipynb`). Detalle, curvas y adaptadores en [results/grpo_kaggle/README.md](results/grpo_kaggle/README.md).
 
-Conclusiones por ahora:
+| Semilla | Pasos | Recompensa, primer → último tercio | Grupos sin señal | Respuestas cortadas |
+|---|---|---|---|---|
+| 2026 | 42 | 68 % → 83 % | 44 % | 10 % |
+| 2027 | 45 | 81 % → 84 % | 58 % | 11 % |
 
-- Hay una posible zona aprendible con datos visibles: el acierto baja de easy a hard, y pass@2 supera a pass@1.
-- Composición es la familia más difícil (4/15 en pass@1).
-- Selección easy y medium podrían ser demasiado fáciles (20 de 20 aciertos por muestra).
-- 13 de las 19 respuestas cortadas por el tope de 2.048 tokens fueron en hard, así que parte de esos fallos no mide razonamiento.
-- Llama queda descartado como objetivo: tampoco acertó al ignorar el formato.
+![Curva de recompensa del piloto GRPO](results/grpo_kaggle/curva_recompensa.png)
 
-`results/exploracion_prompt_original` guarda la primera corrida, antes de corregir el prompt. Cada carpeta tiene `report.md` con el detalle.
+Lectura:
+
+- El entorno da señal: cerca de la mitad de los grupos mezclan aciertos y errores.
+- La curva es ruidosa, porque cada paso usa solo 2 problemas, y son tasas sobre `train`. Si el modelo mejoró solo se sabrá midiendo los adaptadores en `eval` (`notebooks/evaluar_grpo_kaggle.ipynb`).
+- La recompensa ya parte en 75–80 % en easy y medium, así que muchos grupos aciertan las 8 respuestas y no aportan gradiente.
+- `train_grpo.py` no fija `loss_type`, así que TRL 1.18.2 usó `"dapo"`, y `beta=0` (sin KL). Hay que fijarlo explícitamente antes de las corridas comparables.
+
+Los adaptadores están en `results/grpo_kaggle/resultados_grpo.zip`, con Git LFS: `git lfs install && git lfs pull`.
 
 ## Instalación
 
@@ -121,7 +141,7 @@ cd harness-inventarios
 uv run --group dev pytest -q
 ```
 
-Deberían pasar todos los tests, salvo 8 marcados como `xfail`, que son limitaciones conocidas del verificador. El núcleo solo usa la biblioteca estándar; `torch` y `transformers` hacen falta únicamente para correr modelos.
+Deberían pasar todos los tests, salvo 8 marcados como `xfail`, que son limitaciones conocidas del verificador. La suite completa es lenta en Windows. El núcleo solo usa la biblioteca estándar; `torch` y `transformers` hacen falta para correr modelos, y `pip install -r requirements-train.txt` instala lo necesario para entrenar.
 
 ## Uso
 
@@ -131,7 +151,7 @@ Deberían pasar todos los tests, salvo 8 marcados como `xfail`, que son limitaci
 uv run python scripts/generate_dataset.py --n-per-cell 40 --base-seed 2026 --out data
 ```
 
-Crea `train.jsonl`, `eval.jsonl`, `test.jsonl` y `stats.json`. La misma semilla produce el mismo dataset, por eso `data/` no se versiona.
+Crea `train.jsonl`, `eval.jsonl`, `test.jsonl` y `stats.json`. La misma semilla produce el mismo dataset, por eso `data/` no se versiona. No cambies `--n-per-cell` para `eval`: cambia las instancias y deja de ser comparable con la línea base. Para más prompts de entrenamiento está `scripts/make_train_prompts.py`.
 
 ### Usar la recompensa
 
@@ -153,9 +173,20 @@ Para un dataset guardado, usa `InstanceStore.from_jsonl("data/eval.jsonl")`.
 
 En la condición con herramientas, `completion` es la trayectoria completa serializada como JSON. El harness repite cada llamada contra el estado protegido, así que una observación inventada o una respuesta adivinada recibe 0. El detalle está en [docs/contrato.md](docs/contrato.md).
 
-### Línea base y datos del modelo objetivo
+### Correr modelos (Colab y Kaggle)
 
-`notebooks/qwen_objetivo_colab.ipynb` corre Qwen3-1.7B con thinking en Colab: mide su línea base sobre `eval` (pass@1 y pass@5) y guarda sus respuestas sobre `train`. No entrena el modelo. Si Colab se queda sin cuota de GPU, `notebooks/qwen_objetivo_kaggle.ipynb` hace lo mismo en Kaggle y continúa la corrida anterior (ver `docs/guia_kaggle.md`).
+No hace falta GPU local. Todos los cuadernos usan el zip de código que genera `uv run python scripts/package_for_colab.py`, y las corridas se reanudan si la sesión se corta.
+
+| Cuaderno | Para qué |
+|---|---|
+| `notebooks/qwen_objetivo_colab.ipynb`, `qwen_objetivo_kaggle.ipynb` | Línea base del objetivo en `eval` y sus respuestas en `train` |
+| `notebooks/qwen_profesor_kaggle.ipynb` | Trazas del 8B, con `transformers` o vLLM, repartibles entre cuentas (`SHARD`) |
+| `notebooks/linea_base_otros_kaggle.ipynb` | Línea base de los otros modelos |
+| `notebooks/grpo_curva_kaggle.ipynb`, `evaluar_grpo_kaggle.ipynb` | Piloto GRPO y evaluación de sus adaptadores |
+| `notebooks/tools_nativo_colab.ipynb` | Prueba del formato nativo de herramientas |
+| `notebooks/piloto_colab.ipynb` | Exploración inicial |
+
+Guías: [docs/guia_colab.md](docs/guia_colab.md) y [docs/guia_kaggle.md](docs/guia_kaggle.md).
 
 Las respuestas sobre `train` se convierten en datos de entrenamiento con:
 
@@ -163,17 +194,7 @@ Las respuestas sobre `train` se convierten en datos de entrenamiento con:
 uv run python scripts/build_training_data.py results/trazas --out results/datos_derivados
 ```
 
-El script vuelve a verificar cada respuesta y escribe `sft.jsonl` (trazas correctas), `dpo.jsonl` (una correcta y una incorrecta por prompt) y `manifest.json` (procedimiento y conteos). Acepta varias carpetas: con las de Qwen3-8B, sus respuestas tienen prioridad como correctas. Rechaza cualquier corrida que no sea de `train`.
-
-### Correr modelos en Colab
-
-No hace falta GPU local. Sigue [docs/guia_colab.md](docs/guia_colab.md). En resumen:
-
-1. Genera el zip con `uv run python scripts/package_for_colab.py`.
-2. Súbelo a `Mi unidad/inventory_harness/` en Drive.
-3. Abre `notebooks/piloto_colab.ipynb` en Colab, con GPU T4.
-
-Las corridas se guardan en Drive y se reanudan si Colab se desconecta. El piloto está protegido por `EJECUTAR_PILOTO = False`.
+Acepta varias carpetas; las respuestas de Qwen3-8B tienen prioridad como correctas. Rechaza cualquier corrida que no sea de `train`. Si se corrige el verificador, `scripts/reevaluate.py` vuelve a evaluar los rollouts guardados.
 
 ### Probar y analizar sin GPU
 
@@ -196,7 +217,7 @@ Hay tres familias de tareas, con tres niveles cada una. Las reglas exactas está
 
 Cada tarea se evalúa en dos condiciones, para separar la dificultad de razonar de la de usar herramientas:
 
-- `tools`: el modelo debe obtener los datos con `get_inventory`.
+- `tools`: el modelo debe obtener los datos con `get_inventory`, con un máximo de dos rondas.
 - `visible`: los datos van en el prompt.
 
 La respuesta final es texto libre seguido de un bloque:
@@ -208,7 +229,7 @@ faltan: 3
 </answer>
 ```
 
-El verificador acepta formas equivalentes como `3`, `tres`, `20-17` o `1 de P01 y 2 de P02`. Rechaza respuestas múltiples, ambiguas o contradictorias. La suite adversarial tiene 334 casos y pasa 326; los resultados y las 8 limitaciones están en [docs/robustez_verificador.md](docs/robustez_verificador.md). Esos casos los escribió el equipo, así que no reemplazan revisar respuestas reales.
+El verificador acepta formas equivalentes como `3`, `tres`, `20-17` o `1 de P01 y 2 de P02`. Rechaza respuestas múltiples, ambiguas o contradictorias. La suite adversarial tiene 334 casos y pasa 326; los resultados y las 8 limitaciones están en [docs/robustez_verificador.md](docs/robustez_verificador.md). Esos casos los escribió el equipo, así que no reemplazan revisar respuestas reales: la auditoría con respuestas reales está en [docs/auditoria_verificador.md](docs/auditoria_verificador.md).
 
 ## Estructura
 
@@ -218,29 +239,48 @@ src/inventory_harness/
   solver.py                    calcula la respuesta correcta
   verifier.py, numbers_es.py   analizan y verifican la respuesta final
   tools.py, prompts.py         herramienta y mensajes del modelo
-  rollout.py, backends.py      ejecutan modelos, con lotes y reanudación
-  training_prep.py             datos y recompensa para SFT, DPO y GRPO
+  rollout.py, backends.py      ejecutan modelos (transformers o vLLM), con lotes y reanudación
   reward.py                    interfaz reward(prompt, completion)
+  training_data.py             trazas SFT y pares DPO a partir de rollouts
+  training_prep.py             tokenización y recompensa para SFT, DPO y GRPO
   metrics.py, baselines.py     pass@k, intervalos y reglas triviales
-scripts/                       generar datos, correr, analizar y empaquetar
-scripts/train_*.py             SFT, DPO y GRPO con LoRA (docs/guia_entrenamiento.md)
-notebooks/piloto_colab.ipynb   ejecución en Colab
+scripts/
+  generate_dataset.py, make_train_prompts.py   datasets
+  run_pilot.py, analyze_results.py             correr modelos y resumir
+  build_training_data.py, reevaluate.py        datos derivados y reevaluación
+  train_sft.py, train_dpo.py, train_grpo.py    entrenamiento con LoRA
+  plot_training.py, audit_sample.py            curvas y muestra para auditoría manual
+notebooks/                     Colab y Kaggle (tabla de arriba)
 tests/                         tests y casos adversariales
-results/                       corridas de exploración
-docs/                          contrato, reglas, guía de Colab y robustez
-docs/propuesta/                enunciado del desafío y propuestas
+results/
+  exploracion_*                corridas iniciales del Desafío
+  kaggle_qwen17b/              línea base y trazas del objetivo
+  kaggle_otros_modelos/        línea base de los otros modelos
+  kaggle_qwen8b/               trazas del profesor y datos derivados
+  grpo_kaggle/                 piloto GRPO: curvas, métricas y adaptadores
+docs/                          ver la sección siguiente
+docs/propuesta/                enunciados del Desafío y del Proyecto, y propuestas del Desafío
 ```
 
-## Entrenamiento
+## Documentación
 
-`scripts/train_sft.py`, `train_dpo.py` y `train_grpo.py` entrenan a Qwen3-1.7B con LoRA, y `run_pilot.py --stage eval_final --adapter ...` mide el resultado con el mismo protocolo de la línea base. Los pasos, los argumentos y los límites están en [docs/guia_entrenamiento.md](docs/guia_entrenamiento.md); las versiones probadas, en `requirements-train.txt`. Los scripts se probaron de punta a punta en CPU con Qwen3-0.6B. GRPO ya corrió en Kaggle con dos T4 ([piloto](results/grpo_kaggle/README.md)); SFT y DPO todavía no se han corrido en GPU.
+| Documento | Contenido |
+|---|---|
+| [docs/informe.md](docs/informe.md), [docs/informe_v2.md](docs/informe_v2.md) | Informe del Desafío y su revisión |
+| [docs/propuesta_proyecto.md](docs/propuesta_proyecto.md) | Propuesta del Proyecto: caminos, diseño experimental y plan |
+| [docs/estado_entrega2.md](docs/estado_entrega2.md) | Estado y plan hasta la entrega final |
+| [docs/guia_entrenamiento.md](docs/guia_entrenamiento.md) | Cómo entrenar y evaluar cada camino |
+| [docs/auditoria_tool_calling.md](docs/auditoria_tool_calling.md) | Formato de herramientas en texto o nativo: análisis y recomendación |
+| [docs/contrato.md](docs/contrato.md), [docs/reglas_negocio.md](docs/reglas_negocio.md) | Formato de interacción y reglas de las tareas |
+| [docs/robustez_verificador.md](docs/robustez_verificador.md), [docs/auditoria_verificador.md](docs/auditoria_verificador.md), [docs/analisis_verificador.md](docs/analisis_verificador.md) | Robustez del verificador |
+| [docs/guia_colab.md](docs/guia_colab.md), [docs/guia_kaggle.md](docs/guia_kaggle.md) | Cómo correr en Colab y Kaggle |
 
 ## Próximos pasos
 
 El plan completo está en [docs/estado_entrega2.md](docs/estado_entrega2.md) y en la sección 5 de [docs/propuesta_proyecto.md](docs/propuesta_proyecto.md). Lo inmediato:
 
 1. Medir los adaptadores del piloto GRPO en `eval` con el mismo protocolo de la línea base.
-2. Fijar `loss_type` en `train_grpo.py`: sin él, TRL 1.18.2 usa `"dapo"` (ver [docs/auditoria_tool_calling.md](docs/auditoria_tool_calling.md)).
-3. Correr SFT, DPO y SFT seguido de GRPO, y fijar el presupuesto de cómputo comparable entre caminos.
-4. Decidir el formato de `tools` (texto o nativo) antes de generar más trazas de esa condición.
+2. Fijar `loss_type` en `train_grpo.py` antes de las corridas comparables.
+3. Correr SFT (con los datos de vLLM), DPO y SFT seguido de GRPO, y fijar el presupuesto de cómputo comparable entre caminos.
+4. Decidir el formato de `tools` (texto o nativo), porque afecta a las 2.138 trazas de `tools`.
 5. Auditoría manual de trazas exitosas con `scripts/audit_sample.py`.
