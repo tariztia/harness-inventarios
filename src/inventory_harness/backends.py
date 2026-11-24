@@ -1,6 +1,6 @@
 """Backends de generacion. Ver docs/contrato.md.
 
-`torch` y `transformers` solo se importan dentro de `HFBackend.__init__`.
+`torch`, `transformers` y `vllm` solo se importan al crear el backend correspondiente.
 
 `generate(batch_of_messages, gen_config, seed)` devuelve un texto por conversacion, en
 el orden recibido, y deja en `last_usage` una entrada paralela con `new_tokens`,
@@ -321,5 +321,133 @@ class HFBackend(Backend):
             for index, (text, tokens, reason, seconds) in zip(lot, results):
                 texts[index] = text
                 usage[index] = {"new_tokens": tokens, "seconds": seconds, "stop_reason": reason}
+        self.last_usage = usage
+        return texts
+
+
+# ------------------------------------------------------------------------------ vLLM
+
+
+def finish_vllm_row(
+    text: str, new_tokens: int, finish_reason: str | None, stops: Sequence[str]
+) -> tuple[str, int, str]:
+    """Texto, tokens y stop_reason de una fila de vLLM, con las mismas reglas que HF.
+
+    Recorta tras la primera parada fuera de <think> (`cut_at_stop`). Sin parada, el motivo
+    es "length" si vLLM llego al tope de tokens y "eos" en cualquier otro caso.
+    """
+    text, stop = cut_at_stop(text, stops)
+    if stop is not None:
+        return text, new_tokens, _STOP_REASONS[stop]
+    return text, new_tokens, "length" if finish_reason == "length" else "eos"
+
+
+class VLLMBackend(Backend):
+    """Modelo servido con vLLM: batching continuo, para generar muchas trazas rapido.
+
+    Misma interfaz y mismas reglas que HFBackend: con thinking no se pasan paradas al
+    generar (podrian activarse dentro de <think>) y se recorta despues con `cut_at_stop`;
+    sin thinking se paran en `</answer>` y `<tool_result>`. Cada fila recibe su propia
+    semilla, derivada de la de la llamada y de su posicion. vLLM no reproduce el texto
+    de HF aunque la semilla sea la misma: solo muestrea de la misma distribucion.
+
+    `generate` envia toda la llamada junta y vLLM la reparte: `batch_size` solo fija el
+    tamano de la cohorte en rollout.py, no el de los lotes del motor.
+
+    `llm` y `sampling_params_cls` se pueden inyectar para probar sin GPU ni vllm.
+    """
+
+    def __init__(
+        self,
+        model_id: str,
+        *,
+        name: str | None = None,
+        dtype: str = "auto",
+        tensor_parallel_size: int = 1,
+        max_model_len: int = 8192,
+        gpu_memory_utilization: float = 0.90,
+        llm: Any = None,
+        sampling_params_cls: Any = None,
+        llm_kwargs: dict[str, Any] | None = None,
+    ) -> None:
+        self.model_id = model_id
+        self.name = name or model_id
+        self.last_usage = []
+        if llm is None:
+            from vllm import LLM
+
+            llm = LLM(
+                model=model_id,
+                dtype=dtype,
+                tensor_parallel_size=tensor_parallel_size,
+                max_model_len=max_model_len,
+                gpu_memory_utilization=gpu_memory_utilization,
+                **(llm_kwargs or {}),
+            )
+        if sampling_params_cls is None:
+            from vllm import SamplingParams as sampling_params_cls
+        self.llm = llm
+        self._sampling_params_cls = sampling_params_cls
+        self.tokenizer = llm.get_tokenizer()
+
+    def render_chat(self, messages: Messages, gen_config: dict[str, Any]) -> str:
+        """Igual que HFBackend.render_chat: omitir thinking significa sin thinking."""
+        options: dict[str, Any] = {}
+        if template_accepts_thinking(getattr(self.tokenizer, "chat_template", None)):
+            options["enable_thinking"] = bool(gen_config.get("enable_thinking", False))
+        return self.tokenizer.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True, **options
+        )
+
+    def _sampling_params(self, gen_config: dict[str, Any], stops: tuple[str, ...], seed: int) -> Any:
+        options: dict[str, Any] = {
+            "max_tokens": gen_config.get("max_new_tokens", 512),
+            "seed": seed,
+        }
+        if bool(gen_config.get("do_sample", True)):
+            options["temperature"] = gen_config.get("temperature", 1.0)
+            options["top_p"] = gen_config.get("top_p", 1.0)
+            options["top_k"] = gen_config.get("top_k", -1)
+        else:
+            options["temperature"] = 0.0
+        if "repetition_penalty" in gen_config:
+            options["repetition_penalty"] = gen_config["repetition_penalty"]
+        if stops:
+            options["stop"] = list(stops)
+            options["include_stop_str_in_output"] = True
+        return self._sampling_params_cls(**options)
+
+    def generate(
+        self, batch_of_messages: list[Messages], gen_config: dict[str, Any], seed: int
+    ) -> list[str]:
+        stops = tuple(gen_config.get("stop_strings", DEFAULT_STOP_STRINGS))
+        thinking = bool(gen_config.get("enable_thinking"))
+        started = time.perf_counter()
+        # Se pasan ids ya tokenizados, sin tokens especiales extra: igual que HFBackend.
+        prompts = [
+            {
+                "prompt_token_ids": self.tokenizer(
+                    self.render_chat(messages, gen_config), add_special_tokens=False
+                )["input_ids"]
+            }
+            for messages in batch_of_messages
+        ]
+        params = [
+            self._sampling_params(gen_config, () if thinking else stops, derive_seed(seed, row))
+            for row in range(len(prompts))
+        ]
+        outputs = self.llm.generate(prompts, params, use_tqdm=False)
+        if len(outputs) != len(prompts):
+            raise ValueError("vLLM devolvio un numero distinto de salidas")
+        seconds = (time.perf_counter() - started) / max(1, len(prompts))
+        texts: list[str] = []
+        usage: list[dict[str, Any]] = []
+        for output in outputs:
+            completion = output.outputs[0]
+            text, tokens, reason = finish_vllm_row(
+                completion.text, len(completion.token_ids), completion.finish_reason, stops
+            )
+            texts.append(text)
+            usage.append({"new_tokens": tokens, "seconds": seconds, "stop_reason": reason})
         self.last_usage = usage
         return texts
