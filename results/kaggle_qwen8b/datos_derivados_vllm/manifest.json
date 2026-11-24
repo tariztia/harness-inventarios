@@ -1,0 +1,205 @@
+{
+  "created_at": "2026-11-24T13:52:20+00:00",
+  "code_hash": "c0d1e2342820d4c2",
+  "avisos": [],
+  "corridas": [
+    {
+      "carpeta": "trazas_qwen8b_vllm_parte1de2",
+      "stage": "trazas",
+      "dry_run": false,
+      "dataset": {
+        "split": "train",
+        "n_per_cell": 130,
+        "base_seed": 2026,
+        "fingerprint": "5be72de806206ef549d4fb5cbb1d471ed30334319129d81ed50132a538eafb2c"
+      },
+      "gen_configs": {
+        "Qwen/Qwen3-8B+think": {
+          "model": "Qwen/Qwen3-8B+think",
+          "model_id": "Qwen/Qwen3-8B",
+          "enable_thinking": true,
+          "max_new_tokens": 4096,
+          "do_sample": true,
+          "temperature": 0.7,
+          "top_p": 0.95,
+          "top_k": 50,
+          "repetition_penalty": 1.0,
+          "seed": 2026,
+          "batch_size": 64,
+          "backend": "vllm"
+        }
+      }
+    },
+    {
+      "carpeta": "trazas_qwen8b_vllm_parte2de2",
+      "stage": "trazas",
+      "dry_run": false,
+      "dataset": {
+        "split": "train",
+        "n_per_cell": 130,
+        "base_seed": 2026,
+        "fingerprint": "5be72de806206ef549d4fb5cbb1d471ed30334319129d81ed50132a538eafb2c"
+      },
+      "gen_configs": {
+        "Qwen/Qwen3-8B+think": {
+          "model": "Qwen/Qwen3-8B+think",
+          "model_id": "Qwen/Qwen3-8B",
+          "enable_thinking": true,
+          "max_new_tokens": 4096,
+          "do_sample": true,
+          "temperature": 0.7,
+          "top_p": 0.95,
+          "top_k": 50,
+          "repetition_penalty": 1.0,
+          "seed": 2026,
+          "batch_size": 64,
+          "backend": "vllm"
+        }
+      }
+    }
+  ],
+  "profesor": "Qwen/Qwen3-8B+think",
+  "max_sft_por_prompt": 2,
+  "procedimiento": [
+    "Cada modelo resuelve instancias de train con run_pilot (etapa trazas).",
+    "Cada rollout se normaliza: las llamadas pasan a <tool_call>{json}</tool_call> y se descarta el texto que las acompana; el razonamiento <think> se conserva.",
+    "El verificador vuelve a evaluar cada rollout normalizado contra la instancia protegida.",
+    "Se excluye toda instancia de train igual (misma huella) a una de eval o test.",
+    "Las respuestas se agrupan por prompt: corridas con otra semilla reutilizan los IDs.",
+    "SFT: rollouts con recompensa 1 y llamadas validas, priorizando al profesor.",
+    "DPO: por prompt, una respuesta correcta (priorizando al profesor) y una incorrecta (priorizando otros modelos y errores de valor). Se excluyen las respuestas cortadas por el tope de tokens."
+  ],
+  "rollouts_leidos": 4680,
+  "descartados": {
+    "igual_a_eval_o_test": 4
+  },
+  "prompts": 2338,
+  "sft": 4330,
+  "dpo": 148,
+  "sft_por_modelo": {
+    "Qwen/Qwen3-8B+think": 4330
+  },
+  "dpo_rechazada_por_error": {
+    "wrong_value": 148
+  },
+  "por_celda": {
+    "availability|easy|tools": {
+      "prompts": 129,
+      "con_correcta": 129,
+      "con_incorrecta": 0,
+      "sft": 258
+    },
+    "availability|easy|visible": {
+      "prompts": 129,
+      "con_correcta": 129,
+      "con_incorrecta": 0,
+      "sft": 258
+    },
+    "availability|hard|tools": {
+      "prompts": 130,
+      "con_correcta": 130,
+      "con_incorrecta": 2,
+      "sft": 258,
+      "dpo": 2
+    },
+    "availability|hard|visible": {
+      "prompts": 130,
+      "con_correcta": 130,
+      "con_incorrecta": 2,
+      "sft": 258,
+      "dpo": 2
+    },
+    "availability|medium|tools": {
+      "prompts": 130,
+      "con_correcta": 130,
+      "con_incorrecta": 0,
+      "sft": 260
+    },
+    "availability|medium|visible": {
+      "prompts": 130,
+      "con_correcta": 130,
+      "con_incorrecta": 1,
+      "sft": 259,
+      "dpo": 1
+    },
+    "composition|easy|tools": {
+      "prompts": 130,
+      "con_correcta": 130,
+      "con_incorrecta": 0,
+      "sft": 260
+    },
+    "composition|easy|visible": {
+      "prompts": 130,
+      "con_correcta": 130,
+      "con_incorrecta": 0,
+      "sft": 260
+    },
+    "composition|hard|tools": {
+      "prompts": 130,
+      "con_correcta": 88,
+      "con_incorrecta": 88,
+      "sft": 121,
+      "dpo": 47
+    },
+    "composition|hard|visible": {
+      "prompts": 130,
+      "con_correcta": 92,
+      "con_incorrecta": 80,
+      "sft": 134,
+      "dpo": 43
+    },
+    "composition|medium|tools": {
+      "prompts": 130,
+      "con_correcta": 122,
+      "con_incorrecta": 30,
+      "sft": 217,
+      "dpo": 22
+    },
+    "composition|medium|visible": {
+      "prompts": 130,
+      "con_correcta": 130,
+      "con_incorrecta": 10,
+      "sft": 250,
+      "dpo": 10
+    },
+    "selection|easy|tools": {
+      "prompts": 130,
+      "con_correcta": 130,
+      "con_incorrecta": 0,
+      "sft": 260
+    },
+    "selection|easy|visible": {
+      "prompts": 130,
+      "con_correcta": 130,
+      "con_incorrecta": 0,
+      "sft": 260
+    },
+    "selection|hard|tools": {
+      "prompts": 130,
+      "con_correcta": 129,
+      "con_incorrecta": 9,
+      "sft": 250,
+      "dpo": 8
+    },
+    "selection|hard|visible": {
+      "prompts": 130,
+      "con_correcta": 130,
+      "con_incorrecta": 7,
+      "sft": 253,
+      "dpo": 7
+    },
+    "selection|medium|tools": {
+      "prompts": 130,
+      "con_correcta": 130,
+      "con_incorrecta": 6,
+      "sft": 254,
+      "dpo": 6
+    },
+    "selection|medium|visible": {
+      "prompts": 130,
+      "con_correcta": 130,
+      "con_incorrecta": 0,
+      "sft": 260
+    }
+  }
+}

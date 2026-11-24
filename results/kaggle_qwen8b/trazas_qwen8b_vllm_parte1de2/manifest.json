@@ -1,0 +1,62 @@
+{
+  "stage": "trazas",
+  "dry_run": false,
+  "dataset": {
+    "split": "train",
+    "n_per_cell": 130,
+    "base_seed": 2026,
+    "fingerprint": "5be72de806206ef549d4fb5cbb1d471ed30334319129d81ed50132a538eafb2c"
+  },
+  "n_samples": 2,
+  "limit": null,
+  "shard": "1/2",
+  "backend": "vllm",
+  "conditions": [
+    "tools",
+    "visible"
+  ],
+  "only": null,
+  "seeds": {
+    "dataset": 2026,
+    "generation": 2026
+  },
+  "entorno": {
+    "python": "3.13.16",
+    "plataforma": "Linux-6.18.55+-x86_64-with-glibc2.39",
+    "torch": "2.14.0+cu130",
+    "transformers": "5.20.2",
+    "gpu": "Tesla T4",
+    "vllm": "0.34.0"
+  },
+  "code_hash": "c0d1e2342820d4c2",
+  "git_commit": null,
+  "created_at": "2026-11-24T00:49:59+00:00",
+  "gen_configs": {
+    "Qwen/Qwen3-8B+think": {
+      "model": "Qwen/Qwen3-8B+think",
+      "model_id": "Qwen/Qwen3-8B",
+      "enable_thinking": true,
+      "max_new_tokens": 4096,
+      "do_sample": true,
+      "temperature": 0.7,
+      "top_p": 0.95,
+      "top_k": 50,
+      "repetition_penalty": 1.0,
+      "seed": 2026,
+      "batch_size": 64,
+      "backend": "vllm"
+    }
+  },
+  "modelos": {
+    "Qwen/Qwen3-8B+think": {
+      "estado": "completo",
+      "error": null,
+      "esperados": 2340,
+      "hechos": 2340,
+      "segundos_por_rollout": 7.468,
+      "errores_internos": 0
+    }
+  },
+  "notas": [],
+  "updated_at": "2026-11-24T05:45:21+00:00"
+}
