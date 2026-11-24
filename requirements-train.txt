@@ -1,0 +1,15 @@
+# Versiones con las que se probaron scripts/train_sft.py, train_dpo.py, train_grpo.py y
+# run_pilot.py --adapter (humo en CPU, con Qwen3-0.6B). Si el cluster trae otras, los scripts
+# pueden necesitar ajustes menores; el nombre de los argumentos de TrainingArguments y de las
+# configuraciones de TRL cambia entre versiones mayores.
+#
+# torch no esta aqui: instala el que corresponda a la GPU (en Kaggle y en el cluster ya viene).
+transformers==5.24.0
+trl==1.18.2
+peft==0.22.0
+accelerate==1.16.0
+datasets==5.2.0
+jinja2>=3.1.6
+# Opcional: curvas en PNG (scripts/plot_training.py) y generacion rapida en GRPO (--use-vllm).
+matplotlib
+# vllm

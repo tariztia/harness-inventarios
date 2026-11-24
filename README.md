@@ -15,6 +15,8 @@ El modelo recibe una solicitud en español, consulta la herramienta `get_invento
 | Línea base del modelo objetivo (pass@1 y pass@5) | Lista: 900 rollouts de Qwen3-1.7B sobre `eval` |
 | Línea base de otros modelos | Lista para Llama-3.2-1B, Qwen3-1.7B sin thinking y Qwen3-4B; Qwen3-0.6B va en 70 de 90 instancias |
 | Trazas SFT y pares DPO | Listos: 170 trazas, todas de Qwen3-8B, y 106 pares |
+| Piloto GRPO en Kaggle | Dos semillas completas (42 y 45 pasos). [Informe, curvas y adaptadores](results/grpo_kaggle/README.md) |
+| Evaluación de GRPO en `eval` | Pendiente. [Notebook de evaluación](notebooks/evaluar_grpo_kaggle.ipynb) |
 | Informe final | Borrador completo en [docs/informe.md](docs/informe.md) |
 
 ## Línea base de Qwen3-1.7B
@@ -215,15 +217,21 @@ src/inventory_harness/
   verifier.py, numbers_es.py   analizan y verifican la respuesta final
   tools.py, prompts.py         herramienta y mensajes del modelo
   rollout.py, backends.py      ejecutan modelos, con lotes y reanudación
+  training_prep.py             datos y recompensa para SFT, DPO y GRPO
   reward.py                    interfaz reward(prompt, completion)
   metrics.py, baselines.py     pass@k, intervalos y reglas triviales
 scripts/                       generar datos, correr, analizar y empaquetar
+scripts/train_*.py             SFT, DPO y GRPO con LoRA (docs/guia_entrenamiento.md)
 notebooks/piloto_colab.ipynb   ejecución en Colab
 tests/                         tests y casos adversariales
 results/                       corridas de exploración
 docs/                          contrato, reglas, guía de Colab y robustez
 docs/propuesta/                enunciado del desafío y propuestas
 ```
+
+## Entrenamiento
+
+`scripts/train_sft.py`, `train_dpo.py` y `train_grpo.py` entrenan a Qwen3-1.7B con LoRA, y `run_pilot.py --stage eval_final --adapter ...` mide el resultado con el mismo protocolo de la línea base. Los pasos, los argumentos y los límites están en [docs/guia_entrenamiento.md](docs/guia_entrenamiento.md); las versiones probadas, en `requirements-train.txt`. Los scripts se probaron de punta a punta en CPU con Qwen3-0.6B, pero todavía no en una GPU.
 
 ## Próximos pasos
 

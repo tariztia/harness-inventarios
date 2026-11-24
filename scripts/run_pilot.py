@@ -55,6 +55,9 @@ STAGES: dict[str, dict[str, Any]] = {
     # Respuestas para SFT y DPO. Con la semilla del piloto, train sale de la misma
     # generacion que eval y no repite ninguna de sus instancias.
     "trazas": {"base_seed": 2026, "split": "train", "n_per_cell": 10, "n_samples": 2},
+    # Medicion de un modelo entrenado: las mismas 90 instancias de eval y las 5 muestras de la
+    # linea base de Qwen3-1.7B, para comparar. (`piloto` usa 40 por celda salvo --n-per-cell 10.)
+    "eval_final": {"base_seed": 2026, "split": "eval", "n_per_cell": 10, "n_samples": 5},
 }
 DEFAULT_BATCH_SIZE = {TARGET_MODEL: 16, LLAMA_MODEL: 16, LARGE_MODEL: 8}
 FALLBACK_BATCH_SIZE = 16
@@ -100,8 +103,14 @@ def supports_thinking(model: str) -> bool:
     return model.lower().startswith(THINKING_MODEL_PREFIXES)
 
 
-def expand_variants(models: list[str], thinking: str) -> tuple[list[dict[str, Any]], list[str]]:
-    """Una variante por modelo y modo. Cada una tiene su etiqueta, y por tanto sus claves."""
+def expand_variants(
+    models: list[str], thinking: str, adapter: str | None = None, adapter_name: str | None = None
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Una variante por modelo y modo. Cada una tiene su etiqueta, y por tanto sus claves.
+
+    Con `adapter` (un adaptador LoRA) la etiqueta lleva `+lora:<adapter_name>`, para que sus
+    rollouts no se confundan con los del modelo base.
+    """
     variants: list[dict[str, Any]] = []
     notes: list[str] = []
     for model in models:
@@ -110,9 +119,10 @@ def expand_variants(models: list[str], thinking: str) -> tuple[list[dict[str, An
             notes.append(f"{model}: sin modo thinking, se corre solo con thinking off")
             modes = [False]
         for enabled in modes:
-            variants.append(
-                {"model": model, "thinking": enabled, "label": f"{model}+think" if enabled else model}
-            )
+            label = f"{model}+think" if enabled else model
+            if adapter:
+                label += f"+lora:{adapter_name or Path(adapter).parent.name}"
+            variants.append({"model": model, "thinking": enabled, "label": label, "adapter": adapter})
     return variants, notes
 
 
@@ -318,6 +328,7 @@ def make_backend(variant: dict[str, Any], dry_run: bool, instances: list[Instanc
         name=variant["label"],
         torch_dtype=choose_dtype(variant["model"]),
         model_kwargs=quantization_kwargs(variant["model"]),
+        adapter=variant.get("adapter"),
     )
 
 
@@ -428,6 +439,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--dry-run", action="store_true", help="usa ScriptedBackend, sin GPU")
     parser.add_argument("--only", type=Path,
                         help="JSON de scripts/pending_prompts.py: solo esos pares (instancia, condicion)")
+    parser.add_argument("--adapter", type=Path,
+                        help="adaptador LoRA de scripts/train_*.py; se mide el modelo base mas ese adaptador")
+    parser.add_argument("--adapter-name",
+                        help="nombre del adaptador en la etiqueta (por omision, el de la carpeta que lo contiene)")
     return parser.parse_args(argv)
 
 
@@ -461,7 +476,12 @@ def main(argv: list[str] | None = None) -> int:
     }
     selected = instances[: args.limit] if args.limit else instances
     allowed = load_only(args.only, instances) if args.only else None
-    variants, notes = expand_variants(list(args.models), args.thinking)
+    if args.adapter and len(args.models) != 1:
+        raise SystemExit("--adapter se aplica a un solo modelo: usa --models <modelo base>.")
+    variants, notes = expand_variants(
+        list(args.models), args.thinking,
+        adapter=str(args.adapter) if args.adapter else None, adapter_name=args.adapter_name,
+    )
     for note in notes:
         print(note, flush=True)
 
