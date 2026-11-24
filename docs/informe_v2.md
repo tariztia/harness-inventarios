@@ -2,9 +2,9 @@
 
 **Desafío de Investigación, IIC-3694 Inteligencia Artificial Generativa (PUC Chile)**
 
-Integrantes: _(completar)_
+Integrantes: Tomás Ariztía, Arturo Herreros, Rodrigo Meza, Matías Retamales
 
-Código, datos y resultados: _(link al repositorio público, por completar)_. Las rutas que cita este informe son relativas a ese repositorio.
+Código, datos y resultados: `github.com/tariztia/harness-inventarios`. Las rutas que cita este informe son relativas a ese repositorio.
 
 ## 1. Introducción
 

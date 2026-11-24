@@ -1,6 +1,6 @@
 # Harness de razonamiento con herramientas sobre inventarios
 
-Entorno y dataset para el Desafío de Investigación de IIC-3694 (Inteligencia Artificial Generativa, PUC Chile). Evalúa si un modelo pequeño, de 1–2B de parámetros, puede resolver solicitudes sobre inventarios combinando datos, comparando alternativas y aplicando restricciones.
+Entorno y dataset del Desafío de Investigación de IIC-3694 (Inteligencia Artificial Generativa, PUC Chile), y entrenamiento del Proyecto del curso sobre ese mismo entorno. Evalúa si un modelo pequeño, de 1–2B de parámetros, puede resolver solicitudes sobre inventarios combinando datos, comparando alternativas y aplicando restricciones.
 
 El modelo recibe una solicitud en español, consulta la herramienta `get_inventory` y responde. Un verificador independiente calcula la recompensa 0/1, que luego servirá para entrenamiento con SFT, DPO y RL.
 
@@ -17,7 +17,9 @@ El modelo recibe una solicitud en español, consulta la herramienta `get_invento
 | Trazas SFT y pares DPO | Listos: 170 trazas, todas de Qwen3-8B, y 106 pares |
 | Piloto GRPO en Kaggle | Dos semillas completas (42 y 45 pasos). [Informe, curvas y adaptadores](results/grpo_kaggle/README.md) |
 | Evaluación de GRPO en `eval` | Pendiente. [Notebook de evaluación](notebooks/evaluar_grpo_kaggle.ipynb) |
-| Informe final | Borrador completo en [docs/informe.md](docs/informe.md) |
+| Informe del Desafío | [docs/informe.md](docs/informe.md); versión revisada en [docs/informe_v2.md](docs/informe_v2.md) |
+| Propuesta del Proyecto | [docs/propuesta_proyecto.md](docs/propuesta_proyecto.md) |
+| Estado de la Entrega 2 | [docs/estado_entrega2.md](docs/estado_entrega2.md) |
 
 ## Línea base de Qwen3-1.7B
 
@@ -231,11 +233,14 @@ docs/propuesta/                enunciado del desafío y propuestas
 
 ## Entrenamiento
 
-`scripts/train_sft.py`, `train_dpo.py` y `train_grpo.py` entrenan a Qwen3-1.7B con LoRA, y `run_pilot.py --stage eval_final --adapter ...` mide el resultado con el mismo protocolo de la línea base. Los pasos, los argumentos y los límites están en [docs/guia_entrenamiento.md](docs/guia_entrenamiento.md); las versiones probadas, en `requirements-train.txt`. Los scripts se probaron de punta a punta en CPU con Qwen3-0.6B, pero todavía no en una GPU.
+`scripts/train_sft.py`, `train_dpo.py` y `train_grpo.py` entrenan a Qwen3-1.7B con LoRA, y `run_pilot.py --stage eval_final --adapter ...` mide el resultado con el mismo protocolo de la línea base. Los pasos, los argumentos y los límites están en [docs/guia_entrenamiento.md](docs/guia_entrenamiento.md); las versiones probadas, en `requirements-train.txt`. Los scripts se probaron de punta a punta en CPU con Qwen3-0.6B. GRPO ya corrió en Kaggle con dos T4 ([piloto](results/grpo_kaggle/README.md)); SFT y DPO todavía no se han corrido en GPU.
 
 ## Próximos pasos
 
-1. Terminar la línea base de Qwen3-0.6B: faltan 200 rollouts, unas 3 horas en Kaggle. Se continúa agregando la salida anterior como entrada del cuaderno.
-2. Dejar claro el formato de respuesta en el mensaje que llega con los resultados de la herramienta, por las respuestas sin claves en selección. Obliga a repetir las corridas.
-3. Decidir qué hacer con composición hard, que casi no da señal en ningún modelo.
-4. Revisar [docs/informe.md](docs/informe.md), el informe final, y completar los integrantes.
+El plan completo está en [docs/estado_entrega2.md](docs/estado_entrega2.md) y en la sección 5 de [docs/propuesta_proyecto.md](docs/propuesta_proyecto.md). Lo inmediato:
+
+1. Medir los adaptadores del piloto GRPO en `eval` con el mismo protocolo de la línea base.
+2. Fijar `loss_type` en `train_grpo.py`: sin él, TRL 1.18.2 usa `"dapo"` (ver [docs/auditoria_tool_calling.md](docs/auditoria_tool_calling.md)).
+3. Correr SFT, DPO y SFT seguido de GRPO, y fijar el presupuesto de cómputo comparable entre caminos.
+4. Decidir el formato de `tools` (texto o nativo) antes de generar más trazas de esa condición.
+5. Auditoría manual de trazas exitosas con `scripts/audit_sample.py`.
