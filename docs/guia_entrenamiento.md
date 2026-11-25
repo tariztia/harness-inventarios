@@ -59,7 +59,7 @@ python scripts/train_grpo.py --out runs/grpo
 python scripts/train_dpo.py --out runs/dpo
 ```
 
-**DPO en Kaggle.** `notebooks/dpo_kaggle.ipynb` lanza una corrida por T4 (semillas 2026 y 2027) con `--condition visible --drop-longer --max-minutes`, 3 épocas y 16 pares por paso (`--batch-size 1 --grad-accum 16`, para que quepa en 16 GB). Descarga `dpo.jsonl` del repositorio en un commit fijo y verifica su huella, porque el zip del código no trae `results/`. Deja `resultados_dpo.zip` con los adaptadores y las curvas de pérdida, margen y exactitud de preferencia. Los adaptadores se miden con `notebooks/evaluar_grpo_kaggle.ipynb` y `METODO = "dpo"`.
+**DPO en Kaggle.** `notebooks/dpo_kaggle.ipynb` lanza una corrida por T4 (semillas 2026 y 2027) con `--condition visible --drop-longer --max-minutes`, 3 épocas y 16 pares por paso (`--batch-size 1 --grad-accum 16`, para que quepa en 16 GB). Descarga `dpo.jsonl` del repositorio en un commit fijo y verifica su huella, porque el zip del código no trae `results/`. Deja `resultados_dpo.zip` con los adaptadores y las curvas de pérdida, margen y exactitud de preferencia. Los adaptadores se miden con `notebooks/evaluar_grpo_kaggle.ipynb` y `METODO = "dpo"`. El cuaderno no filtra por dificultad: entrena con easy, medium y hard. Para dejar hard sin ver, como en GRPO, hay que pasar `--difficulties easy medium` a `train_dpo.py`. En la primera corrida (25 de noviembre), las dos semillas tardaron unos 80 minutos, a unos 1,7 minutos por paso.
 
 Para comparar con **presupuesto comparable**, los dos GRPO (3 y 4) deben tener los mismos `--max-steps`, `--num-generations` y `--batch-size`.
 

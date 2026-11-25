@@ -37,7 +37,7 @@ Integrantes: Tomás Ariztía, Arturo Herreros, Rodrigo Meza, Matías Retamales.
 | 2. Solo SFT | Script listo; sin correr en GPU |
 | 3. SFT seguido de GRPO | Script listo; sin correr |
 | 4. Solo GRPO | Piloto con dos semillas medido en `eval`: pass@1 de 53/90 (base) a 69/90 y 67/90 ([resultados](results/grpo_kaggle/README.md)); falta pass@5 |
-| 5. DPO | Script listo; sin correr en GPU |
+| 5. DPO | Corrido en Kaggle con dos semillas (`notebooks/dpo_kaggle.ipynb`): 230 pares `visible` de los tres niveles, 3 épocas; falta medirlo en `eval` ([estado](docs/estado_entrega2.md)) |
 
 ## Línea base de Qwen3-1.7B
 
@@ -330,6 +330,6 @@ El plan completo está en [docs/estado_entrega2.md](docs/estado_entrega2.md) y e
 
 1. pass@5 de los adaptadores del piloto GRPO en `eval` (`MUESTRAS = 5` en `notebooks/evaluar_grpo_kaggle.ipynb`).
 2. Fijar `loss_type` en `train_grpo.py` antes de las corridas comparables.
-3. Correr SFT (con los datos de vLLM), DPO y SFT seguido de GRPO, y fijar el presupuesto de cómputo comparable entre caminos.
+3. Medir los adaptadores DPO en `eval` (`METODO = "dpo"` en `notebooks/evaluar_grpo_kaggle.ipynb`). Correr SFT (con los datos de vLLM) y SFT seguido de GRPO, y fijar el presupuesto de cómputo comparable entre caminos.
 4. Decidir el formato de `tools` (texto o nativo), porque afecta a las 2.138 trazas de `tools`.
 5. Auditoría manual de trazas exitosas con `scripts/audit_sample.py`.
