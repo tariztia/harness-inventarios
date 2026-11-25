@@ -20,7 +20,7 @@ Integrantes: Tomás Ariztía, Arturo Herreros, Rodrigo Meza, Matías Retamales.
 | Harness, generador de tareas y verificador | Listos. 334 casos adversariales, pasan 326 |
 | Línea base del modelo objetivo | Lista: 900 rollouts de Qwen3-1.7B sobre `eval` (pass@1 y pass@5) |
 | Línea base de otros modelos | Llama-3.2-1B, Qwen3-1.7B sin thinking y Qwen3-4B completas; Qwen3-0.6B en 70 de 90 instancias |
-| Trazas SFT y pares DPO | 170 trazas y 106 pares (primera versión); 4.330 trazas y 148 pares (corrida grande con vLLM) |
+| Trazas SFT y pares DPO | 170 trazas y 106 pares (primera versión); 4.330 trazas y 148 pares (corrida grande con vLLM); 529 pares, 424 con rechazada del 1.7B (corrida parcial del 1.7B) |
 | Informe | [docs/informe.md](docs/informe.md); versión revisada con figuras en [docs/informe_v2.md](docs/informe_v2.md) |
 
 ### Proyecto
@@ -96,8 +96,9 @@ Los dos conjuntos se arman con `scripts/build_training_data.py`, que vuelve a ve
 |---|---|---|---|---|
 | `results/kaggle_qwen8b/datos_derivados_qwen8b` | 180 (90 instancias × 2 condiciones) | 170 | 106 | Qwen3-1.7B (105 pares) |
 | `results/kaggle_qwen8b/datos_derivados_vllm` | 2.338 (1.170 instancias × 2 condiciones, 130 por celda) | 4.330 | 148 | Qwen3-8B |
+| `results/kaggle_qwen17b/datos_derivados_dpo17b` | Los mismos 2.338; el 1.7B corrió 768 de ellos | (no versionado) | 529 | Qwen3-1.7B (424), Qwen3-8B (105) |
 
-En los dos, la traza correcta es siempre de Qwen3-8B.
+En los tres, la traza correcta es de Qwen3-8B, salvo 1 par del último.
 
 **Primera versión.** Qwen3-8B corrió los 180 prompts con 2 muestras y acertó 329 de 360 respuestas. Los 10 prompts sin respuesta correcta son todos de composición hard. En DPO, la rechazada es del modelo objetivo, y 83 de las 106 son errores de valor.
 
@@ -106,6 +107,23 @@ En los dos, la traza correcta es siempre de Qwen3-8B.
 - Las rechazadas de DPO son errores del propio 8B, no del 1.7B, y se concentran en composición (122 de 148 pares).
 - Las trazas de `tools` usan el formato de herramienta en texto. Si se adopta el formato nativo ([docs/auditoria_tool_calling.md](docs/auditoria_tool_calling.md)), hay que convertirlas.
 - `train_sft.py` y `train_dpo.py` siguen usando por defecto la primera versión. Para usar esta hay que pasar `--data results/kaggle_qwen8b/datos_derivados_vllm/sft.jsonl` (o `dpo.jsonl`).
+
+**Pares DPO con rechazada del 1.7B (corrida parcial).** Qwen3-1.7B con thinking corrió en Colab, con vLLM en una T4, sobre los mismos prompts que el 8B (`results/kaggle_qwen17b/trazas_qwen1.7b_vllm`, el mismo código `c0d1e2342820d4c2`). La sesión se cortó a las 4,5 horas, con 1.536 de 4.680 rollouts (10,1 s por rollout): 384 instancias (unas 21 por celda) con las dos condiciones y las dos muestras, así que la muestra queda pareja entre celdas. El 1.7B acertó 829 de 1.536 (54 %); 72 respuestas se cortaron en el tope, 46 de ellas en composición hard, donde acierta 2 de 168.
+
+`build_training_data.py` sobre las dos partes del 8B y esta corrida da 529 pares: 424 con rechazada del 1.7B y 105 con rechazada del 8B en prompts que el 1.7B no corrió. `dpo_17b.jsonl` trae solo los 424 del 1.7B:
+
+- 248 de `tools` y 176 de `visible`; 162 de composición, 141 de disponibilidad y 121 de selección; 166 hard, 160 medium y 98 easy.
+- 343 son errores de valor (`wrong_value`) y 33 de campo desconocido (`unknown_field`, un problema de formato).
+- Medidos en caracteres (unos 3,3 por token), cerca de 65 pares superan los 4.096 tokens en alguno de sus lados y `train_dpo.py` los trunca con su `--max-length` por omisión.
+- `sft.jsonl` no se versiona: repite las 4.330 trazas de `datos_derivados_vllm` y suma solo 8 del 1.7B. Se regenera con el comando de abajo.
+
+```bash
+uv run python scripts/build_training_data.py \
+  results/kaggle_qwen8b/trazas_qwen8b_vllm_parte1de2 results/kaggle_qwen8b/trazas_qwen8b_vllm_parte2de2 \
+  results/kaggle_qwen17b/trazas_qwen1.7b_vllm --out results/kaggle_qwen17b/datos_derivados_dpo17b --max-sft-per-prompt 2
+jq -c 'select(.rejected_model=="Qwen/Qwen3-1.7B+think")' results/kaggle_qwen17b/datos_derivados_dpo17b/dpo.jsonl \
+  > results/kaggle_qwen17b/datos_derivados_dpo17b/dpo_17b.jsonl
+```
 
 ## Entrenamiento
 
