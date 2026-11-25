@@ -59,6 +59,8 @@ python scripts/train_grpo.py --out runs/grpo
 python scripts/train_dpo.py --out runs/dpo
 ```
 
+**DPO en Kaggle.** `notebooks/dpo_kaggle.ipynb` lanza una corrida por T4 (semillas 2026 y 2027) con `--condition visible --drop-longer --max-minutes`, 3 épocas y 16 pares por paso (`--batch-size 1 --grad-accum 16`, para que quepa en 16 GB). Descarga `dpo.jsonl` del repositorio en un commit fijo y verifica su huella, porque el zip del código no trae `results/`. Deja `resultados_dpo.zip` con los adaptadores y las curvas de pérdida, margen y exactitud de preferencia. Los adaptadores se miden con `notebooks/evaluar_grpo_kaggle.ipynb` y `METODO = "dpo"`.
+
 Para comparar con **presupuesto comparable**, los dos GRPO (3 y 4) deben tener los mismos `--max-steps`, `--num-generations` y `--batch-size`.
 
 **Niveles no vistos.** Para medir hard sin haberlo visto, entrena cada camino con `--difficulties easy medium` y evalúa en los tres niveles. Funciona igual en los tres scripts.
@@ -81,7 +83,7 @@ Todos son valores de partida razonables, **no valores ajustados**. Se corrigen t
 
 - **GRPO solo en `visible`.** El trainer de TRL genera un mensaje por prompt y `tools` necesita varias rondas con la herramienta en medio. Por eso el RL se entrena en `visible` y se evalúa también en `tools`.
 - **SFT por ronda.** Cada mensaje del asistente es un ejemplo aparte con la perdida solo en ese mensaje. Así el modelo aprende exactamente lo que verá al generar: la plantilla de Qwen3 borra el `<think>` de los mensajes anteriores, y entrenar la conversación entera enseñaría una primera ronda sin razonamiento.
-- **DPO con herramientas.** En los pares `tools` la perdida cubre también el mensaje con los resultados de la herramienta. Con `--condition visible` el problema no existe, pero quedan 262 de los 635 pares del conjunto combinado.
+- **DPO con herramientas.** En los pares `tools` la perdida cubre también el mensaje con los resultados de la herramienta. Con `--condition visible` el problema no existe, pero quedan 262 de los 635 pares del conjunto combinado. `--drop-longer` descarta los pares que no caben en `--max-length` en vez de truncarlos, porque truncar puede cortar el `<answer>` de ambos lados.
 - **Generación lenta.** GRPO genera con `transformers`, sin vLLM, a menos que se instale y se pase `--use-vllm` (no probado). Es lo que más va a pesar en el tiempo.
 
 ## 5. Medir un modelo entrenado
