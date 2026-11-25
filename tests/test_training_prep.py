@@ -119,8 +119,12 @@ def test_filtros_de_dificultad_y_condicion():
         prep.keep_conditions(rows, "otra")
 
 
-def test_los_datos_reales_de_sft_se_leen_y_cada_uno_tiene_un_ejemplo_por_ronda():
-    path = ROOT / "results" / "kaggle_qwen8b" / "datos_derivados_qwen8b" / "sft.jsonl"
+@pytest.mark.parametrize("folder", [
+    ("kaggle_qwen8b", "datos_derivados_qwen8b"),
+    ("datos_combinados",),
+])
+def test_los_datos_reales_de_sft_se_leen_y_cada_uno_tiene_un_ejemplo_por_ronda(folder):
+    path = ROOT.joinpath("results", *folder, "sft.jsonl")
     if not path.exists():
         pytest.skip("sft.jsonl no esta en este checkout")
     rows = prep.load_jsonl(path)

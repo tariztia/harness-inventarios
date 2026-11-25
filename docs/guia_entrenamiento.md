@@ -7,8 +7,8 @@ Los scripts de `scripts/train_*.py` entrenan a Qwen3-1.7B sobre el harness y `ru
 | Script | Camino del proyecto | Entrada | Salida |
 |---|---|---|---|
 | `make_train_prompts.py` | (prepara GRPO) | el generador del harness | `data/train_extra.jsonl`: 360 instancias nuevas de `train` |
-| `train_sft.py` | 2 (solo SFT) y primera parte del 3 | `sft.jsonl`, 170 trazas del Qwen3-8B | adaptador LoRA |
-| `train_dpo.py` | 5 (DPO) | `dpo.jsonl`, 106 pares | adaptador LoRA |
+| `train_sft.py` | 2 (solo SFT) y primera parte del 3 | `sft.jsonl`, 4.664 trazas (4.655 del Qwen3-8B) | adaptador LoRA |
+| `train_dpo.py` | 5 (DPO) | `dpo.jsonl`, 635 pares (529 con rechazada del Qwen3-1.7B) | adaptador LoRA |
 | `train_grpo.py` | 4 (solo RL) y segunda parte del 3 | prompts `visible` y `reward()` del harness | adaptador, curvas de recompensa y respuestas |
 | `run_pilot.py --stage eval_final --adapter ...` | mide cualquiera de los anteriores | el modelo base más el adaptador | rollouts y pass@k en `eval` |
 | `plot_training.py` | (curvas) | `train_log.json` | PNG y CSV |
@@ -27,7 +27,7 @@ python scripts/make_train_prompts.py --n-per-cell 40 --out data/train_extra.json
 
 El `pytest` completo, en Windows y con un pytest reciente, puede dar unos 47 errores de "environment variable is longer than 32767 characters". Vienen de nombres de prueba larguísimos en `test_verifier.py` y `test_reward.py`, no de los scripts de entrenamiento, y en Linux no aparecen.
 
-El modelo (`Qwen/Qwen3-1.7B`, 3.4 GB) se descarga solo la primera vez. Los datos de SFT y DPO ya están en el repo (`results/kaggle_qwen8b/datos_derivados_qwen8b/`).
+El modelo (`Qwen/Qwen3-1.7B`, 3.4 GB) se descarga solo la primera vez. Los datos de SFT y DPO ya están en el repo: por omisión se usa el conjunto combinado (`results/datos_combinados/`). Los conjuntos anteriores siguen disponibles con `--data` (ver la sección "Datos derivados" del README).
 
 ## 3. Primera hora en el cluster: medir antes de lanzar
 
@@ -81,7 +81,7 @@ Todos son valores de partida razonables, **no valores ajustados**. Se corrigen t
 
 - **GRPO solo en `visible`.** El trainer de TRL genera un mensaje por prompt y `tools` necesita varias rondas con la herramienta en medio. Por eso el RL se entrena en `visible` y se evalúa también en `tools`.
 - **SFT por ronda.** Cada mensaje del asistente es un ejemplo aparte con la perdida solo en ese mensaje. Así el modelo aprende exactamente lo que verá al generar: la plantilla de Qwen3 borra el `<think>` de los mensajes anteriores, y entrenar la conversación entera enseñaría una primera ronda sin razonamiento.
-- **DPO con herramientas.** En los pares `tools` la perdida cubre también el mensaje con los resultados de la herramienta. Con `--condition visible` el problema no existe, pero quedan 41 de 106 pares.
+- **DPO con herramientas.** En los pares `tools` la perdida cubre también el mensaje con los resultados de la herramienta. Con `--condition visible` el problema no existe, pero quedan 262 de los 635 pares del conjunto combinado.
 - **Generación lenta.** GRPO genera con `transformers`, sin vLLM, a menos que se instale y se pase `--use-vllm` (no probado). Es lo que más va a pesar en el tiempo.
 
 ## 5. Medir un modelo entrenado

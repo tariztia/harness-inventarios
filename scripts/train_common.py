@@ -19,8 +19,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 TARGET_MODEL = "Qwen/Qwen3-1.7B"
-DEFAULT_SFT = ROOT / "results" / "kaggle_qwen8b" / "datos_derivados_qwen8b" / "sft.jsonl"
-DEFAULT_DPO = ROOT / "results" / "kaggle_qwen8b" / "datos_derivados_qwen8b" / "dpo.jsonl"
+# Conjunto combinado de las cinco corridas sobre train (ver README, "Datos derivados").
+# Los conjuntos anteriores siguen en results/ y se usan con --data.
+DEFAULT_SFT = ROOT / "results" / "datos_combinados" / "sft.jsonl"
+DEFAULT_DPO = ROOT / "results" / "datos_combinados" / "dpo.jsonl"
 DIFFICULTIES = ("easy", "medium", "hard")
 
 
