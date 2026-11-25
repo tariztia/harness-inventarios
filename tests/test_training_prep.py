@@ -340,6 +340,42 @@ def test_train_grpo_acepta_el_limite_de_minutos():
     assert train_grpo.parse_args(["--out", "x"]).max_minutes is None
 
 
+def test_el_cuaderno_de_dpo_es_valido_y_su_codigo_compila():
+    notebook = json.loads((ROOT / "notebooks" / "dpo_kaggle.ipynb").read_text(encoding="utf-8"))
+    assert notebook["nbformat"] == 4
+    code = [cell for cell in notebook["cells"] if cell["cell_type"] == "code"]
+    assert code
+    for cell in code:
+        assert not cell["outputs"] and cell["execution_count"] is None
+        compile("".join(cell["source"]), "celda", "exec")
+    text = "".join("".join(cell["source"]) for cell in notebook["cells"])
+    for piece in ("scripts/train_dpo.py", "--max-minutes", "--drop-longer", "CUDA_VISIBLE_DEVICES",
+                  "transformers==5.24.0", "trl==1.18.2", "resultados_dpo.zip", "HUELLA_DPO"):
+        assert piece in text, piece
+
+
+def test_train_dpo_acepta_el_limite_de_minutos_y_el_descarte_por_largo():
+    import train_dpo
+
+    args = train_dpo.parse_args(["--out", "x", "--max-minutes", "150", "--drop-longer", "--condition", "visible"])
+    assert args.max_minutes == 150 and args.drop_longer and args.condition == "visible"
+    defaults = train_dpo.parse_args(["--out", "x"])
+    assert defaults.max_minutes is None and not defaults.drop_longer
+
+
+def test_train_dpo_mide_el_lado_mas_largo_del_par():
+    import train_dpo
+
+    class Tokenizador:
+        def apply_chat_template(self, messages, tokenize=True):
+            return list(range(sum(len(m["content"]) for m in messages)))
+
+    example = {"prompt": [{"role": "user", "content": "abc"}],
+               "chosen": [{"role": "assistant", "content": "x" * 5}],
+               "rejected": [{"role": "assistant", "content": "y" * 9}]}
+    assert train_dpo.longest_side(Tokenizador(), example) == 12
+
+
 def test_plot_training_lee_el_registro_paso_a_paso(tmp_path):
     import plot_training
 

@@ -8,6 +8,15 @@ La Entrega 2 pide una implementación inicial del trabajo propuesto, la línea b
 
 **Actualización del 24 de noviembre.** Los adaptadores se midieron en `eval` (condición `visible`, 1 muestra, mismas 90 instancias): pass@1 de 53/90 en el base reevaluado a 69/90 (semilla 2026) y 67/90 (semilla 2027); hard, no entrenado, de 10/30 a 16/30. Falta pass@5. Resultados en `results/grpo_kaggle/eval_pass1`; borrador del informe en [informe_avance_E2.docx](informe_avance_E2.docx).
 
+**Actualización del 25 de noviembre: DPO (camino 5).** Corrió en Kaggle con `notebooks/dpo_kaggle.ipynb` (rama `dpo-kaggle`, PR #4): dos semillas (2026 y 2027), una por T4, unos 80 minutos en total. Pendiente: medir los adaptadores en `eval`.
+- **Datos:** pares `visible` del conjunto combinado (`results/datos_combinados/dpo.jsonl`, commit `7dd2db8`): 262 pares, de los que se descartaron 32 que superaban 4.096 tokens (`--drop-longer`, en vez de truncarlos). Quedaron 230. La elegida es del Qwen3-8B y la rechazada, casi siempre del Qwen3-1.7B.
+- **Dificultades: se entrenó con los tres niveles, hard incluido.** De los 262 pares, 127 son hard, 95 medium y 40 easy. GRPO, en cambio, entrenó solo con easy y medium. Consecuencias: en DPO, hard **no** es un nivel no visto, y la comparación DPO contra GRPO en hard no mide generalización. Hay que declararlo en la sección de métodos.
+- **Configuración:** 3 épocas, 16 pares por paso (`--batch-size 1 --grad-accum 16`), β = 0,1, tasa 2e-5, LoRA r = 16, `--gradient-checkpointing`, tope de 150 minutos (no se alcanzó). Unos 45 pasos por semilla, a unos 1,7 minutos por paso.
+- **Curvas** (semilla 2027, primer tercio frente al último): pérdida de 0,339 a 0,022, exactitud de preferencia de 0,66 a 0,99 y margen de 4,3 a 9,4. Los registros y las curvas de las dos semillas están en `resultados_dpo.zip`, en el Output de la versión de Kaggle.
+- **Cuidado al interpretar:** la exactitud pasó de 0,9 antes de completar la primera época. Como la elegida es del 8B y la rechazada del 1.7B, el modelo podría estar separando los pares por el estilo de cada modelo y no por la corrección. Además, 3 épocas sobre 230 pares invitan a memorizar, y solo se guardó el adaptador final. Lo que decide es el pass@1 en `eval`. Conviene revisar también `logps/chosen` en `log.jsonl`: si cae mucho, el modelo se alejó incluso de las respuestas correctas.
+- **Evaluación:** `notebooks/evaluar_grpo_kaggle.ipynb` con `METODO = "dpo"`, `resultados_dpo.zip` y el zip del código como entrada, y `EVALUAR_BASE = False`. Se compara contra el base reevaluado con el mismo cuaderno (53/90). Con `MUESTRAS = 1` tarda unos 35 minutos (unos 17 s por respuesta, 90 respuestas por adaptador, un adaptador por GPU); con `MUESTRAS = 5`, unas 2,5 horas.
+- **Si no mejora sobre el base, para la Entrega 3:** 1 época o β entre 0,3 y 0,5, guardar el adaptador por época (`--save-steps`) y entrenar sin hard (`--difficulties easy medium`, unos 135 pares) para comparar con GRPO bajo el mismo protocolo.
+
 ## Ya hecho
 
 **Del Desafío** (en `main`, informe en `docs/informe.md`):
