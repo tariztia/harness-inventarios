@@ -1,1 +1,2 @@
 results/grpo_kaggle/resultados_grpo.zip filter=lfs diff=lfs merge=lfs -text
+results/sft_peteroa/*.zip filter=lfs diff=lfs merge=lfs -text

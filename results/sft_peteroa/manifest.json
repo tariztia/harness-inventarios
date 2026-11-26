@@ -1,0 +1,49 @@
+{
+  "tipo": "sft",
+  "argumentos": {
+    "model": "Qwen/Qwen3-1.7B",
+    "out": "runs/sft_visible_em",
+    "difficulties": [
+      "easy",
+      "medium"
+    ],
+    "epochs": 3,
+    "max_steps": -1,
+    "limit": null,
+    "learning_rate": 0.0002,
+    "batch_size": 2,
+    "grad_accum": 8,
+    "seed": 2026,
+    "gradient_checkpointing": true,
+    "logging_steps": 1,
+    "save_steps": 0,
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "data": "results/datos_combinados/sft.jsonl",
+    "condition": "visible",
+    "max_length": 8192
+  },
+  "git_commit": null,
+  "versiones": {
+    "python": "3.12.3",
+    "torch": "2.15.0+cu132",
+    "transformers": "5.24.0",
+    "trl": "1.18.2",
+    "peft": "0.22.0",
+    "accelerate": "1.16.0",
+    "datasets": "5.2.0",
+    "gpu": "NVIDIA H100 80GB HBM3"
+  },
+  "creado": "2026-11-25T20:13:56",
+  "datos": {
+    "archivo": "results/datos_combinados/sft.jsonl",
+    "sha256": "83dfa8f8f8ce12df3d427202324e2bfb7c8eee492c66e3c5081c39cb54c33d4f",
+    "filas": 1666,
+    "ejemplos": 1666,
+    "descartados_por_largo": 0,
+    "tokens_totales": 2117614,
+    "tokens_aprendidos": 1232592
+  },
+  "pasos": 315
+}
