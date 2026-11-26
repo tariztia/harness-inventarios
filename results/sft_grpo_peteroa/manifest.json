@@ -1,0 +1,67 @@
+{
+  "tipo": "grpo",
+  "argumentos": {
+    "model": "Qwen/Qwen3-1.7B",
+    "out": "runs/grpo_desde_sft",
+    "difficulties": [
+      "easy",
+      "medium"
+    ],
+    "epochs": 1,
+    "max_steps": 45,
+    "limit": null,
+    "learning_rate": 2e-05,
+    "batch_size": 4,
+    "grad_accum": 4,
+    "seed": 2026,
+    "gradient_checkpointing": true,
+    "logging_steps": 1,
+    "save_steps": 0,
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "train_file": "data/train_extra.jsonl",
+    "n_per_cell": 40,
+    "include_pilot_train": false,
+    "init_adapter": "runs/sft_visible_em/adapter",
+    "num_generations": 8,
+    "max_completion_length": 2048,
+    "temperature": 0.7,
+    "top_p": 0.95,
+    "top_k": 50,
+    "beta": 0.0,
+    "loss_type": "dapo",
+    "use_vllm": false,
+    "trace_every": 4,
+    "max_minutes": 600.0
+  },
+  "git_commit": null,
+  "versiones": {
+    "python": "3.12.3",
+    "torch": "2.15.0+cu132",
+    "transformers": "5.24.0",
+    "trl": "1.18.2",
+    "peft": "0.22.0",
+    "accelerate": "1.16.0",
+    "datasets": "5.2.0",
+    "gpu": "NVIDIA H100 80GB HBM3"
+  },
+  "creado": "2026-11-25T22:41:45",
+  "datos": {
+    "prompts": 240,
+    "archivo": "data/train_extra.jsonl",
+    "instancias": 360
+  },
+  "recompensa": {
+    "respuestas": 720,
+    "recompensa_media": 0.9569,
+    "errores": {
+      "ok": 689,
+      "wrong_value": 20,
+      "no_answer_block": 10,
+      "multiple_answer_blocks": 1
+    }
+  },
+  "pasos": 45,
+  "detenido_por_tiempo": false
+}

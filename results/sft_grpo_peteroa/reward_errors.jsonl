@@ -1,0 +1,46 @@
+{"paso": 1, "respuestas": 16, "recompensa_media": 1.0, "errores": {"ok": 16}}
+{"paso": 2, "respuestas": 32, "recompensa_media": 1.0, "errores": {"ok": 32}}
+{"paso": 3, "respuestas": 48, "recompensa_media": 0.9792, "errores": {"ok": 47, "wrong_value": 1}}
+{"paso": 4, "respuestas": 64, "recompensa_media": 0.9844, "errores": {"ok": 63, "wrong_value": 1}}
+{"paso": 5, "respuestas": 80, "recompensa_media": 0.9875, "errores": {"ok": 79, "wrong_value": 1}}
+{"paso": 6, "respuestas": 96, "recompensa_media": 0.9688, "errores": {"ok": 93, "no_answer_block": 2, "wrong_value": 1}}
+{"paso": 7, "respuestas": 112, "recompensa_media": 0.9464, "errores": {"ok": 106, "wrong_value": 4, "no_answer_block": 2}}
+{"paso": 8, "respuestas": 128, "recompensa_media": 0.9531, "errores": {"ok": 122, "wrong_value": 4, "no_answer_block": 2}}
+{"paso": 9, "respuestas": 144, "recompensa_media": 0.9583, "errores": {"ok": 138, "wrong_value": 4, "no_answer_block": 2}}
+{"paso": 10, "respuestas": 160, "recompensa_media": 0.9625, "errores": {"ok": 154, "wrong_value": 4, "no_answer_block": 2}}
+{"paso": 11, "respuestas": 176, "recompensa_media": 0.9489, "errores": {"ok": 167, "wrong_value": 6, "no_answer_block": 3}}
+{"paso": 12, "respuestas": 192, "recompensa_media": 0.9531, "errores": {"ok": 183, "wrong_value": 6, "no_answer_block": 3}}
+{"paso": 13, "respuestas": 208, "recompensa_media": 0.9567, "errores": {"ok": 199, "wrong_value": 6, "no_answer_block": 3}}
+{"paso": 14, "respuestas": 224, "recompensa_media": 0.9554, "errores": {"ok": 214, "wrong_value": 7, "no_answer_block": 3}}
+{"paso": 15, "respuestas": 240, "recompensa_media": 0.9583, "errores": {"ok": 230, "wrong_value": 7, "no_answer_block": 3}}
+{"paso": 16, "respuestas": 256, "recompensa_media": 0.9609, "errores": {"ok": 246, "wrong_value": 7, "no_answer_block": 3}}
+{"paso": 17, "respuestas": 272, "recompensa_media": 0.9485, "errores": {"ok": 258, "wrong_value": 10, "no_answer_block": 4}}
+{"paso": 18, "respuestas": 288, "recompensa_media": 0.9444, "errores": {"ok": 272, "wrong_value": 11, "no_answer_block": 5}}
+{"paso": 19, "respuestas": 304, "recompensa_media": 0.9474, "errores": {"ok": 288, "wrong_value": 11, "no_answer_block": 5}}
+{"paso": 20, "respuestas": 320, "recompensa_media": 0.9469, "errores": {"ok": 303, "wrong_value": 11, "no_answer_block": 6}}
+{"paso": 21, "respuestas": 336, "recompensa_media": 0.9494, "errores": {"ok": 319, "wrong_value": 11, "no_answer_block": 6}}
+{"paso": 22, "respuestas": 352, "recompensa_media": 0.946, "errores": {"ok": 333, "wrong_value": 13, "no_answer_block": 6}}
+{"paso": 23, "respuestas": 368, "recompensa_media": 0.9484, "errores": {"ok": 349, "wrong_value": 13, "no_answer_block": 6}}
+{"paso": 24, "respuestas": 384, "recompensa_media": 0.9427, "errores": {"ok": 362, "wrong_value": 15, "no_answer_block": 7}}
+{"paso": 25, "respuestas": 400, "recompensa_media": 0.945, "errores": {"ok": 378, "wrong_value": 15, "no_answer_block": 7}}
+{"paso": 26, "respuestas": 416, "recompensa_media": 0.9447, "errores": {"ok": 393, "wrong_value": 15, "no_answer_block": 7, "multiple_answer_blocks": 1}}
+{"paso": 27, "respuestas": 432, "recompensa_media": 0.9468, "errores": {"ok": 409, "wrong_value": 15, "no_answer_block": 7, "multiple_answer_blocks": 1}}
+{"paso": 28, "respuestas": 448, "recompensa_media": 0.9487, "errores": {"ok": 425, "wrong_value": 15, "no_answer_block": 7, "multiple_answer_blocks": 1}}
+{"paso": 29, "respuestas": 464, "recompensa_media": 0.9504, "errores": {"ok": 441, "wrong_value": 15, "no_answer_block": 7, "multiple_answer_blocks": 1}}
+{"paso": 30, "respuestas": 480, "recompensa_media": 0.9521, "errores": {"ok": 457, "wrong_value": 15, "no_answer_block": 7, "multiple_answer_blocks": 1}}
+{"paso": 31, "respuestas": 496, "recompensa_media": 0.9496, "errores": {"ok": 471, "wrong_value": 16, "no_answer_block": 8, "multiple_answer_blocks": 1}}
+{"paso": 32, "respuestas": 512, "recompensa_media": 0.9512, "errores": {"ok": 487, "wrong_value": 16, "no_answer_block": 8, "multiple_answer_blocks": 1}}
+{"paso": 33, "respuestas": 528, "recompensa_media": 0.9489, "errores": {"ok": 501, "wrong_value": 17, "no_answer_block": 9, "multiple_answer_blocks": 1}}
+{"paso": 34, "respuestas": 544, "recompensa_media": 0.9504, "errores": {"ok": 517, "wrong_value": 17, "no_answer_block": 9, "multiple_answer_blocks": 1}}
+{"paso": 35, "respuestas": 560, "recompensa_media": 0.9518, "errores": {"ok": 533, "wrong_value": 17, "no_answer_block": 9, "multiple_answer_blocks": 1}}
+{"paso": 36, "respuestas": 576, "recompensa_media": 0.9531, "errores": {"ok": 549, "wrong_value": 17, "no_answer_block": 9, "multiple_answer_blocks": 1}}
+{"paso": 37, "respuestas": 592, "recompensa_media": 0.9544, "errores": {"ok": 565, "wrong_value": 17, "no_answer_block": 9, "multiple_answer_blocks": 1}}
+{"paso": 38, "respuestas": 608, "recompensa_media": 0.9556, "errores": {"ok": 581, "wrong_value": 17, "no_answer_block": 9, "multiple_answer_blocks": 1}}
+{"paso": 39, "respuestas": 624, "recompensa_media": 0.9567, "errores": {"ok": 597, "wrong_value": 17, "no_answer_block": 9, "multiple_answer_blocks": 1}}
+{"paso": 40, "respuestas": 640, "recompensa_media": 0.9578, "errores": {"ok": 613, "wrong_value": 17, "no_answer_block": 9, "multiple_answer_blocks": 1}}
+{"paso": 41, "respuestas": 656, "recompensa_media": 0.9558, "errores": {"ok": 627, "wrong_value": 18, "no_answer_block": 10, "multiple_answer_blocks": 1}}
+{"paso": 42, "respuestas": 672, "recompensa_media": 0.9539, "errores": {"ok": 641, "wrong_value": 20, "no_answer_block": 10, "multiple_answer_blocks": 1}}
+{"paso": 43, "respuestas": 688, "recompensa_media": 0.9549, "errores": {"ok": 657, "wrong_value": 20, "no_answer_block": 10, "multiple_answer_blocks": 1}}
+{"paso": 44, "respuestas": 704, "recompensa_media": 0.956, "errores": {"ok": 673, "wrong_value": 20, "no_answer_block": 10, "multiple_answer_blocks": 1}}
+{"paso": 45, "respuestas": 720, "recompensa_media": 0.9569, "errores": {"ok": 689, "wrong_value": 20, "no_answer_block": 10, "multiple_answer_blocks": 1}}
+{"paso": 45, "respuestas": 720, "recompensa_media": 0.9569, "errores": {"ok": 689, "wrong_value": 20, "no_answer_block": 10, "multiple_answer_blocks": 1}}
