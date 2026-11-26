@@ -57,6 +57,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--top-p", type=float, default=0.95)
     parser.add_argument("--top-k", type=int, default=50)
     parser.add_argument("--beta", type=float, default=0.0, help="coeficiente de la penalizacion KL")
+    parser.add_argument("--loss-type", default="dapo",
+                        help="perdida de TRL (grpo, dapo, dr_grpo, bnpo...). Se fija explicito: el valor por omision "
+                             "de TRL cambio entre versiones. 'dapo' es lo que uso el piloto de Kaggle")
     parser.add_argument("--use-vllm", action="store_true", help="generar con vLLM (debe estar instalado)")
     parser.add_argument("--trace-every", type=int, default=4, help="guarda 1 de cada N respuestas en completions.jsonl")
     parser.add_argument("--max-minutes", type=float,
@@ -113,6 +116,7 @@ def main(argv: list[str] | None = None) -> int:
         top_p=args.top_p,
         top_k=args.top_k,
         beta=args.beta,
+        loss_type=args.loss_type,
         use_vllm=args.use_vllm,
         logging_steps=args.logging_steps,
         save_strategy="steps" if args.save_steps else "no",
