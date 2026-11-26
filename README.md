@@ -28,13 +28,13 @@ Integrantes: Tomás Ariztía, Arturo Herreros, Rodrigo Meza, Matías Retamales.
 | Hito | Fecha | Estado |
 |---|---|---|
 | Entrega 1: propuesta | 11 nov | [docs/propuesta_proyecto.md](docs/propuesta_proyecto.md) |
-| Entrega 2: avance con línea base y primeras curvas | 25 nov | Piloto GRPO con dos semillas, curvas y evaluación en `eval`. Borrador del informe en [docs/informe_avance_E2.docx](docs/informe_avance_E2.docx); estado en [docs/estado_entrega2.md](docs/estado_entrega2.md) |
+| Entrega 2: avance con línea base y primeras curvas | 25 nov | Piloto GRPO con dos semillas y SFT en Peteroa, con curvas y evaluación en `eval`. Borrador del informe en [docs/informe_avance_E2.docx](docs/informe_avance_E2.docx); estado en [docs/estado_entrega2.md](docs/estado_entrega2.md) |
 | Entrega 3: paper, poster y video | 9 dic | Pendiente |
 
 | Camino | Estado |
 |---|---|
 | 1. Modelo base | Medido (línea base) |
-| 2. Solo SFT | Script listo; sin correr en GPU |
+| 2. Solo SFT | Corrido en Peteroa y medido en `eval` con 5 muestras: pass@1 de 64/90 (base) a 76/90, pass@5 de 80/90 a 81/90 ([resultados](results/sft_peteroa/README.md)) |
 | 3. SFT seguido de GRPO | Script listo; sin correr |
 | 4. Solo GRPO | Piloto con dos semillas medido en `eval`: pass@1 de 53/90 (base) a 69/90 y 67/90 ([resultados](results/grpo_kaggle/README.md)); falta pass@5 |
 | 5. DPO | Corrido en Kaggle con dos semillas (`notebooks/dpo_kaggle.ipynb`): 230 pares `visible` de los tres niveles, 3 épocas; falta medirlo en `eval` ([estado](docs/estado_entrega2.md)) |
@@ -179,6 +179,26 @@ Lectura:
 
 Los adaptadores están en `results/grpo_kaggle/resultados_grpo.zip`, con Git LFS: `git lfs install && git lfs pull`.
 
+### SFT (camino 2)
+
+Qwen3-1.7B con LoRA sobre las 1.666 trazas `visible` easy y medium del conjunto combinado (casi todas del Qwen3-8B), 3 épocas y 315 pasos, en una H100 de Peteroa (13 minutos). Detalle, curva y adaptador en [results/sft_peteroa/README.md](results/sft_peteroa/README.md).
+
+![Curva de pérdida del SFT](results/sft_peteroa/curva_perdida.png)
+
+**Evaluación en `eval`.** Mismas 90 instancias `visible` (misma huella), 5 muestras y 4.096 tokens. El base se corrió en el mismo trabajo y la misma GPU.
+
+| Modelo | Easy | Medium | Hard (no entrenado) | pass@1 | pass@5 |
+|---|---|---|---|---|---|
+| Base | 26/30 | 25/30 | 13/30 | 64/90 | 80/90 |
+| SFT | 29/30 | 30/30 | 17/30 | 76/90 | 81/90 |
+
+- Pareado por instancia, el SFT resuelve 16 que el base fallaba y pierde 4 (McNemar exacto, p = 0,012).
+- pass@5 casi no cambia: el SFT hace al modelo más consistente en lo que ya podía resolver, pero no amplía lo que resuelve.
+- Composición hard sigue sin resolverse (1/10 en el base y 0/10 en el SFT).
+- El base da 64/90 aquí, 58/90 en la línea base y 53/90 en Kaggle: es la variación de una sola muestra. Por eso cada camino se compara con el base medido en la misma corrida.
+
+El adaptador está en `results/sft_peteroa/adaptador_sft_visible_em.zip` (Git LFS).
+
 ## Instalación
 
 Requiere Python 3.10 o superior y [uv](https://docs.astral.sh/uv/).
@@ -306,6 +326,8 @@ results/
   kaggle_otros_modelos/        línea base de los otros modelos
   kaggle_qwen8b/               trazas del profesor y datos derivados
   grpo_kaggle/                 piloto GRPO: curvas, métricas, adaptadores y evaluación en eval
+  sft_peteroa/                 SFT en Peteroa: curva, adaptador y evaluación contra el base
+  datos_combinados/            trazas SFT y pares DPO de todas las corridas (por omisión)
 docs/                          ver la sección siguiente
 docs/propuesta/                enunciados del Desafío y del Proyecto, y propuestas del Desafío
 ```
@@ -330,6 +352,6 @@ El plan completo está en [docs/estado_entrega2.md](docs/estado_entrega2.md) y e
 
 1. pass@5 de los adaptadores del piloto GRPO en `eval` (`MUESTRAS = 5` en `notebooks/evaluar_grpo_kaggle.ipynb`).
 2. Fijar `loss_type` en `train_grpo.py` antes de las corridas comparables.
-3. Medir los adaptadores DPO en `eval` (`METODO = "dpo"` en `notebooks/evaluar_grpo_kaggle.ipynb`). Correr SFT (con los datos de vLLM) y SFT seguido de GRPO, y fijar el presupuesto de cómputo comparable entre caminos.
+3. Medir los adaptadores DPO en `eval` (`METODO = "dpo"` en `notebooks/evaluar_grpo_kaggle.ipynb`). Correr SFT seguido de GRPO desde `results/sft_peteroa/adaptador_sft_visible_em.zip` (camino 3), y fijar el presupuesto de cómputo comparable entre caminos.
 4. Decidir el formato de `tools` (texto o nativo), porque afecta a las 2.138 trazas de `tools`.
 5. Auditoría manual de trazas exitosas con `scripts/audit_sample.py`.
