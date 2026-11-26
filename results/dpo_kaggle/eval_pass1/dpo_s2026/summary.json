@@ -1,0 +1,1706 @@
+{
+  "k": 1,
+  "carpeta": "/kaggle/working/evaluacion_dpo_pass1/dpo_s2026",
+  "archivos": [
+    "rollouts_Qwen_Qwen3-1.7B+think+lora_dpo_s2026.jsonl"
+  ],
+  "problemas_de_carga": {
+    "linea_final_truncada": 0,
+    "lineas_corruptas": 0,
+    "filas_sin_campos_requeridos": 0,
+    "duplicados_descartados": 0
+  },
+  "manifest": {
+    "stage": "eval_final",
+    "dry_run": false,
+    "dataset": {
+      "split": "eval",
+      "n_per_cell": 10,
+      "base_seed": 2026,
+      "fingerprint": "efb77852b9c86edc5c478be0de30fa11515d288e272a6cf09f624c3bd0453e5b"
+    },
+    "n_samples": 1,
+    "limit": null,
+    "conditions": [
+      "visible"
+    ],
+    "only": null,
+    "seeds": {
+      "dataset": 2026,
+      "generation": 2026
+    },
+    "entorno": {
+      "python": "3.13.16",
+      "plataforma": "Linux-6.18.55+-x86_64-with-glibc2.39",
+      "torch": "2.11.0+cu130",
+      "transformers": "5.24.0",
+      "gpu": "Tesla T4"
+    },
+    "code_hash": "9b6422ea39f9397c",
+    "git_commit": null,
+    "created_at": "2026-11-25T23:02:50+00:00",
+    "gen_configs": {
+      "Qwen/Qwen3-1.7B+think+lora:dpo_s2026": {
+        "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+        "model_id": "Qwen/Qwen3-1.7B",
+        "enable_thinking": true,
+        "max_new_tokens": 4096,
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.95,
+        "top_k": 50,
+        "repetition_penalty": 1.0,
+        "seed": 2026,
+        "batch_size": 8
+      }
+    },
+    "modelos": {
+      "Qwen/Qwen3-1.7B+think+lora:dpo_s2026": {
+        "estado": "completo",
+        "error": null,
+        "esperados": 90,
+        "hechos": 90,
+        "segundos_por_rollout": 18.54,
+        "errores_internos": 0
+      }
+    },
+    "notas": [],
+    "updated_at": "2026-11-25T23:30:55+00:00"
+  },
+  "aviso_baselines": null,
+  "grupos": [
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 9,
+        "n": 10,
+        "tasa": 0.9
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 9,
+        "n": 10,
+        "tasa": 0.9,
+        "ic95": [
+          0.5958499732047615,
+          0.9821237869049271
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 9,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 9,
+        "wrong_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 5029.0,
+        "tokens_por_muestra": 502.9,
+        "segundos": 73.04169999999999,
+        "segundos_por_muestra": 7.304169999999999
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 8,
+        "n": 10,
+        "tasa": 0.8
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 8,
+        "n": 10,
+        "tasa": 0.8,
+        "ic95": [
+          0.49016247153664183,
+          0.9433178485456247
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 8,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 8,
+        "wrong_value": 2
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 8302.0,
+        "tokens_por_muestra": 830.2,
+        "segundos": 155.3399,
+        "segundos_por_muestra": 15.53399
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5,
+        "ic95": [
+          0.236593090512564,
+          0.7634069094874361
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 1,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 5,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 5,
+        "wrong_value": 4,
+        "no_answer_block": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 12498.0,
+        "tokens_por_muestra": 1249.8,
+        "segundos": 188.3276,
+        "segundos_por_muestra": 18.83276
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 9,
+        "n": 10,
+        "tasa": 0.9
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 9,
+        "n": 10,
+        "tasa": 0.9,
+        "ic95": [
+          0.5958499732047615,
+          0.9821237869049271
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 9,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 9,
+        "wrong_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 6402.0,
+        "tokens_por_muestra": 640.2,
+        "segundos": 107.1213,
+        "segundos_por_muestra": 10.71213
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "medium",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 8,
+        "n": 10,
+        "tasa": 0.8
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 8,
+        "n": 10,
+        "tasa": 0.8,
+        "ic95": [
+          0.49016247153664183,
+          0.9433178485456247
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 1,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 8,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 8,
+        "no_answer_block": 1,
+        "wrong_value": 1
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 17644.0,
+        "tokens_por_muestra": 1764.4,
+        "segundos": 239.6001,
+        "segundos_por_muestra": 23.96001
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 4,
+        "n": 10,
+        "tasa": 0.4
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 4,
+        "n": 10,
+        "tasa": 0.4,
+        "ic95": [
+          0.16818032970623614,
+          0.6873262302663417
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 1,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 4,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 5,
+        "ok": 4,
+        "no_answer_block": 1
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 21914.0,
+        "tokens_por_muestra": 2191.4,
+        "segundos": 273.8109,
+        "segundos_por_muestra": 27.38109
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5,
+        "ic95": [
+          0.236593090512564,
+          0.7634069094874361
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 0,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 5,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "ok": 5,
+        "wrong_value": 5
+      },
+      "tope_de_tokens": {
+        "si": 0,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 7003.0,
+        "tokens_por_muestra": 700.3,
+        "segundos": 87.9474,
+        "segundos_por_muestra": 8.794740000000001
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3,
+        "ic95": [
+          0.10779126740630099,
+          0.6032218525388546
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 1,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 3,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 6,
+        "ok": 3,
+        "no_answer_block": 1
+      },
+      "tope_de_tokens": {
+        "si": 1,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 22263.0,
+        "tokens_por_muestra": 2226.3,
+        "segundos": 269.3654,
+        "segundos_por_muestra": 26.93654
+      }
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard",
+      "n_instancias": 10,
+      "n_muestras": 10,
+      "tasa_media_muestra": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0,
+        "ic95": [
+          0.0,
+          0.2775327998628892
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 2,
+        "n": 10
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correct_final_answer": {
+        "si": 0,
+        "n": 10
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 10
+      },
+      "error_types": {
+        "wrong_value": 8,
+        "no_answer_block": 2
+      },
+      "tope_de_tokens": {
+        "si": 2,
+        "n": 10
+      },
+      "uso": {
+        "tokens_nuevos": 24867.0,
+        "tokens_por_muestra": 2486.7,
+        "segundos": 273.8109,
+        "segundos_por_muestra": 27.38109
+      }
+    }
+  ],
+  "por_modelo_condicion": [
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "n_instancias": 90,
+      "n_muestras": 90,
+      "tasa_media_muestra": {
+        "aciertos": 51,
+        "n": 90,
+        "tasa": 0.5666666666666667
+      },
+      "incompletas": {
+        "k=1": {
+          "n": 0,
+          "instancias": []
+        }
+      },
+      "pass@1": {
+        "aciertos": 51,
+        "n": 90,
+        "tasa": 0.5666666666666667,
+        "ic95": [
+          0.46364097523724423,
+          0.6642342746875122
+        ]
+      },
+      "valid_tool_call": {
+        "si": 0,
+        "n": 0
+      },
+      "correct_tool_arguments": {
+        "si": 0,
+        "n": 0
+      },
+      "retrieved_required_data": {
+        "si": 0,
+        "n": 0
+      },
+      "forged_observation": {
+        "si": 0,
+        "n": 0
+      },
+      "tool_limit_exceeded": {
+        "si": 0,
+        "n": 0
+      },
+      "parser_error": {
+        "si": 6,
+        "n": 90
+      },
+      "contradictory_answer": {
+        "si": 0,
+        "n": 90
+      },
+      "correct_final_answer": {
+        "si": 51,
+        "n": 90
+      },
+      "correcta_sin_recompensa": {
+        "si": 0,
+        "n": 90
+      },
+      "error_types": {
+        "ok": 51,
+        "wrong_value": 33,
+        "no_answer_block": 6
+      },
+      "tope_de_tokens": {
+        "si": 5,
+        "n": 90
+      },
+      "uso": {
+        "tokens_nuevos": 125922.0,
+        "tokens_por_muestra": 1399.1333333333334,
+        "segundos": 1668.3652,
+        "segundos_por_muestra": 18.53739111111111
+      }
+    }
+  ],
+  "clasificacion": [
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "cerca_de_100",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.38627381370016556,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "easy",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "easy",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_informada": "supera"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.4531553770089829,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "medium",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "medium",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5268138189748721,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "siempre_alcanza",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "hard",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "availability",
+        "difficulty": "hard",
+        "aciertos": 5,
+        "n": 10,
+        "tasa": 0.5
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "cerca_de_100",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.38627381370016556,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "easy",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "primera_sucursal_contada",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_informada": "supera"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.4531553770089829,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "medium",
+        "aciertos": 0,
+        "n": 10,
+        "tasa": 0.0
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "primera_sucursal_contada",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "medium",
+        "aciertos": 2,
+        "n": 10,
+        "tasa": 0.2
+      },
+      "frente_a_informada": "supera"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5191459005601056,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "primera_sucursal",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "hard",
+        "aciertos": 1,
+        "n": 10,
+        "tasa": 0.1
+      },
+      "frente_a_trivial": "supera",
+      "regla_informada": {
+        "baseline": "sucursal_azar_contada",
+        "clase": "azar",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "selection",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.5268138189748721,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "easy",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "intermedio_sin_ganancia",
+      "certeza": "ic_muy_ancho",
+      "ancho_ic_max": 0.49543058513255367,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "medium",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_trivial": "no_distinguible",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "medium",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_informada": "no_distinguible"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "condition": "visible",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "cerca_de_0",
+      "certeza": "tentativa",
+      "ancho_ic_max": 0.2775327998628892,
+      "motivo": "sin pass@1 utilizable: se clasifica solo con pass@1",
+      "regla_trivial": {
+        "baseline": "todo_atendido",
+        "clase": "trivial",
+        "usa_inventario": false,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_trivial": "por_debajo",
+      "regla_informada": {
+        "baseline": "ignorar_reservas",
+        "clase": "error_razonable",
+        "usa_inventario": true,
+        "usa_expected": false,
+        "family": "composition",
+        "difficulty": "hard",
+        "aciertos": 3,
+        "n": 10,
+        "tasa": 0.3
+      },
+      "frente_a_informada": "por_debajo"
+    }
+  ],
+  "clasificacion_entre_condiciones": [
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "family": "availability",
+      "difficulty": "easy",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "family": "availability",
+      "difficulty": "hard",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "family": "availability",
+      "difficulty": "medium",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "family": "composition",
+      "difficulty": "easy",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "family": "composition",
+      "difficulty": "hard",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "family": "composition",
+      "difficulty": "medium",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "family": "selection",
+      "difficulty": "easy",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "family": "selection",
+      "difficulty": "hard",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    },
+    {
+      "model": "Qwen/Qwen3-1.7B+think+lora:dpo_s2026",
+      "family": "selection",
+      "difficulty": "medium",
+      "categoria": "falta_condicion",
+      "certeza": "sin_datos"
+    }
+  ],
+  "baselines": [
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "control_expected",
+      "clase": "control",
+      "usa_inventario": false,
+      "usa_expected": true,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 10,
+      "n": 10,
+      "tasa": 1.0
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 5,
+      "n": 10,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 5,
+      "n": 10,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 5,
+      "n": 10,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 1,
+      "n": 10,
+      "tasa": 0.1
+    },
+    {
+      "baseline": "ignorar_reservas",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "no_descontar_stock",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "no_descontar_stock",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "no_descontar_stock",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "nunca_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "nunca_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "nunca_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "primera_sucursal",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "primera_sucursal",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 1,
+      "n": 10,
+      "tasa": 0.1
+    },
+    {
+      "baseline": "primera_sucursal",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "primera_sucursal_contada",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "primera_sucursal_contada",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 2,
+      "n": 10,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "primera_sucursal_contada",
+      "clase": "error_razonable",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 10,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "siempre_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "easy",
+      "aciertos": 5,
+      "n": 10,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "siempre_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "hard",
+      "aciertos": 5,
+      "n": 10,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "siempre_alcanza",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "availability",
+      "difficulty": "medium",
+      "aciertos": 5,
+      "n": 10,
+      "tasa": 0.5
+    },
+    {
+      "baseline": "sucursal_azar",
+      "clase": "azar",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "sucursal_azar",
+      "clase": "azar",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "sucursal_azar",
+      "clase": "azar",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 0,
+      "n": 10,
+      "tasa": 0.0
+    },
+    {
+      "baseline": "sucursal_azar_contada",
+      "clase": "azar",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "easy",
+      "aciertos": 2,
+      "n": 10,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "sucursal_azar_contada",
+      "clase": "azar",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "sucursal_azar_contada",
+      "clase": "azar",
+      "usa_inventario": true,
+      "usa_expected": false,
+      "family": "selection",
+      "difficulty": "medium",
+      "aciertos": 2,
+      "n": 10,
+      "tasa": 0.2
+    },
+    {
+      "baseline": "todo_atendido",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "easy",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "todo_atendido",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "hard",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    },
+    {
+      "baseline": "todo_atendido",
+      "clase": "trivial",
+      "usa_inventario": false,
+      "usa_expected": false,
+      "family": "composition",
+      "difficulty": "medium",
+      "aciertos": 3,
+      "n": 10,
+      "tasa": 0.3
+    }
+  ],
+  "umbrales": {
+    "cerca_de_100": 0.9,
+    "cerca_de_0": 0.1,
+    "ganancia_apreciable": 0.15,
+    "visible_bueno": 0.7,
+    "brecha_condiciones": 0.3,
+    "mal_en_ambas": 0.3,
+    "ic_muy_ancho": 0.3
+  },
+  "n_rollouts": 90,
+  "n_muestra_errores": 26
+}

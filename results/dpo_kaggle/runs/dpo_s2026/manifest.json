@@ -1,0 +1,47 @@
+{
+  "tipo": "dpo",
+  "argumentos": {
+    "model": "Qwen/Qwen3-1.7B",
+    "out": "/kaggle/working/runs/dpo_s2026",
+    "difficulties": null,
+    "epochs": 3.0,
+    "max_steps": -1,
+    "limit": null,
+    "learning_rate": 2e-05,
+    "batch_size": 1,
+    "grad_accum": 16,
+    "seed": 2026,
+    "gradient_checkpointing": true,
+    "logging_steps": 1,
+    "save_steps": 0,
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "data": "/tmp/inventory_harness/results/datos_combinados/dpo.jsonl",
+    "condition": "visible",
+    "beta": 0.1,
+    "max_length": 4096,
+    "drop_longer": true,
+    "max_minutes": 150.0
+  },
+  "git_commit": null,
+  "versiones": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.24.0",
+    "trl": "1.18.2",
+    "peft": "0.22.0",
+    "accelerate": "1.16.0",
+    "datasets": "5.2.0",
+    "gpu": "Tesla T4"
+  },
+  "creado": "2026-11-25T21:52:13",
+  "datos": {
+    "archivo": "/tmp/inventory_harness/results/datos_combinados/dpo.jsonl",
+    "sha256": "54fa530cac809f6b89c087a7fa03a122de9ba572469d8743d446407e95cf06f7",
+    "pares": 230,
+    "descartados_por_largo": 32
+  },
+  "pasos": 45,
+  "detenido_por_tiempo": false
+}

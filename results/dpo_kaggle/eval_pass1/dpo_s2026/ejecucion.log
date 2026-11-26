@@ -1,0 +1,22 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]
+Loading weights:   0%|          | 1/311 [00:02<10:51,  2.10s/it]
+Loading weights:  48%|████▊     | 149/311 [00:02<00:01, 93.50it/s]
+Loading weights:  72%|███████▏  | 223/311 [00:02<00:00, 117.16it/s]
+Loading weights:  87%|████████▋ | 272/311 [00:02<00:00, 125.16it/s]
+Loading weights:  99%|█████████▉| 308/311 [00:03<00:00, 132.14it/s]
+Loading weights: 100%|██████████| 311/311 [00:03<00:00, 97.92it/s] 
+/usr/local/lib/python3.13/dist-packages/peft/import_utils.py:195: UserWarning: Found an incompatible version of torchao. Found version 0.10.0, but only versions above 0.16.0 are supported. torchao support in PEFT is disabled; if you want to use a torchao-quantized model with PEFT, please upgrade torchao.
+  warnings.warn(
+[Qwen/Qwen3-1.7B+think+lora:dpo_s2026|visible] 25/32 muestras, 0.04 muestras/s, ETA 2.6 min, errores 0
+[Qwen/Qwen3-1.7B+think+lora:dpo_s2026|visible] 32/32 muestras, 0.06 muestras/s, ETA 0.0 min, errores 0
+[Qwen/Qwen3-1.7B+think+lora:dpo_s2026] TOTAL 32/90 rollouts; 17.43 s/rollout; faltan ~17 min
+[Qwen/Qwen3-1.7B+think+lora:dpo_s2026|visible] 25/32 muestras, 0.04 muestras/s, ETA 3.1 min, errores 0
+[Qwen/Qwen3-1.7B+think+lora:dpo_s2026|visible] 32/32 muestras, 0.05 muestras/s, ETA 0.0 min, errores 0
+[Qwen/Qwen3-1.7B+think+lora:dpo_s2026] TOTAL 64/90 rollouts; 19.11 s/rollout; faltan ~8 min
+[Qwen/Qwen3-1.7B+think+lora:dpo_s2026|visible] 25/26 muestras, 0.06 muestras/s, ETA 0.3 min, errores 0
+[Qwen/Qwen3-1.7B+think+lora:dpo_s2026|visible] 26/26 muestras, 0.06 muestras/s, ETA 0.0 min, errores 0
+[Qwen/Qwen3-1.7B+think+lora:dpo_s2026] TOTAL 90/90 rollouts; 18.54 s/rollout; faltan ~0 min
+Salida en /kaggle/working/evaluacion_dpo_pass1/dpo_s2026
